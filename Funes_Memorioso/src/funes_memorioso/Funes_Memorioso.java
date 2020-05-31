@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package funes_memorioso;
-
+//UWU
 /**
  *
  * @author Reyner
@@ -17,3 +17,4 @@ public class Funes_Memorioso {
         // TODO code application logic here
     }
 }
+//OWO
