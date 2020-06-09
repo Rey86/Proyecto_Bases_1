@@ -1,3 +1,5 @@
+--jaja
+
 -- Table Userapp
 CREATE TABLE USERAPP(
     username VARCHAR2(30) CONSTRAINT userapp_username_nn NOT NULL,
