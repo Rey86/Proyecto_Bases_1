@@ -18,6 +18,7 @@ CREATE TABLE USERAPP(
     
 -- Table Person
 CREATE TABLE PERSON(
+    id_user VARCHAR2(20) CONSTRAINT userapp_id_nn NOT NULL,
     first_name VARCHAR2(25) CONSTRAINT person_firstname_nn NOT NULL,
     last_name VARCHAR2(25) CONSTRAINT person_lastname_nn NOT NULL,
     second_last_name VARCHAR2(25) CONSTRAINT person_secondlastname_nn NOT NULL,
@@ -28,17 +29,17 @@ CREATE TABLE PERSON(
     );
     
 -- Table Proceedings
-CREATE TABLE PROCEEDINGS(
+CREATE TABLE TRANSCRIPT(
     valid BOOLEAN DEFAULT TRUE,
-    proceedings_number NUMBER(15) CONSTRAINT proceedings_number_nn NOT NULL,
-    username VARCHAR2(30) CONSTRAINT proceedings_username_nn NOT NULL, 
-    id_accused VARCHAR2(20) CONSTRAINT proceedings_idaccused_nn NOT NULL,
-    id_proceedingstype NUMBER(6) CONSTRAINT proceedings_idproceedingstype_nn NOT NULL,
-    id_resolution NUMBER(6) CONSTRAINT proceedings_idresolution_nn NOT NULL,
-    id_community NUMBER(6) CONSTRAINT proceedings_idcommunity_nn NOT NULL,
-    id_judgment NUMBER(6) CONSTRAINT proceedings_idjudgment_nn NOT NULL,
-    id_crime NUMBER(6) CONSTRAINT proceedings_idcrime_nn NOT NULL,
-    due_date DATE CONSTRAINT proceedings_duedate_nn NOT NULL
+    transcript_number VARCHAR2(15) CONSTRAINT transcript_number_nn NOT NULL,
+    username VARCHAR2(30) CONSTRAINT transcript_username_nn NOT NULL, 
+    id_accused VARCHAR2(20) CONSTRAINT transcript_idaccused_nn NOT NULL,
+    id_proceedingstype NUMBER(6) CONSTRAINT transcript_idtranscripttype_nn NOT NULL,
+    id_resolution NUMBER(6) CONSTRAINT transcript_idresolution_nn NOT NULL,
+    id_community NUMBER(6) CONSTRAINT transcript_idcommunity_nn NOT NULL,
+    id_sentence NUMBER(6) CONSTRAINT transcript_idsentence_nn NOT NULL,
+    id_crime NUMBER(6) CONSTRAINT transcript_idcrime_nn NOT NULL,
+    due_date DATE CONSTRAINT transcript_duedate_nn NOT NULL
     );
     
 -- Table Accused
@@ -59,7 +60,7 @@ CREATE TABLE COMPANY(
     );
 
 -- Table Resolution
-CREATE TABLE RESOLUTION(
+CREATE TABLE VERDICT(
     id_resolution NUMBER(6) CONSTRAINT resolution_id_nn NOT NULL,
     resolution_name VARCHAR2(30) CONSTRAINT resolution_name_nn NOT NULL
     );
@@ -77,7 +78,7 @@ CREATE TABLE BANREASON(
     );
     
 -- Table ProceedingsType
-CREATE TABLE PROCEEDINGSTYPE(
+CREATE TABLE TRANSCRIPTTYPE(
     id_proceedingstype NUMBER(6) CONSTRAINT proceedingstype_id_nn NOT NULL,
     proceedingstype_name VARCHAR2(30) CONSTRAINT proceedingstype_name_nn NOT NULL
     );
