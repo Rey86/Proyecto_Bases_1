@@ -1,4 +1,3 @@
---jaja
 
 -- Table Userapp
 CREATE TABLE USERAPP(
