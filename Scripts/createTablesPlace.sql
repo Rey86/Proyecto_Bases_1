@@ -46,8 +46,8 @@ CREATE TABLE PROVINCE(
 CREATE TABLE COUNTRY(
     id_country NUMBER(6) CONSTRAINT country_id_nn NOT NULL,
     country_name VARCHAR2(30) CONSTRAINT country_name_nn NOT NULL,
-    date_creation DATE CONSTRAINT province_datecreation_nn NOT NULL,
-    user_creation varchar2(15) CONSTRAINT province_usercreation_nn NOT NULL,
-    date_last_modification DATE CONSTRAINT province_datelastmod_nn NOT NULL,
-    user_last_modification varchar2(15) CONSTRAINT province_userlastmod_nn NOT NULL
+    date_creation DATE CONSTRAINT country_datecreation_nn NOT NULL,
+    user_creation varchar2(15) CONSTRAINT country_usercreation_nn NOT NULL,
+    date_last_modification DATE CONSTRAINT country_datelastmod_nn NOT NULL,
+    user_last_modification varchar2(15) CONSTRAINT country_userlastmod_nn NOT NULL
     );
