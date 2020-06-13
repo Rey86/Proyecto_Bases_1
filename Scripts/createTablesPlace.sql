@@ -5,8 +5,8 @@ CREATE TABLE COMMUNITY(
     id_district NUMBER(6) CONSTRAINT community_iddistrict_nn NOT NULL,
     date_creation DATE CONSTRAINT community_datecreation_nn NOT NULL,
     user_creation varchar2(15) CONSTRAINT community_datecreation_nn NOT NULL,
-    date_last_mod DATE CONSTRAINT community_datelastmodification_nn NOT NULL,
-    user_last_mod varchar2(15) CONSTRAINT community_userlastmodification_nn NOT NULL
+    date_last_modification DATE CONSTRAINT community_datelastmod_nn NOT NULL,
+    user_last_modification varchar2(15) CONSTRAINT community_userlastmod_nn NOT NULL
     );
     
 -- Table District
@@ -16,8 +16,8 @@ CREATE TABLE DISTRICT(
     id_canton NUMBER(6) CONSTRAINT district_idcanton_nn NOT NULL,
     date_creation DATE CONSTRAINT district_datecreation_nn NOT NULL,
     user_creation varchar2(15) CONSTRAINT district_datecreation_nn NOT NULL,
-    date_last_mod DATE CONSTRAINT district_datelastmodification_nn NOT NULL,
-    user_last_mod varchar2(15) CONSTRAINT district_userlastmodification_nn NOT NULL
+    date_last_modification DATE CONSTRAINT district_datelastmod_nn NOT NULL,
+    user_last_modification varchar2(15) CONSTRAINT district_userlastmod_nn NOT NULL
     );
     
 -- Table Canton
@@ -27,8 +27,8 @@ CREATE TABLE CANTON(
     id_province NUMBER(6) CONSTRAINT canton_idprovince_nn NOT NULL,
     date_creation DATE CONSTRAINT canton_datecreation_nn NOT NULL,
     user_creation varchar2(15) CONSTRAINT canton_datecreation_nn NOT NULL,
-    date_last_mod DATE CONSTRAINT canton_datelastmodification_nn NOT NULL,
-    user_last_mod varchar2(15) CONSTRAINT canton_userlastmodification_nn NOT NULL
+    date_last_modification DATE CONSTRAINT canton_datelastmod_nn NOT NULL,
+    user_last_modification varchar2(15) CONSTRAINT canton_userlastmod_nn NOT NULL
     );
     
 -- Table Province
@@ -38,8 +38,8 @@ CREATE TABLE PROVINCE(
     id_country NUMBER(6) CONSTRAINT province_idcountry_nn NOT NULL,
     date_creation DATE CONSTRAINT province_datecreation_nn NOT NULL,
     user_creation varchar2(15) CONSTRAINT province_datecreation_nn NOT NULL,
-    date_last_mod DATE CONSTRAINT province_datelastmodification_nn NOT NULL,
-    user_last_mod varchar2(15) CONSTRAINT province_userlastmodification_nn NOT NULL
+    date_last_modification DATE CONSTRAINT province_datelastmod_nn NOT NULL,
+    user_last_modification varchar2(15) CONSTRAINT province_userlastmod_nn NOT NULL
     );
     
 -- Table Country
@@ -48,6 +48,6 @@ CREATE TABLE COUNTRY(
     country_name VARCHAR2(30) CONSTRAINT country_name_nn NOT NULL,
     date_creation DATE CONSTRAINT province_datecreation_nn NOT NULL,
     user_creation varchar2(15) CONSTRAINT province_datecreation_nn NOT NULL,
-    date_last_mod DATE CONSTRAINT province_datelastmodification_nn NOT NULL,
-    user_last_mod varchar2(15) CONSTRAINT province_userlastmodification_nn NOT NULL
+    date_last_modification DATE CONSTRAINT province_datelastmod_nn NOT NULL,
+    user_last_modification varchar2(15) CONSTRAINT province_userlastmod_nn NOT NULL
     );
