@@ -35,10 +35,10 @@ CREATE TABLE ACCUSED(
     second_last_name VARCHAR2(25) CONSTRAINT accused_secondlastname_nn NOT NULL,
     birthdate DATE CONSTRAINT accused_birthdate_nn NOT NULL, 
     id_gender NUMBER(6) CONSTRAINT accused_idgender_nn NOT NULL,
-    date_creation DATE CONSTRAINT transcripttype_datecreation_nn NOT NULL,
-    user_creation varchar2(15) CONSTRAINT transcripttype_usercreation_nn NOT NULL,
-    date_last_modification DATE CONSTRAINT transcripttype_datelastmod_nn NOT NULL,
-    user_last_modification varchar2(15) CONSTRAINT transcripttype_userlastmod_nn NOT NULL
+    date_creation DATE CONSTRAINT accused_datecreation_nn NOT NULL,
+    user_creation varchar2(15) CONSTRAINT accused_usercreation_nn NOT NULL,
+    date_last_modification DATE CONSTRAINT accused_datelastmod_nn NOT NULL,
+    user_last_modification varchar2(15) CONSTRAINT accused_userlastmod_nn NOT NULL
     );
 
 -- Table Veredict
@@ -57,12 +57,12 @@ CREATE TABLE SENTENCE(
     sentence_name VARCHAR2(30) CONSTRAINT sentence_name_nn NOT NULL,
     start_date DATE CONSTRAINT sentence_startdate_nn NOT NULL,
     end_date DATE CONSTRAINT sentence_enddate_nn NOT NULL,
-    id_sentencetype NUMBER(6) CONSTRAINT sentencetype_id_nn NOT NULL,
+    id_sentencetype NUMBER(6) CONSTRAINT sentence_typeid_nn NOT NULL,
     date_creation DATE CONSTRAINT sentence_datecreation_nn NOT NULL,
     user_creation varchar2(15) CONSTRAINT sentence_usercreation_nn NOT NULL,
     date_last_modification DATE CONSTRAINT sentence_datelastmod_nn NOT NULL,
     user_last_modification varchar2(15) CONSTRAINT sentence_userlastmod_nn NOT NULL
-    );
+    );  
     
 --Table SentenceType
 CREATE TABLE SENTENCETYPE(
