@@ -12,8 +12,8 @@ CREATE TABLE TRANSCRIPT(
     due_date DATE CONSTRAINT transcript_duedate_nn NOT NULL,
     date_creation DATE CONSTRAINT transcript_datecreation_nn NOT NULL,
     user_creation varchar2(15) CONSTRAINT transcript_usercreation_nn NOT NULL,
-    date_last_modification DATE CONSTRAINT transcript_datelastmod_nn NOT NULL,
-    user_last_modification varchar2(15) CONSTRAINT transcript_userlastmod_nn NOT NULL
+    date_last_modification DATE,
+    user_last_modification varchar2(15)
     );
     
 -- Table ProceedingsType
@@ -22,8 +22,8 @@ CREATE TABLE TRANSCRIPTTYPE(
     transcripttype_name VARCHAR2(30) CONSTRAINT transcripttype_name_nn NOT NULL,
     date_creation DATE CONSTRAINT transcripttype_datecreation_nn NOT NULL,
     user_creation varchar2(15) CONSTRAINT transcripttype_usercreation_nn NOT NULL,
-    date_last_modification DATE CONSTRAINT transcripttype_datelastmod_nn NOT NULL,
-    user_last_modification varchar2(15) CONSTRAINT transcripttype_userlastmod_nn NOT NULL
+    date_last_modification DATE,
+    user_last_modification varchar2(15)
     );
     
 -- Table Accused
@@ -37,8 +37,8 @@ CREATE TABLE ACCUSED(
     id_gender NUMBER(6) CONSTRAINT accused_idgender_nn NOT NULL,
     date_creation DATE CONSTRAINT accused_datecreation_nn NOT NULL,
     user_creation varchar2(15) CONSTRAINT accused_usercreation_nn NOT NULL,
-    date_last_modification DATE CONSTRAINT accused_datelastmod_nn NOT NULL,
-    user_last_modification varchar2(15) CONSTRAINT accused_userlastmod_nn NOT NULL
+    date_last_modification DATE,
+    user_last_modification varchar2(15)
     );
 
 -- Table Veredict
@@ -47,8 +47,8 @@ CREATE TABLE VERDICT(
     veredict_name VARCHAR2(30) CONSTRAINT veredict_name_nn NOT NULL,
     date_creation DATE CONSTRAINT veredict_datecreation_nn NOT NULL,
     user_creation varchar2(15) CONSTRAINT veredict_usercreation_nn NOT NULL,
-    date_last_modification DATE CONSTRAINT veredict_datelastmod_nn NOT NULL,
-    user_last_modification varchar2(15) CONSTRAINT veredict_userlastmod_nn NOT NULL
+    date_last_modification DATE,
+    user_last_modification varchar2(15)
     );
     
 --Table Sentence
@@ -60,8 +60,8 @@ CREATE TABLE SENTENCE(
     id_sentencetype NUMBER(6) CONSTRAINT sentence_typeid_nn NOT NULL,
     date_creation DATE CONSTRAINT sentence_datecreation_nn NOT NULL,
     user_creation varchar2(15) CONSTRAINT sentence_usercreation_nn NOT NULL,
-    date_last_modification DATE CONSTRAINT sentence_datelastmod_nn NOT NULL,
-    user_last_modification varchar2(15) CONSTRAINT sentence_userlastmod_nn NOT NULL
+    date_last_modification DATE,
+    user_last_modification varchar2(15)
     );  
     
 --Table SentenceType
@@ -70,8 +70,8 @@ CREATE TABLE SENTENCETYPE(
     sentencetype_name VARCHAR2(30) CONSTRAINT sentencetype_name_nn NOT NULL,
     date_creation DATE CONSTRAINT sentencetype_datecreation_nn NOT NULL,
     user_creation varchar2(15) CONSTRAINT sentencetype_usercreation_nn NOT NULL,
-    date_last_modification DATE CONSTRAINT sentencetype_datelastmod_nn NOT NULL,
-    user_last_modification varchar2(15) CONSTRAINT sentencetype_userlastmod_nn NOT NULL
+    date_last_modification DATE,
+    user_last_modification varchar2(15)
     );
     
 --Table Crime
@@ -80,6 +80,6 @@ CREATE TABLE CRIME(
     crime_name VARCHAR2(30) CONSTRAINT crime_name_nn NOT NULL,
     date_creation DATE CONSTRAINT crime_datecreation_nn NOT NULL,
     user_creation varchar2(15) CONSTRAINT crime_usercreation_nn NOT NULL,
-    date_last_modification DATE CONSTRAINT crime_datelastmod_nn NOT NULL,
-    user_last_modification varchar2(15) CONSTRAINT crime_userlastmod_nn NOT NULL
+    date_last_modification DATE,
+    user_last_modification varchar2(15)
     );
