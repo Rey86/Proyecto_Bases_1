@@ -39,3 +39,9 @@ CREATE TABLE BANREASON(
     date_last_modification DATE,
     user_last_modification varchar2(15)
     );
+    
+--Table BanReasonXUserapp
+CREATE TABLE BANREASONXUSERAPP(
+    id_banreason NUMBER(6) CONSTRAINT banreason_id_nn NOT NULL,
+    username VARCHAR2(30) CONSTRAINT userapp_username_nn NOT NULL
+);
