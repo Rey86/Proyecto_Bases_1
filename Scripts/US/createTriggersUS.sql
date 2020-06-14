@@ -57,3 +57,16 @@ CREATE OR REPLACE TRIGGER US.beforeUpdateBanReason
         :new.user_last_modification:=USER;
         :new.date_last_modification:=SYSDATE;
     END beforeUpdateBanReason;
+    
+-- Trigger to fill GENERALLOG table in admscheme.
+
+CREATE OR REPLACE TRIGGER US.beforeUpdateUserPassword
+    BEFORE INSERT OR UPDATE OF user_password
+    ON USERAPP
+    for each row
+    BEGIN
+        INSERT INTO GENERALLOG
+        (id_generallog, scheme_name, table_name, column_name, modification_date, previous_value ,current_value)
+        VALUES (s_generallog.nextval(), 'US', 'USERAPP', 'USER_PASSWORD', SYSDATE, :old.user_password, :new.user_password);
+    END beforeUpdateUserPassword;
+        
