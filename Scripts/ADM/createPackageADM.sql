@@ -3,9 +3,9 @@ CREATE OR REPLACE PACKAGE ADMTables IS
     FUNCTION getAllParameters RETURN VARCHAR2; 
     FUNCTION getParameterColumns (pnIdParameter NUMBER) RETURN VARCHAR2;
     PROCEDURE setParameterColumns (pnIdParameter NUMBER, pcParameterName VARCHAR2, pnParameterValue NUMBER);
-    PROCEDURE deletePameter (pnIdParameter NUMBER);
+    PROCEDURE deleteParameter (pnIdParameter NUMBER);
     PROCEDURE insertParameter (pcParameterName VARCHAR2, pnParameterValue NUMBER);
-END;
+END ADMTables;
 
 CREATE OR REPLACE PACKAGE BODY ADMTables AS
 -- Function to get all parameters to show them in the screen
@@ -34,18 +34,18 @@ CREATE OR REPLACE PACKAGE BODY ADMTables AS
     BEGIN
         UPDATE PARAMETER_TABLE
         SET parameter_name = pcParameterName,
-        parameter_value = pcParameterName
+        parameter_value = pnParameterValue
         WHERE id_parameter = pnIdParameter;
         Commit;
     END setParameterColumns;
 
 -- Procedure to delete a specific parameter  
-    PROCEDURE deletePameter (pnIdParameter NUMBER) IS
+    PROCEDURE deleteParameter (pnIdParameter NUMBER) IS
     BEGIN 
         DELETE FROM PARAMETER_TABLE
         WHERE id_parameter = pnIdParameter;
         Commit;
-    END deletePameter;
+    END deleteParameter;
 
 -- Procedure to insert a new parameter
     PROCEDURE insertParameter (pcParameterName VARCHAR2, pnParameterValue NUMBER) IS

@@ -1,0 +1,8 @@
+-- Sequence to fill id PARAMETER_TABLE.
+CREATE SEQUENCE s_parameter
+    START WITH 0
+    INCREMENT BY 1
+    MINVALUE 0
+    MAXVALUE 10000000
+    NOCACHE
+    NOCYCLE;
