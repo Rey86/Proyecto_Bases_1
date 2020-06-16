@@ -58,6 +58,26 @@ CREATE OR REPLACE TRIGGER US.beforeUpdateBanReason
         :new.date_last_modification:=SYSDATE;
     END beforeUpdateBanReason;
     
+-- Insert and Update Triggers of BANREASONXUSERAPP table.
+
+CREATE OR REPLACE TRIGGER US.beforeInsertBanReasonxUserApp
+    BEFORE INSERT
+    ON US.BANREASONXUSERAPP
+    For each row
+    BEGIN
+        :new.user_creation:=USER;
+        :new.date_creation:=SYSDATE;
+    END beforeInsertBanReasonxUserApp;
+    
+CREATE OR REPLACE TRIGGER US.beforeUpdateBanReasonUserApp
+    BEFORE UPDATE
+    ON US.BANREASONXUSERAPP
+    For each row
+    BEGIN
+        :new.user_last_modification:=USER;
+        :new.date_last_modification:=SYSDATE;
+    END beforeUpdateBanReasonxUserApp;
+    
 -- Trigger to fill GENERALLOG table in admscheme.
 
 CREATE OR REPLACE TRIGGER US.beforeUpdateUserPassword
