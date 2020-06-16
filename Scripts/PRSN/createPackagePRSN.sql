@@ -1,18 +1,18 @@
 -- Package to PRSN procedures and functions.
 CREATE OR REPLACE PACKAGE PRSNTables IS
     -- Person Table
-    PROCEDURE getCommunity (pnIdCommunity NUMBER);
-    PROCEDURE setCommunityColumns (pnIdCommunity NUMBER, pcCommunityName VARCHAR2, pnIdDistrict NUMBER);
-    PROCEDURE deleteCommunity (pnIdCommunity NUMBER);
-    PROCEDURE insertCommunity (pcCommunityName VARCHAR2, pnIdDistrict NUMBER);
+    PROCEDURE getPerson (pnIdPerson NUMBER);
+    PROCEDURE setPerson (pnIdCommunity NUMBER, pcPersonName VARCHAR2, pnIdDistrict NUMBER);
+    PROCEDURE deletePerson (pnIdPerson NUMBER);
+    PROCEDURE insertPerson (pcPersonName VARCHAR2, pnIdDistrict NUMBER);
     -- Company Table
     PROCEDURE getDistrict (pnIdDistrict NUMBER);
-    PROCEDURE setDistrictColumns (pnIdDistrict NUMBER, pcDistrictName VARCHAR2, pnIdCanton NUMBER);
+    PROCEDURE setDistrict (pnIdDistrict NUMBER, pcDistrictName VARCHAR2, pnIdCanton NUMBER);
     PROCEDURE deleteDistrict (pnIdDistrict NUMBER);
     PROCEDURE insertDistrict (pcDistrictName VARCHAR2, pnIdCanton NUMBER);
     -- Gender Table 
     PROCEDURE getCanton (pnIdCanton NUMBER);
-    PROCEDURE setCantonColumns (pnIdCanton NUMBER, pcCantonName VARCHAR2, pnIdProvince NUMBER);
+    PROCEDURE setCanton (pnIdCanton NUMBER, pcCantonName VARCHAR2, pnIdProvince NUMBER);
     PROCEDURE deleteCanton (pnIdCanton NUMBER);
     PROCEDURE insertCanton (pcCantonName VARCHAR2, pnIdProvince NUMBER);
 END PlaceTables;

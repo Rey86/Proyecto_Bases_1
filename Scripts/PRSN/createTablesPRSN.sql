@@ -1,6 +1,5 @@
 -- Table Person
 CREATE TABLE PERSON(
-    id_user VARCHAR2(20) CONSTRAINT userapp_id_nn NOT NULL,
     first_name VARCHAR2(25) CONSTRAINT person_firstname_nn NOT NULL,
     last_name VARCHAR2(25) CONSTRAINT person_lastname_nn NOT NULL,
     second_last_name VARCHAR2(25) CONSTRAINT person_secondlastname_nn NOT NULL,
@@ -11,7 +10,7 @@ CREATE TABLE PERSON(
     date_creation DATE CONSTRAINT person_datecreation_nn NOT NULL,
     user_creation varchar2(15) CONSTRAINT person_usercreation_nn NOT NULL,
     date_last_modification DATE,
-    user_last_modification varchar2(15) CONSTRAINT
+    user_last_modification varchar2(15)
     );
 
 -- Table Company
