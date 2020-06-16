@@ -160,8 +160,8 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         Commit;
     END insertCanton;
     
--- Table Country
--- Function to get a country with specific id to show it in the screen      
+-- Table Province
+-- Function to get a province with specific id to show it in the screen      
     PROCEDURE getProvince (pnIdProvince IN NUMBER) AS
     CURSOR province(pnIdProvince IN NUMBER)
     IS
@@ -178,7 +178,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         END LOOP;
     END getProvince;
 
--- Procedure to set a country with specific id and the new values wrote by the user  
+-- Procedure to set a province with specific id and the new values wrote by the user  
     PROCEDURE setProvince (pnIdProvince IN NUMBER, pcProvinceName IN VARCHAR2, pnIdCountry IN NUMBER) IS
     BEGIN
         UPDATE PROVINCE
@@ -188,7 +188,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         Commit;
     END setProvince;
 
--- Procedure to delete a specific country  
+-- Procedure to delete a specific province 
     PROCEDURE deleteProvince (pnIdProvince IN NUMBER) IS
     BEGIN 
         DELETE FROM PROVINCE
@@ -196,12 +196,52 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         Commit;
     END deleteProvince;
 
--- Procedure to insert a new country
+-- Procedure to insert a new province
     PROCEDURE insertProvince (pcProvinceName IN VARCHAR2, pnIdCountry IN NUMBER) IS
     BEGIN 
         INSERT INTO PROVINCE (id_province, province_name, id_country)
         VALUES (s_province, pcProvinceName, pnIdCountry);
         Commit;
     END insertProvince;
+    
+-- Table Country
+-- Function to get a country with specific id to show it in the screen      
+    PROCEDURE getCountry (pnIdCountry IN NUMBER) AS
+    CURSOR country(pnIdCountry IN NUMBER)
+    IS
+        SELECT id_country, country_name
+        FROM COUNTRY 
+        WHERE id_country = NVL(pnIdCountry, id_country);
+    BEGIN 
+        FOR i in country(pnIdCountry) LOOP
+            dbms_output.put_line(i.id_country);
+            dbms_output.put_line(i.country_name);
+        END LOOP;
+    END getCountry;
+
+-- Procedure to set a country with specific id and the new values wrote by the user  
+    PROCEDURE setCountry (pnIdCountry IN NUMBER, pcCountryName IN VARCHAR2) IS
+    BEGIN
+        UPDATE COUNTRY
+        SET country_name = pcCountryName
+        WHERE id_country = pnIdCountry;
+        Commit;
+    END setCountry;
+
+-- Procedure to delete a specific country  
+    PROCEDURE deleteCountry (pnIdCountry IN NUMBER) IS
+    BEGIN 
+        DELETE FROM COUNTRY
+        WHERE id_country = pnIdCountry;
+        Commit;
+    END deleteCountry;
+
+-- Procedure to insert a new country
+    PROCEDURE insertCountry (pcCountryName IN VARCHAR2) IS
+    BEGIN 
+        INSERT INTO COUNTRY (id_country, country_name)
+        VALUES (s_country, pcCountryName);
+        Commit;
+    END insertCountry;
     
 END PlaceTables;
