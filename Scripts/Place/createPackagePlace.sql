@@ -159,5 +159,49 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         VALUES (s_canton, pcCantonName, pnIdProvince);
         Commit;
     END insertCanton;
+    
+-- Table Country
+-- Function to get a country with specific id to show it in the screen      
+    PROCEDURE getProvince (pnIdProvince IN NUMBER) AS
+    CURSOR province(pnIdProvince IN NUMBER)
+    IS
+        SELECT p.id_province id_province, p.province_name province_name, c.country_name province_name
+        FROM PROVINCE p
+        INNER JOIN COUNTRY c
+        ON p.id_province = c.id_province
+        WHERE p.id_province = NVL(pnIdProvince, p.id_province);
+    BEGIN 
+        FOR i in province(pnIdProvince) LOOP
+            dbms_output.put_line(i.id_province);
+            dbms_output.put_line(i.province_name);
+            dbms_output.put_line(i.country_name);
+        END LOOP;
+    END getProvince;
 
+-- Procedure to set a country with specific id and the new values wrote by the user  
+    PROCEDURE setProvince (pnIdProvince IN NUMBER, pcProvinceName IN VARCHAR2, pnIdCountry IN NUMBER) IS
+    BEGIN
+        UPDATE PROVINCE
+        SET province_name = pcProvinceName,
+        id_country = pnIdCountry
+        WHERE id_province = pnIdProvince;
+        Commit;
+    END setProvince;
+
+-- Procedure to delete a specific country  
+    PROCEDURE deleteProvince (pnIdProvince IN NUMBER) IS
+    BEGIN 
+        DELETE FROM PROVINCE
+        WHERE id_province = pnIdProvince;
+        Commit;
+    END deleteProvince;
+
+-- Procedure to insert a new country
+    PROCEDURE insertProvince (pcProvinceName IN VARCHAR2, pnIdCountry IN NUMBER) IS
+    BEGIN 
+        INSERT INTO PROVINCE (id_province, province_name, id_country)
+        VALUES (s_province, pcProvinceName, pnIdCountry);
+        Commit;
+    END insertProvince;
+    
 END PlaceTables;
