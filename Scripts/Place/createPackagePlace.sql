@@ -37,27 +37,27 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         FROM COMMUNITY c
         INNER JOIN DISTRICT d
         ON c.id_district = d.id_district
-        WHERE d.id_community = NVL(pnIdCommunity, d.id_community);
+        WHERE c.id_community = NVL(pnIdCommunity, c.id_community);
     BEGIN 
         FOR i in community(pnIdCommunity) LOOP
             dbms_output.put_line(i.id_community);
             dbms_output.put_line(i.community_name);
             dbms_output.put_line(i.district_name);
         END LOOP;
-    END getCommunityColumns;
+    END getCommunity;
 
 -- Procedure to set a community with specific id and the new values wrote by the user  
-    PROCEDURE setCommunityColumns (pnIdCommunity NUMBER, pcCommunityName VARCHAR2, pnIdDistict NUMBER) IS
+    PROCEDURE setCommunity (pnIdCommunity IN NUMBER, pcCommunityName IN VARCHAR2, pnIdDistict IN NUMBER) IS
     BEGIN
         UPDATE COMMUNITY
         SET community_name = pcCommunityName,
         id_district = pnIdDistict
         WHERE id_community = pnIdCommunity;
         Commit;
-    END setCommunityColumns;
+    END setCommunitys;
 
 -- Procedure to delete a specific community  
-    PROCEDURE deleteCommunity (pnIdCommunity NUMBER) IS
+    PROCEDURE deleteCommunity (pnIdCommunity IN NUMBER) IS
     BEGIN 
         DELETE FROM COMMUNITY
         WHERE id_community = pnIdCommunity;
@@ -65,11 +65,55 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     END deleteCommunity;
 
 -- Procedure to insert a new community
-    PROCEDURE insertCommunity (pcCommunityName VARCHAR2, pnIdDistict NUMBER) IS
+    PROCEDURE insertCommunity (pcCommunityName IN VARCHAR2, pnIdDistict IN NUMBER) IS
     BEGIN 
         INSERT INTO COMMUNITY (id_community, community_name, id_district)
-        VALUES (s_community, pcCommunityName, pnIdDistict);
+        VALUES (s_community, pcCommunityName, pnIdDistrict);
         Commit;
     END insertCommunity;
+
+-- Table District
+-- Function to get a district with specific id to show it in the screen      
+    PROCEDURE getDistrict (pnIdDistrict IN NUMBER) AS
+    CURSOR district(pnIdDistrict IN NUMBER)
+    IS
+        SELECT d.id_district id_district, d.district_name district_name, c.canton_name canton_name
+        FROM DISTRICT d
+        INNER JOIN CANTON c
+        ON d.id_canton = c.id_canton
+        WHERE d.id_district = NVL(pnIdDistrict, d.id_district);
+    BEGIN 
+        FOR i in district(pnIdDistrict) LOOP
+            dbms_output.put_line(i.id_district);
+            dbms_output.put_line(i.district_name);
+            dbms_output.put_line(i.canton_name);
+        END LOOP;
+    END getDistrict;
+
+-- Procedure to set a district with specific id and the new values wrote by the user  
+    PROCEDURE setDistrict (pnIdDistrict IN NUMBER, pcDistrictName IN VARCHAR2, pnIdCanton IN NUMBER) IS
+    BEGIN
+        UPDATE DISTRICT
+        SET district_name = pcDistrictName,
+        id_canton = pnIdCanton
+        WHERE id_district = pnIdDistrict;
+        Commit;
+    END setDistrict;
+
+-- Procedure to delete a specific district  
+    PROCEDURE deleteDistrict (pnIdDistrict IN NUMBER) IS
+    BEGIN 
+        DELETE FROM DISTRICT
+        WHERE id_district = pnIdDistrict;
+        Commit;
+    END deleteDistrict;
+
+-- Procedure to insert a new district
+    PROCEDURE insertDistrict (pcDistrictName IN VARCHAR2, pnIdCanton IN NUMBER) IS
+    BEGIN 
+        INSERT INTO DISTRICT (id_district, district_name, id_canton)
+        VALUES (s_district, pcDistrictName, pnIdCanton);
+        Commit;
+    END insertDistrict;
 
 END PlaceTables;

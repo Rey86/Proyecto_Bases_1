@@ -20,7 +20,7 @@ CREATE OR REPLACE PACKAGE BODY ADMTables AS
             dbms_output.put_line(i.parameter_name);
             dbms_output.put_line(i.parameter_value);
         END LOOP;
-    END getParameterColumns;
+    END getParameter;
 
 -- Procedure to set a parameter with specific id and the new values wrote by the user  
     PROCEDURE setParameterColumns (pnIdParameter NUMBER, pcParameterName VARCHAR2, pnParameterValue NUMBER) IS
