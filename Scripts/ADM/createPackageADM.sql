@@ -23,7 +23,7 @@ CREATE OR REPLACE PACKAGE BODY ADMTables AS
     END getParameter;
 
 -- Procedure to set a parameter with specific id and the new values wrote by the user  
-    PROCEDURE setParameterColumns (pnIdParameter NUMBER, pcParameterName VARCHAR2, pnParameterValue NUMBER) IS
+    PROCEDURE setParameterColumns (pnIdParameter IN NUMBER, pcParameterName IN VARCHAR2, pnParameterValue IN NUMBER) IS
     BEGIN
         UPDATE PARAMETER_TABLE
         SET parameter_name = pcParameterName,
@@ -33,7 +33,7 @@ CREATE OR REPLACE PACKAGE BODY ADMTables AS
     END setParameterColumns;
 
 -- Procedure to delete a specific parameter  
-    PROCEDURE deleteParameter (pnIdParameter NUMBER) IS
+    PROCEDURE deleteParameter (pnIdParameter IN NUMBER) IS
     BEGIN 
         DELETE FROM PARAMETER_TABLE
         WHERE id_parameter = pnIdParameter;
@@ -41,7 +41,7 @@ CREATE OR REPLACE PACKAGE BODY ADMTables AS
     END deleteParameter;
 
 -- Procedure to insert a new parameter
-    PROCEDURE insertParameter (pcParameterName VARCHAR2, pnParameterValue NUMBER) IS
+    PROCEDURE insertParameter (pcParameterName IN VARCHAR2, pnParameterValue IN NUMBER) IS
     BEGIN 
         INSERT INTO PARAMETER_TABLE (id_parameter, parameter_name, parameter_value)
         VALUES (s_parameter, pcParameterName, pnParameterValue);
