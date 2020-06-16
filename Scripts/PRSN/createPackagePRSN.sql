@@ -2,51 +2,66 @@
 CREATE OR REPLACE PACKAGE PRSNTables IS
     -- Person Table
     PROCEDURE getPerson (pnIdPerson NUMBER);
-    PROCEDURE setPerson (pnIdCommunity NUMBER, pcPersonName VARCHAR2, pnIdDistrict NUMBER);
+    PROCEDURE setPerson (pnIdPerson NUMBER, pcFirstName VARCHAR2, pcLastName VARCHAR2, 
+        pcSecondLastName VARCHAR2, pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER);
     PROCEDURE deletePerson (pnIdPerson NUMBER);
-    PROCEDURE insertPerson (pcPersonName VARCHAR2, pnIdDistrict NUMBER);
+    PROCEDURE insertPerson (pcFirstName VARCHAR2, pcLastName VARCHAR2, pcSecondLastName VARCHAR2, 
+        pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER);
     -- Company Table
-    PROCEDURE getDistrict (pnIdDistrict NUMBER);
-    PROCEDURE setDistrict (pnIdDistrict NUMBER, pcDistrictName VARCHAR2, pnIdCanton NUMBER);
-    PROCEDURE deleteDistrict (pnIdDistrict NUMBER);
-    PROCEDURE insertDistrict (pcDistrictName VARCHAR2, pnIdCanton NUMBER);
+    PROCEDURE getCompany (pnIdCompany NUMBER);
+    PROCEDURE setCompany (pnIdCompany NUMBER, pcCompanyName VARCHAR2);
+    PROCEDURE deleteCompany (pnIdCompany NUMBER);
+    PROCEDURE insertCompany (pcCompanyName VARCHAR2);
     -- Gender Table 
-    PROCEDURE getCanton (pnIdCanton NUMBER);
-    PROCEDURE setCanton (pnIdCanton NUMBER, pcCantonName VARCHAR2, pnIdProvince NUMBER);
-    PROCEDURE deleteCanton (pnIdCanton NUMBER);
-    PROCEDURE insertCanton (pcCantonName VARCHAR2, pnIdProvince NUMBER);
+    PROCEDURE getGender (pnIdGender NUMBER);
+    PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);
+    PROCEDURE deleteGender (pnIdGender NUMBER);
+    PROCEDURE insertGender (pcGenderName VARCHAR2);
 END PlaceTables;
 
 CREATE OR REPLACE PACKAGE BODY PlaceTables AS
--- Table Community
--- Function to get a community with specific id to show it in the screen      
-    PROCEDURE getCommunity (pnIdCommunity IN NUMBER) AS
-    CURSOR community(pnIdCommunity IN NUMBER)
+-- Table Person
+-- Function to get a person with specific id to show it in the screen      
+    PROCEDURE getPerson (pnIdPerson IN NUMBER) AS
+    CURSOR person(pnIdPerson IN NUMBER)
     IS
-        SELECT c.id_community id_community, c.community_name community_name, d.district_name district_name
-        FROM COMMUNITY c
-        INNER JOIN DISTRICT d
-        ON c.id_district = d.id_district
-        WHERE c.id_community = NVL(pnIdCommunity, c.id_community);
+        SELECT pc.id_person id_person, pc.first_name first_name, pc.last_name last_name, pc.second_last_name second_last_name, 
+            pc.birthdate birthdate, g.gender_name gender_name, pc.company_name company_name
+        FROM (SELECT p.id_person, p.first_name, p.last_name, p.second_last_name, p.birthdate, p.id_gender, c.company_name
+              FROM PERSON p
+              INNER JOIN COMPANY c
+              ON p.id_company = c.id_company) pc
+        INNER JOIN GENDER g
+        ON pc.id_gender = g.id_gender
+        WHERE pc.id_person = NVL(pnIdPerson, pc.id_person);
     BEGIN 
-        FOR i in community(pnIdCommunity) LOOP
-            dbms_output.put_line(i.id_community);
-            dbms_output.put_line(i.community_name);
-            dbms_output.put_line(i.district_name);
+        FOR i in person(pnIdPerson) LOOP
+            dbms_output.put_line(i.id_person);
+            dbms_output.put_line(i.first_name);
+            dbms_output.put_line(i.last_name);
+            dbms_output.put_line(i.second_last_name);
+            dbms_output.put_line(i.birthdate);
+            dbms_output.put_line(i.gender_name);
+            dbms_output.put_line(i.company_name);
         END LOOP;
-    END getCommunity;
+    END getPerson;
 
--- Procedure to set a community with specific id and the new values wrote by the user  
-    PROCEDURE setCommunity (pnIdCommunity IN NUMBER, pcCommunityName IN VARCHAR2, pnIdDistict IN NUMBER) IS
+-- Procedure to set a person with specific id and the new values wrote by the user  
+    PROCEDURE setPerson (pnIdPerson NUMBER, pcFirstName VARCHAR2, pcLastName VARCHAR2, 
+        pcSecondLastName VARCHAR2, pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER) IS
     BEGIN
-        UPDATE COMMUNITY
-        SET community_name = pcCommunityName,
-        id_district = pnIdDistict
-        WHERE id_community = pnIdCommunity;
+        UPDATE PERSON
+        SET first_name = pcFirstName,
+        last_name = pcLastName,
+        second_last_name = pcSecondLastName,
+        birthdate = pdBirthdate,
+        id_gender = pnIdGender,
+        id_company = pnIdCompany
+        WHERE id_person = pnIdPerson;
         Commit;
-    END setCommunitys;
+    END setCommunity;
 
--- Procedure to delete a specific community  
+-- Procedure to delete a specific person  
     PROCEDURE deleteCommunity (pnIdCommunity IN NUMBER) IS
     BEGIN 
         DELETE FROM COMMUNITY
@@ -54,148 +69,16 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         Commit;
     END deleteCommunity;
 
--- Procedure to insert a new community
+-- Procedure to insert a new person
     PROCEDURE insertCommunity (pcCommunityName IN VARCHAR2, pnIdDistict IN NUMBER) IS
     BEGIN 
         INSERT INTO COMMUNITY (id_community, community_name, id_district)
         VALUES (s_community, pcCommunityName, pnIdDistrict);
         Commit;
     END insertCommunity;
-
--- Table District
--- Function to get a district with specific id to show it in the screen      
-    PROCEDURE getDistrict (pnIdDistrict IN NUMBER) AS
-    CURSOR district(pnIdDistrict IN NUMBER)
-    IS
-        SELECT d.id_district id_district, d.district_name district_name, c.canton_name canton_name
-        FROM DISTRICT d
-        INNER JOIN CANTON c
-        ON d.id_canton = c.id_canton
-        WHERE d.id_district = NVL(pnIdDistrict, d.id_district);
-    BEGIN 
-        FOR i in district(pnIdDistrict) LOOP
-            dbms_output.put_line(i.id_district);
-            dbms_output.put_line(i.district_name);
-            dbms_output.put_line(i.canton_name);
-        END LOOP;
-    END getDistrict;
-
--- Procedure to set a district with specific id and the new values wrote by the user  
-    PROCEDURE setDistrict (pnIdDistrict IN NUMBER, pcDistrictName IN VARCHAR2, pnIdCanton IN NUMBER) IS
-    BEGIN
-        UPDATE DISTRICT
-        SET district_name = pcDistrictName,
-        id_canton = pnIdCanton
-        WHERE id_district = pnIdDistrict;
-        Commit;
-    END setDistrict;
-
--- Procedure to delete a specific district  
-    PROCEDURE deleteDistrict (pnIdDistrict IN NUMBER) IS
-    BEGIN 
-        DELETE FROM DISTRICT
-        WHERE id_district = pnIdDistrict;
-        Commit;
-    END deleteDistrict;
-
--- Procedure to insert a new district
-    PROCEDURE insertDistrict (pcDistrictName IN VARCHAR2, pnIdCanton IN NUMBER) IS
-    BEGIN 
-        INSERT INTO DISTRICT (id_district, district_name, id_canton)
-        VALUES (s_district, pcDistrictName, pnIdCanton);
-        Commit;
-    END insertDistrict;
-
--- Table Canton
--- Function to get a canton with specific id to show it in the screen      
-    PROCEDURE getCanton (pnIdCanton IN NUMBER) AS
-    CURSOR canton(pnIdCanton IN NUMBER)
-    IS
-        SELECT c.id_canton id_canton, c.canton_name canton_name, p.province_name province_name
-        FROM CANTON c
-        INNER JOIN PROVINCE p
-        ON c.id_province = p.id_province
-        WHERE c.id_canton = NVL(pnIdCanton, c.id_canton);
-    BEGIN 
-        FOR i in canton(pnIdCanton) LOOP
-            dbms_output.put_line(i.id_canton);
-            dbms_output.put_line(i.canton_name);
-            dbms_output.put_line(i.province_name);
-        END LOOP;
-    END getCanton;
-
--- Procedure to set a canton with specific id and the new values wrote by the user  
-    PROCEDURE setCanton (pnIdCanton IN NUMBER, pcCantonName IN VARCHAR2, pnIdProvince IN NUMBER) IS
-    BEGIN
-        UPDATE CANTON
-        SET canton_name = pcCantonName,
-        id_province = pnIdProvince
-        WHERE id_canton = pnIdCanton;
-        Commit;
-    END setCanton;
-
--- Procedure to delete a specific canton  
-    PROCEDURE deleteCanton (pnIdCanton IN NUMBER) IS
-    BEGIN 
-        DELETE FROM CANTON
-        WHERE id_canton = pnIdCanton;
-        Commit;
-    END deleteCanton;
-
--- Procedure to insert a new canton
-    PROCEDURE insertCanton (pcCantonName IN VARCHAR2, pnIdProvince IN NUMBER) IS
-    BEGIN 
-        INSERT INTO CANTON (id_canton, canton_name, id_province)
-        VALUES (s_canton, pcCantonName, pnIdProvince);
-        Commit;
-    END insertCanton;
     
--- Table Province
--- Function to get a province with specific id to show it in the screen      
-    PROCEDURE getProvince (pnIdProvince IN NUMBER) AS
-    CURSOR province(pnIdProvince IN NUMBER)
-    IS
-        SELECT p.id_province id_province, p.province_name province_name, c.country_name province_name
-        FROM PROVINCE p
-        INNER JOIN COUNTRY c
-        ON p.id_province = c.id_province
-        WHERE p.id_province = NVL(pnIdProvince, p.id_province);
-    BEGIN 
-        FOR i in province(pnIdProvince) LOOP
-            dbms_output.put_line(i.id_province);
-            dbms_output.put_line(i.province_name);
-            dbms_output.put_line(i.country_name);
-        END LOOP;
-    END getProvince;
-
--- Procedure to set a province with specific id and the new values wrote by the user  
-    PROCEDURE setProvince (pnIdProvince IN NUMBER, pcProvinceName IN VARCHAR2, pnIdCountry IN NUMBER) IS
-    BEGIN
-        UPDATE PROVINCE
-        SET province_name = pcProvinceName,
-        id_country = pnIdCountry
-        WHERE id_province = pnIdProvince;
-        Commit;
-    END setProvince;
-
--- Procedure to delete a specific province 
-    PROCEDURE deleteProvince (pnIdProvince IN NUMBER) IS
-    BEGIN 
-        DELETE FROM PROVINCE
-        WHERE id_province = pnIdProvince;
-        Commit;
-    END deleteProvince;
-
--- Procedure to insert a new province
-    PROCEDURE insertProvince (pcProvinceName IN VARCHAR2, pnIdCountry IN NUMBER) IS
-    BEGIN 
-        INSERT INTO PROVINCE (id_province, province_name, id_country)
-        VALUES (s_province, pcProvinceName, pnIdCountry);
-        Commit;
-    END insertProvince;
-    
--- Table Country
--- Function to get a country with specific id to show it in the screen      
+-- Table Company
+-- Function to get a company with specific id to show it in the screen      
     PROCEDURE getCountry (pnIdCountry IN NUMBER) AS
     CURSOR country(pnIdCountry IN NUMBER)
     IS
@@ -209,7 +92,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         END LOOP;
     END getCountry;
 
--- Procedure to set a country with specific id and the new values wrote by the user  
+-- Procedure to set a company with specific id and the new values wrote by the user  
     PROCEDURE setCountry (pnIdCountry IN NUMBER, pcCountryName IN VARCHAR2) IS
     BEGIN
         UPDATE COUNTRY
@@ -218,7 +101,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         Commit;
     END setCountry;
 
--- Procedure to delete a specific country  
+-- Procedure to delete a specific company  
     PROCEDURE deleteCountry (pnIdCountry IN NUMBER) IS
     BEGIN 
         DELETE FROM COUNTRY
@@ -226,7 +109,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         Commit;
     END deleteCountry;
 
--- Procedure to insert a new country
+-- Procedure to insert a new company
     PROCEDURE insertCountry (pcCountryName IN VARCHAR2) IS
     BEGIN 
         INSERT INTO COUNTRY (id_country, country_name)
@@ -234,4 +117,43 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         Commit;
     END insertCountry;
     
+-- Table Gender
+-- Function to get a gender with specific id to show it in the screen      
+    PROCEDURE getCountry (pnIdCountry IN NUMBER) AS
+    CURSOR country(pnIdCountry IN NUMBER)
+    IS
+        SELECT id_country, country_name
+        FROM COUNTRY 
+        WHERE id_country = NVL(pnIdCountry, id_country);
+    BEGIN 
+        FOR i in country(pnIdCountry) LOOP
+            dbms_output.put_line(i.id_country);
+            dbms_output.put_line(i.country_name);
+        END LOOP;
+    END getCountry;
+
+-- Procedure to set a gender with specific id and the new values wrote by the user  
+    PROCEDURE setCountry (pnIdCountry IN NUMBER, pcCountryName IN VARCHAR2) IS
+    BEGIN
+        UPDATE COUNTRY
+        SET country_name = pcCountryName
+        WHERE id_country = pnIdCountry;
+        Commit;
+    END setCountry;
+
+-- Procedure to delete a specific gender  
+    PROCEDURE deleteCountry (pnIdCountry IN NUMBER) IS
+    BEGIN 
+        DELETE FROM COUNTRY
+        WHERE id_country = pnIdCountry;
+        Commit;
+    END deleteCountry;
+
+-- Procedure to insert a new gender
+    PROCEDURE insertCountry (pcCountryName IN VARCHAR2) IS
+    BEGIN 
+        INSERT INTO COUNTRY (id_country, country_name)
+        VALUES (s_country, pcCountryName);
+        Commit;
+    END insertCountry;
 END PRSNTables;

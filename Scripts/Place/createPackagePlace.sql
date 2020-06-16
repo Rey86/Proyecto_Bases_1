@@ -54,7 +54,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         id_district = pnIdDistict
         WHERE id_community = pnIdCommunity;
         Commit;
-    END setCommunitys;
+    END setCommunity;
 
 -- Procedure to delete a specific community  
     PROCEDURE deleteCommunity (pnIdCommunity IN NUMBER) IS
