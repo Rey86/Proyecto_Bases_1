@@ -116,4 +116,48 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         Commit;
     END insertDistrict;
 
+-- Table Canton
+-- Function to get a canton with specific id to show it in the screen      
+    PROCEDURE getCanton (pnIdCanton IN NUMBER) AS
+    CURSOR canton(pnIdCanton IN NUMBER)
+    IS
+        SELECT c.id_canton id_canton, c.canton_name canton_name, p.province_name province_name
+        FROM CANTON c
+        INNER JOIN PROVINCE p
+        ON c.id_province = p.id_province
+        WHERE c.id_canton = NVL(pnIdCanton, c.id_canton);
+    BEGIN 
+        FOR i in canton(pnIdCanton) LOOP
+            dbms_output.put_line(i.id_canton);
+            dbms_output.put_line(i.canton_name);
+            dbms_output.put_line(i.province_name);
+        END LOOP;
+    END getCanton;
+
+-- Procedure to set a canton with specific id and the new values wrote by the user  
+    PROCEDURE setCanton (pnIdCanton IN NUMBER, pcCantonName IN VARCHAR2, pnIdProvince IN NUMBER) IS
+    BEGIN
+        UPDATE CANTON
+        SET canton_name = pcCantonName,
+        id_province = pnIdProvince
+        WHERE id_canton = pnIdCanton;
+        Commit;
+    END setCanton;
+
+-- Procedure to delete a specific canton  
+    PROCEDURE deleteCanton (pnIdCanton IN NUMBER) IS
+    BEGIN 
+        DELETE FROM CANTON
+        WHERE id_canton = pnIdCanton;
+        Commit;
+    END deleteCanton;
+
+-- Procedure to insert a new canton
+    PROCEDURE insertCanton (pcCantonName IN VARCHAR2, pnIdProvince IN NUMBER) IS
+    BEGIN 
+        INSERT INTO CANTON (id_canton, canton_name, id_province)
+        VALUES (s_canton, pcCantonName, pnIdProvince);
+        Commit;
+    END insertCanton;
+
 END PlaceTables;
