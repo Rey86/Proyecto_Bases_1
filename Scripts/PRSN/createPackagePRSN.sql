@@ -1,30 +1,20 @@
--- Package to Place procedures and functions.
-CREATE OR REPLACE PACKAGE PlaceTables IS
-    -- Community Table
+-- Package to PRSN procedures and functions.
+CREATE OR REPLACE PACKAGE PRSNTables IS
+    -- Person Table
     PROCEDURE getCommunity (pnIdCommunity NUMBER);
-    PROCEDURE setCommunity (pnIdCommunity NUMBER, pcCommunityName VARCHAR2, pnIdDistrict NUMBER);
+    PROCEDURE setCommunityColumns (pnIdCommunity NUMBER, pcCommunityName VARCHAR2, pnIdDistrict NUMBER);
     PROCEDURE deleteCommunity (pnIdCommunity NUMBER);
     PROCEDURE insertCommunity (pcCommunityName VARCHAR2, pnIdDistrict NUMBER);
-    -- District Table
+    -- Company Table
     PROCEDURE getDistrict (pnIdDistrict NUMBER);
-    PROCEDURE setDistrict (pnIdDistrict NUMBER, pcDistrictName VARCHAR2, pnIdCanton NUMBER);
+    PROCEDURE setDistrictColumns (pnIdDistrict NUMBER, pcDistrictName VARCHAR2, pnIdCanton NUMBER);
     PROCEDURE deleteDistrict (pnIdDistrict NUMBER);
     PROCEDURE insertDistrict (pcDistrictName VARCHAR2, pnIdCanton NUMBER);
-    -- Canton Table 
+    -- Gender Table 
     PROCEDURE getCanton (pnIdCanton NUMBER);
-    PROCEDURE setCanton (pnIdCanton NUMBER, pcCantonName VARCHAR2, pnIdProvince NUMBER);
+    PROCEDURE setCantonColumns (pnIdCanton NUMBER, pcCantonName VARCHAR2, pnIdProvince NUMBER);
     PROCEDURE deleteCanton (pnIdCanton NUMBER);
     PROCEDURE insertCanton (pcCantonName VARCHAR2, pnIdProvince NUMBER);
-    -- Province Table 
-    PROCEDURE getProvince (pnIdProvince NUMBER);
-    PROCEDURE setProvince (pnIdProvince NUMBER, pcProvinceName VARCHAR2, pnIdCountry NUMBER);
-    PROCEDURE deleteProvince (pnIdProvince NUMBER);
-    PROCEDURE insertProvince (pcProvinceName VARCHAR2, pnIdCountry NUMBER);
-    -- Country Table
-    PROCEDURE getCountry (pnIdCountry NUMBER);
-    PROCEDURE setCountry (pnIdCountry NUMBER, pcCountryName VARCHAR2);
-    PROCEDURE deleteCountry (pnIdCountry NUMBER);
-    PROCEDURE insertCountry (pcCountryName VARCHAR2);
 END PlaceTables;
 
 CREATE OR REPLACE PACKAGE BODY PlaceTables AS
@@ -244,4 +234,4 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         Commit;
     END insertCountry;
     
-END PlaceTables;
+END PRSNTables;
