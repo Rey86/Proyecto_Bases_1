@@ -59,63 +59,64 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         id_company = pnIdCompany
         WHERE id_person = pnIdPerson;
         Commit;
-    END setCommunity;
+    END setPerson;
 
 -- Procedure to delete a specific person  
-    PROCEDURE deleteCommunity (pnIdCommunity IN NUMBER) IS
+    PROCEDURE deletePerson (pnIdPerson NUMBER) IS
     BEGIN 
-        DELETE FROM COMMUNITY
-        WHERE id_community = pnIdCommunity;
+        DELETE FROM PERSON
+        WHERE id_person = pnIdPerson;
         Commit;
-    END deleteCommunity;
+    END deletePerson;
 
 -- Procedure to insert a new person
-    PROCEDURE insertCommunity (pcCommunityName IN VARCHAR2, pnIdDistict IN NUMBER) IS
+    PROCEDURE insertPerson (pcFirstName VARCHAR2, pcLastName VARCHAR2, pcSecondLastName VARCHAR2, 
+        pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER) IS
     BEGIN 
-        INSERT INTO COMMUNITY (id_community, community_name, id_district)
-        VALUES (s_community, pcCommunityName, pnIdDistrict);
+        INSERT INTO PERSON (id_person, first_name, lat_name, second_last_name, birthdate, id_gender, id_company)
+        VALUES (s_person, pcFirstName, pcLastName, pcSecondLastName, pdBirthdate, pnIdGender, pnIdCompany);
         Commit;
-    END insertCommunity;
+    END insertPerson;
     
 -- Table Company
 -- Function to get a company with specific id to show it in the screen      
-    PROCEDURE getCountry (pnIdCountry IN NUMBER) AS
-    CURSOR country(pnIdCountry IN NUMBER)
+    PROCEDURE getCompany (pnIdCompany IN NUMBER) AS
+    CURSOR company(pnIdCompany IN NUMBER)
     IS
-        SELECT id_country, country_name
-        FROM COUNTRY 
-        WHERE id_country = NVL(pnIdCountry, id_country);
+        SELECT id_company, company_name
+        FROM COMPANY 
+        WHERE id_company = NVL(pnIdCompany, id_company);
     BEGIN 
-        FOR i in country(pnIdCountry) LOOP
-            dbms_output.put_line(i.id_country);
-            dbms_output.put_line(i.country_name);
+        FOR i in company(pnIdCompany) LOOP
+            dbms_output.put_line(i.id_company);
+            dbms_output.put_line(i.company_name);
         END LOOP;
-    END getCountry;
+    END getCompany;
 
 -- Procedure to set a company with specific id and the new values wrote by the user  
-    PROCEDURE setCountry (pnIdCountry IN NUMBER, pcCountryName IN VARCHAR2) IS
+    PROCEDURE setCompany (pnIdCompany IN NUMBER, pcCompanyName IN VARCHAR2) IS
     BEGIN
-        UPDATE COUNTRY
-        SET country_name = pcCountryName
-        WHERE id_country = pnIdCountry;
+        UPDATE COMPANY
+        SET company_name = pcCompanyName
+        WHERE id_company = pnIdCompany;
         Commit;
-    END setCountry;
+    END setCompany;
 
 -- Procedure to delete a specific company  
-    PROCEDURE deleteCountry (pnIdCountry IN NUMBER) IS
+    PROCEDURE deleteCompany (pnIdCompany IN NUMBER) IS
     BEGIN 
-        DELETE FROM COUNTRY
-        WHERE id_country = pnIdCountry;
+        DELETE FROM COMPANY
+        WHERE id_company = pnIdCompany;
         Commit;
-    END deleteCountry;
+    END deleteCompany;
 
 -- Procedure to insert a new company
-    PROCEDURE insertCountry (pcCountryName IN VARCHAR2) IS
+    PROCEDURE insertCompany (pcCompanyName IN VARCHAR2) IS
     BEGIN 
-        INSERT INTO COUNTRY (id_country, country_name)
-        VALUES (s_country, pcCountryName);
+        INSERT INTO COMPANY (id_company, company_name)
+        VALUES (s_company, pcCompanyName);
         Commit;
-    END insertCountry;
+    END insertCompany;
     
 -- Table Gender
 -- Function to get a gender with specific id to show it in the screen      
