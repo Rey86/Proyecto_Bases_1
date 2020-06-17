@@ -2,7 +2,7 @@
 
 CREATE OR REPLACE TRIGGER TR.beforeInsertParameter
     BEFORE INSERT
-    ON TR.PARAMETER_TABLE
+    ON ADM.PARAMETER_TABLE
     For each row
     BEGIN
         :new.user_creation:=USER;
@@ -11,7 +11,7 @@ CREATE OR REPLACE TRIGGER TR.beforeInsertParameter
     
 CREATE OR REPLACE TRIGGER TR.beforeUpdateParameter
     BEFORE UPDATE
-    ON TR.PARAMETER_TABLE
+    ON ADM.PARAMETER_TABLE
     For each row
     BEGIN
         :new.user_last_modification:=USER;
