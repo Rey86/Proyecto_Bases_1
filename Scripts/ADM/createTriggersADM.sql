@@ -1,6 +1,6 @@
 -- Insert and Update Triggers of PARAMETER_TABLE table.
 
-CREATE OR REPLACE TRIGGER TR.beforeInsertParameter
+CREATE OR REPLACE TRIGGER ADM.beforeInsertParameter
     BEFORE INSERT
     ON ADM.PARAMETER_TABLE
     For each row
@@ -9,7 +9,7 @@ CREATE OR REPLACE TRIGGER TR.beforeInsertParameter
         :new.date_creation:=SYSDATE;
     END beforeInsertParameter;
     
-CREATE OR REPLACE TRIGGER TR.beforeUpdateParameter
+CREATE OR REPLACE TRIGGER ADM.beforeUpdateParameter
     BEFORE UPDATE
     ON ADM.PARAMETER_TABLE
     For each row
