@@ -15,9 +15,9 @@ CREATE TABLE USERAPP(
     id_gender NUMBER(6) CONSTRAINT userapp_idgender_nn NOT NULL,
     id_company NUMBER(6) CONSTRAINT userapp_idcompany_nn NOT NULL,
     date_creation DATE CONSTRAINT userapp_datecreation_nn NOT NULL,
-    user_creation varchar2(15) CONSTRAINT userapp_usercreation_nn NOT NULL,
+    user_creation VARCHAR2(15) CONSTRAINT userapp_usercreation_nn NOT NULL,
     date_last_modification DATE,
-    user_last_modification varchar2(15)
+    user_last_modification VARCHAR2(15)
     );
     
 -- Table UserType
@@ -25,9 +25,9 @@ CREATE TABLE USERTYPE(
     id_usertype NUMBER(6) CONSTRAINT usertype_id_nn NOT NULL,
     usertype_description VARCHAR2(30) CONSTRAINT usertype_description_nn NOT NULL,
     date_creation DATE CONSTRAINT usertype_datecreation_nn NOT NULL,
-    user_creation varchar2(15) CONSTRAINT usertype_usercreation_nn NOT NULL,
+    user_creation VARCHAR2(15) CONSTRAINT usertype_usercreation_nn NOT NULL,
     date_last_modification DATE,
-    user_last_modification varchar2(15)
+    user_last_modification VARCHAR2(15)
     );
     
 -- Table BanReason
@@ -35,9 +35,9 @@ CREATE TABLE BANREASON(
     id_banreason NUMBER(6) CONSTRAINT banreason_id_nn NOT NULL,
     banreason_description VARCHAR2(30) CONSTRAINT banreason_description_nn NOT NULL,
     date_creation DATE CONSTRAINT banreason_datecreation_nn NOT NULL,
-    user_creation varchar2(15) CONSTRAINT banreason_usercreation_nn NOT NULL,
+    user_creation VARCHAR2(15) CONSTRAINT banreason_usercreation_nn NOT NULL,
     date_last_modification DATE,
-    user_last_modification varchar2(15)
+    user_last_modification VARCHAR2(15)
     );
     
 --Table BanReasonXUserapp

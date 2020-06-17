@@ -11,19 +11,19 @@ CREATE TABLE TRANSCRIPT(
     id_crime NUMBER(6) CONSTRAINT transcript_idcrime_nn NOT NULL,
     due_date DATE CONSTRAINT transcript_duedate_nn NOT NULL,
     date_creation DATE CONSTRAINT transcript_datecreation_nn NOT NULL,
-    user_creation varchar2(15) CONSTRAINT transcript_usercreation_nn NOT NULL,
+    user_creation VARCHAR2(15) CONSTRAINT transcript_usercreation_nn NOT NULL,
     date_last_modification DATE,
-    user_last_modification varchar2(15)
+    user_last_modification VARCHAR2(15)
     );
     
--- Table ProceedingsType
+-- Table TranscriptType
 CREATE TABLE TRANSCRIPTTYPE(
     id_transcripttype NUMBER(6) CONSTRAINT transcripttype_id_nn NOT NULL,
     transcripttype_name VARCHAR2(30) CONSTRAINT transcripttype_name_nn NOT NULL,
     date_creation DATE CONSTRAINT transcripttype_datecreation_nn NOT NULL,
-    user_creation varchar2(15) CONSTRAINT transcripttype_usercreation_nn NOT NULL,
+    user_creation VARCHAR2(15) CONSTRAINT transcripttype_usercreation_nn NOT NULL,
     date_last_modification DATE,
-    user_last_modification varchar2(15)
+    user_last_modification VARCHAR2(15)
     );
     
 -- Table Accused
@@ -36,19 +36,19 @@ CREATE TABLE ACCUSED(
     birthdate DATE CONSTRAINT accused_birthdate_nn NOT NULL, 
     id_gender NUMBER(6) CONSTRAINT accused_idgender_nn NOT NULL,
     date_creation DATE CONSTRAINT accused_datecreation_nn NOT NULL,
-    user_creation varchar2(15) CONSTRAINT accused_usercreation_nn NOT NULL,
+    user_creation VARCHAR2(15) CONSTRAINT accused_usercreation_nn NOT NULL,
     date_last_modification DATE,
-    user_last_modification varchar2(15)
+    user_last_modification VARCHAR2(15)
     );
 
--- Table Veredict
+-- Table Verdict
 CREATE TABLE VERDICT(
     id_verdict NUMBER(6) CONSTRAINT verdict_id_nn NOT NULL,
     verdict_name VARCHAR2(30) CONSTRAINT verdict_name_nn NOT NULL,
     date_creation DATE CONSTRAINT verdict_datecreation_nn NOT NULL,
-    user_creation varchar2(15) CONSTRAINT verdict_usercreation_nn NOT NULL,
+    user_creation VARCHAR2(15) CONSTRAINT verdict_usercreation_nn NOT NULL,
     date_last_modification DATE,
-    user_last_modification varchar2(15)
+    user_last_modification VARCHAR2(15)
     );
     
 --Table Sentence
@@ -59,9 +59,9 @@ CREATE TABLE SENTENCE(
     end_date DATE CONSTRAINT sentence_enddate_nn NOT NULL,
     id_sentencetype NUMBER(6) CONSTRAINT sentence_typeid_nn NOT NULL,
     date_creation DATE CONSTRAINT sentence_datecreation_nn NOT NULL,
-    user_creation varchar2(15) CONSTRAINT sentence_usercreation_nn NOT NULL,
+    user_creation VARCHAR2(15) CONSTRAINT sentence_usercreation_nn NOT NULL,
     date_last_modification DATE,
-    user_last_modification varchar2(15)
+    user_last_modification VARCHAR2(15)
     );  
     
 --Table SentenceType
@@ -69,9 +69,9 @@ CREATE TABLE SENTENCETYPE(
     id_sentencetype NUMBER(6) CONSTRAINT sentencetype_id_nn NOT NULL,
     sentencetype_name VARCHAR2(30) CONSTRAINT sentencetype_name_nn NOT NULL,
     date_creation DATE CONSTRAINT sentencetype_datecreation_nn NOT NULL,
-    user_creation varchar2(15) CONSTRAINT sentencetype_usercreation_nn NOT NULL,
+    user_creation VARCHAR2(15) CONSTRAINT sentencetype_usercreation_nn NOT NULL,
     date_last_modification DATE,
-    user_last_modification varchar2(15)
+    user_last_modification VARCHAR2(15)
     );
     
 --Table Crime
@@ -79,19 +79,19 @@ CREATE TABLE CRIME(
     id_crime NUMBER(6) CONSTRAINT crime_id_nn NOT NULL,
     crime_name VARCHAR2(30) CONSTRAINT crime_name_nn NOT NULL,
     date_creation DATE CONSTRAINT crime_datecreation_nn NOT NULL,
-    user_creation varchar2(15) CONSTRAINT crime_usercreation_nn NOT NULL,
+    user_creation VARCHAR2(15) CONSTRAINT crime_usercreation_nn NOT NULL,
     date_last_modification DATE,
-    user_last_modification varchar2(15)
+    user_last_modification VARCHAR2(15)
     );
     
 --Table Photo
-CREATE TABLE PHOTO (
+CREATE TABLE PHOTO(
     id_photo NUMBER(6) CONSTRAINT photo_id_nn NOT NULL,
     direction VARCHAR2 CONSTRAINT photo_direction_nn NOT NULL,
     photo_description VARCHAR2 CONSTRAINT photo_description_nn NOT NULL,
     id_accused VARCHAR2(20) CONSTRAINT photo_accusedId_nn NOT NULL,
     date_creation DATE CONSTRAINT photo_datecreation_nn NOT NULL,
-    user_creation varchar2(15) CONSTRAINT photo_usercreation_nn NOT NULL,
+    user_creation VARCHAR2(15) CONSTRAINT photo_usercreation_nn NOT NULL,
     date_last_modification DATE,
-    user_last_modification varchar2(15)
+    user_last_modification VARCHAR2(15)
 );
