@@ -120,41 +120,41 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     
 -- Table Gender
 -- Function to get a gender with specific id to show it in the screen      
-    PROCEDURE getCountry (pnIdCountry IN NUMBER) AS
-    CURSOR country(pnIdCountry IN NUMBER)
+    PROCEDURE getGender (pnIdGender IN NUMBER) AS
+    CURSOR gender(pnIdGender IN NUMBER)
     IS
-        SELECT id_country, country_name
-        FROM COUNTRY 
-        WHERE id_country = NVL(pnIdCountry, id_country);
+        SELECT id_gender, gender_name
+        FROM GENDER 
+        WHERE id_gender = NVL(pnIdGender, id_gender);
     BEGIN 
-        FOR i in country(pnIdCountry) LOOP
-            dbms_output.put_line(i.id_country);
-            dbms_output.put_line(i.country_name);
+        FOR i in gender(pnIdGender) LOOP
+            dbms_output.put_line(i.id_gender);
+            dbms_output.put_line(i.gender_name);
         END LOOP;
-    END getCountry;
+    END getGender;
 
 -- Procedure to set a gender with specific id and the new values wrote by the user  
-    PROCEDURE setCountry (pnIdCountry IN NUMBER, pcCountryName IN VARCHAR2) IS
+    PROCEDURE setGender (pnIdGender IN NUMBER, pcGenderName IN VARCHAR2) IS
     BEGIN
-        UPDATE COUNTRY
-        SET country_name = pcCountryName
-        WHERE id_country = pnIdCountry;
+        UPDATE GENDER
+        SET gender_name = pcGenderName
+        WHERE id_gender = pnIdGender;
         Commit;
-    END setCountry;
+    END setGender;
 
 -- Procedure to delete a specific gender  
-    PROCEDURE deleteCountry (pnIdCountry IN NUMBER) IS
+    PROCEDURE deleteGender (pnIdGender IN NUMBER) IS
     BEGIN 
-        DELETE FROM COUNTRY
-        WHERE id_country = pnIdCountry;
+        DELETE FROM GENDER
+        WHERE id_gender = pnIdGender;
         Commit;
-    END deleteCountry;
+    END deleteGender;
 
 -- Procedure to insert a new gender
-    PROCEDURE insertCountry (pcCountryName IN VARCHAR2) IS
+    PROCEDURE insertGender (pcGenderName IN VARCHAR2) IS
     BEGIN 
-        INSERT INTO COUNTRY (id_country, country_name)
-        VALUES (s_country, pcCountryName);
+        INSERT INTO GENDER (id_gender, gender_name)
+        VALUES (s_gender, pcGenderName);
         Commit;
-    END insertCountry;
+    END insertGender;
 END PRSNTables;
