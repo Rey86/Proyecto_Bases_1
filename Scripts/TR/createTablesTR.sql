@@ -5,7 +5,7 @@ CREATE TABLE TRANSCRIPT(
     username VARCHAR2(30) CONSTRAINT transcript_username_nn NOT NULL, 
     id_accused VARCHAR2(20) CONSTRAINT transcript_idaccused_nn NOT NULL,
     id_transcripttype NUMBER(6) CONSTRAINT transcript_idtranscripttype_nn NOT NULL,
-    id_veredict NUMBER(6) CONSTRAINT transcript_idveredict_nn NOT NULL,
+    id_verdict NUMBER(6) CONSTRAINT transcript_idverdict_nn NOT NULL,
     id_community NUMBER(6) CONSTRAINT transcript_idcommunity_nn NOT NULL,
     id_sentence NUMBER(6) CONSTRAINT transcript_idsentence_nn NOT NULL,
     id_crime NUMBER(6) CONSTRAINT transcript_idcrime_nn NOT NULL,
