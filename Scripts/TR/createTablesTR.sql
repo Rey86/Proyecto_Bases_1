@@ -43,10 +43,10 @@ CREATE TABLE ACCUSED(
 
 -- Table Veredict
 CREATE TABLE VERDICT(
-    id_veredict NUMBER(6) CONSTRAINT veredict_id_nn NOT NULL,
-    veredict_name VARCHAR2(30) CONSTRAINT veredict_name_nn NOT NULL,
-    date_creation DATE CONSTRAINT veredict_datecreation_nn NOT NULL,
-    user_creation varchar2(15) CONSTRAINT veredict_usercreation_nn NOT NULL,
+    id_verdict NUMBER(6) CONSTRAINT verdict_id_nn NOT NULL,
+    verdict_name VARCHAR2(30) CONSTRAINT verdict_name_nn NOT NULL,
+    date_creation DATE CONSTRAINT verdict_datecreation_nn NOT NULL,
+    user_creation varchar2(15) CONSTRAINT verdict_usercreation_nn NOT NULL,
     date_last_modification DATE,
     user_last_modification varchar2(15)
     );
@@ -83,3 +83,15 @@ CREATE TABLE CRIME(
     date_last_modification DATE,
     user_last_modification varchar2(15)
     );
+    
+--Table Photo
+CREATE TABLE PHOTO (
+    id_photo NUMBER(6) CONSTRAINT photo_id_nn NOT NULL,
+    direction VARCHAR2 CONSTRAINT photo_direction_nn NOT NULL,
+    photo_description VARCHAR2 CONSTRAINT photo_description_nn NOT NULL,
+    id_accused VARCHAR2(20) CONSTRAINT photo_accusedId_nn NOT NULL,
+    date_creation DATE CONSTRAINT photo_datecreation_nn NOT NULL,
+    user_creation varchar2(15) CONSTRAINT photo_usercreation_nn NOT NULL,
+    date_last_modification DATE,
+    user_last_modification varchar2(15)
+);
