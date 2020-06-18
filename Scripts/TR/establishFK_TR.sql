@@ -92,7 +92,7 @@ ALTER TABLE SENTENCE
     SENTENCETYPE(id_sentencetype);
     
 --Photo's foreign key
-    --ID Accused
+    --Accused ID
 ALTER TABLE PHOTO
     ADD CONSTRAINT fk_photo_accused FOREIGN KEY
     (id_accused) REFERENCES
