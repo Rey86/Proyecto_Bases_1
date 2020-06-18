@@ -1,6 +1,6 @@
 -- Table Transcript
 CREATE TABLE TRANSCRIPT(
-    valid BOOLEAN DEFAULT TRUE,
+    valid NUMBER(1) CONSTRAINT transcript_valid_nn NOT NULL,
     transcript_number VARCHAR2(15) CONSTRAINT transcript_number_nn NOT NULL,
     username VARCHAR2(30) CONSTRAINT transcript_username_nn NOT NULL, 
     id_accused VARCHAR2(20) CONSTRAINT transcript_idaccused_nn NOT NULL,

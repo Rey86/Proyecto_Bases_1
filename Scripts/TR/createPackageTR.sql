@@ -1,28 +1,29 @@
 -- Package to PRSN procedures and functions.
 CREATE OR REPLACE PACKAGE PRSNTables IS
-    -- Person Table
-    PROCEDURE getPerson (pnIdPerson NUMBER);
-    PROCEDURE setPerson (pnIdPerson NUMBER, pcFirstName VARCHAR2, pcLastName VARCHAR2, 
+    -- Transcript Table
+    PROCEDURE getPerson (pcIdPerson VARCHAR2);
+    PROCEDURE setPerson (pcIdPerson VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, 
         pcSecondLastName VARCHAR2, pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER);
-    PROCEDURE deletePerson (pnIdPerson NUMBER);
-    PROCEDURE insertPerson (pcFirstName VARCHAR2, pcLastName VARCHAR2, pcSecondLastName VARCHAR2, 
+    PROCEDURE deletePerson (pcIdPerson VARCHAR2);
+    PROCEDURE insertPerson (pcIdPerson VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pcSecondLastName VARCHAR2, 
         pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER);
-    -- Company Table
+    -- TranscriptType Table
     PROCEDURE getCompany (pnIdCompany NUMBER);
     PROCEDURE setCompany (pnIdCompany NUMBER, pcCompanyName VARCHAR2);
     PROCEDURE deleteCompany (pnIdCompany NUMBER);
     PROCEDURE insertCompany (pcCompanyName VARCHAR2);
-    -- Gender Table 
+    -- Accused Table 
     PROCEDURE getGender (pnIdGender NUMBER);
     PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);
     PROCEDURE deleteGender (pnIdGender NUMBER);
     PROCEDURE insertGender (pcGenderName VARCHAR2);
+    -- Verdict
 END PlaceTables;
 
 CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 -- Table Person
 -- Function to get a person with specific id to show it in the screen      
-    PROCEDURE getPerson (pnIdPerson IN NUMBER) AS
+    PROCEDURE getPerson (pcIdPerson IN VARCHAR2) AS
     CURSOR person(pnIdPerson IN NUMBER)
     IS
         SELECT pc.id_person id_person, pc.first_name first_name, pc.last_name last_name, pc.second_last_name second_last_name, 
@@ -33,7 +34,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
               ON p.id_company = c.id_company) pc
         INNER JOIN GENDER g
         ON pc.id_gender = g.id_gender
-        WHERE pc.id_person = NVL(pnIdPerson, pc.id_person);
+        WHERE pc.id_person = NVL(pcIdPerson, pc.id_person);
     BEGIN 
         FOR i in person(pnIdPerson) LOOP
             dbms_output.put_line(i.id_person);
@@ -47,8 +48,8 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     END getPerson;
 
 -- Procedure to set a person with specific id and the new values wrote by the user  
-    PROCEDURE setPerson (pnIdPerson NUMBER, pcFirstName VARCHAR2, pcLastName VARCHAR2, 
-        pcSecondLastName VARCHAR2, pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER) IS
+    PROCEDURE setPerson (pcIdPerson IN VARCHAR2, pcFirstName IN VARCHAR2, pcLastName IN VARCHAR2, 
+        pcSecondLastName IN VARCHAR2, pdBirthdate IN DATE, pnIdGender IN NUMBER, pnIdCompany IN NUMBER) IS
     BEGIN
         UPDATE PERSON
         SET first_name = pcFirstName,
@@ -57,24 +58,24 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         birthdate = pdBirthdate,
         id_gender = pnIdGender,
         id_company = pnIdCompany
-        WHERE id_person = pnIdPerson;
+        WHERE id_person = pcIdPerson;
         Commit;
     END setPerson;
 
 -- Procedure to delete a specific person  
-    PROCEDURE deletePerson (pnIdPerson NUMBER) IS
+    PROCEDURE deletePerson (pcIdPerson IN VARCHAR2) IS
     BEGIN 
         DELETE FROM PERSON
-        WHERE id_person = pnIdPerson;
+        WHERE id_person = pcIdPerson;
         Commit;
     END deletePerson;
 
 -- Procedure to insert a new person
-    PROCEDURE insertPerson (pcFirstName VARCHAR2, pcLastName VARCHAR2, pcSecondLastName VARCHAR2, 
-        pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER) IS
+    PROCEDURE insertPerson (pcIdPerson IN VARCHAR2, pcFirstName IN VARCHAR2, pcLastName IN VARCHAR2, pcSecondLastName IN VARCHAR2, 
+        pdBirthdate IN DATE, pnIdGender IN NUMBER, pnIdCompany IN NUMBER) IS
     BEGIN 
         INSERT INTO PERSON (id_person, first_name, lat_name, second_last_name, birthdate, id_gender, id_company)
-        VALUES (s_person, pcFirstName, pcLastName, pcSecondLastName, pdBirthdate, pnIdGender, pnIdCompany);
+        VALUES (pcIdPerson, pcFirstName, pcLastName, pcSecondLastName, pdBirthdate, pnIdGender, pnIdCompany);
         Commit;
     END insertPerson;
     
