@@ -68,7 +68,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     PROCEDURE insertCommunity (pcCommunityName IN VARCHAR2, pnIdDistict IN NUMBER) IS
     BEGIN 
         INSERT INTO COMMUNITY (id_community, community_name, id_district)
-        VALUES (s_community, pcCommunityName, pnIdDistrict);
+        VALUES (s_community.nextval, pcCommunityName, pnIdDistrict);
         Commit;
     END insertCommunity;
 
@@ -112,7 +112,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     PROCEDURE insertDistrict (pcDistrictName IN VARCHAR2, pnIdCanton IN NUMBER) IS
     BEGIN 
         INSERT INTO DISTRICT (id_district, district_name, id_canton)
-        VALUES (s_district, pcDistrictName, pnIdCanton);
+        VALUES (s_district.nextval, pcDistrictName, pnIdCanton);
         Commit;
     END insertDistrict;
 
@@ -156,7 +156,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     PROCEDURE insertCanton (pcCantonName IN VARCHAR2, pnIdProvince IN NUMBER) IS
     BEGIN 
         INSERT INTO CANTON (id_canton, canton_name, id_province)
-        VALUES (s_canton, pcCantonName, pnIdProvince);
+        VALUES (s_canton.nextval, pcCantonName, pnIdProvince);
         Commit;
     END insertCanton;
     
@@ -200,7 +200,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     PROCEDURE insertProvince (pcProvinceName IN VARCHAR2, pnIdCountry IN NUMBER) IS
     BEGIN 
         INSERT INTO PROVINCE (id_province, province_name, id_country)
-        VALUES (s_province, pcProvinceName, pnIdCountry);
+        VALUES (s_province.nextval, pcProvinceName, pnIdCountry);
         Commit;
     END insertProvince;
     
@@ -240,7 +240,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     PROCEDURE insertCountry (pcCountryName IN VARCHAR2) IS
     BEGIN 
         INSERT INTO COUNTRY (id_country, country_name)
-        VALUES (s_country, pcCountryName);
+        VALUES (s_country.nextval, pcCountryName);
         Commit;
     END insertCountry;
     

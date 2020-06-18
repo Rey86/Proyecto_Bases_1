@@ -1,11 +1,11 @@
 -- Package to PRSN procedures and functions.
 CREATE OR REPLACE PACKAGE PRSNTables IS
     -- Person Table
-    PROCEDURE getPerson (pnIdPerson NUMBER);
-    PROCEDURE setPerson (pnIdPerson NUMBER, pcFirstName VARCHAR2, pcLastName VARCHAR2, 
+    PROCEDURE getPerson (pnIdPerson VARCHAR2);
+    PROCEDURE setPerson (pnIdPerson VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, 
         pcSecondLastName VARCHAR2, pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER);
-    PROCEDURE deletePerson (pnIdPerson NUMBER);
-    PROCEDURE insertPerson (pcFirstName VARCHAR2, pcLastName VARCHAR2, pcSecondLastName VARCHAR2, 
+    PROCEDURE deletePerson (pnIdPerson VARCHAR2);
+    PROCEDURE insertPerson (pnIdPerson VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pcSecondLastName VARCHAR2, 
         pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER);
     -- Company Table
     PROCEDURE getCompany (pnIdCompany NUMBER);
@@ -22,7 +22,7 @@ END PlaceTables;
 CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 -- Table Person
 -- Function to get a person with specific id to show it in the screen      
-    PROCEDURE getPerson (pnIdPerson IN NUMBER) AS
+    PROCEDURE getPerson (pnIdPerson IN VARCHAR2) AS
     CURSOR person(pnIdPerson IN NUMBER)
     IS
         SELECT pc.id_person id_person, pc.first_name first_name, pc.last_name last_name, pc.second_last_name second_last_name, 
@@ -47,7 +47,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     END getPerson;
 
 -- Procedure to set a person with specific id and the new values wrote by the user  
-    PROCEDURE setPerson (pnIdPerson NUMBER, pcFirstName VARCHAR2, pcLastName VARCHAR2, 
+    PROCEDURE setPerson (pnIdPerson VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, 
         pcSecondLastName VARCHAR2, pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER) IS
     BEGIN
         UPDATE PERSON
@@ -62,7 +62,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     END setPerson;
 
 -- Procedure to delete a specific person  
-    PROCEDURE deletePerson (pnIdPerson NUMBER) IS
+    PROCEDURE deletePerson (pnIdPerson IN VARCHAR2) IS
     BEGIN 
         DELETE FROM PERSON
         WHERE id_person = pnIdPerson;
@@ -74,7 +74,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER) IS
     BEGIN 
         INSERT INTO PERSON (id_person, first_name, lat_name, second_last_name, birthdate, id_gender, id_company)
-        VALUES (s_person, pcFirstName, pcLastName, pcSecondLastName, pdBirthdate, pnIdGender, pnIdCompany);
+        VALUES (s_person., pcFirstName, pcLastName, pcSecondLastName, pdBirthdate, pnIdGender, pnIdCompany);
         Commit;
     END insertPerson;
     

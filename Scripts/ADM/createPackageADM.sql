@@ -44,7 +44,7 @@ CREATE OR REPLACE PACKAGE BODY ADMTables AS
     PROCEDURE insertParameter (pcParameterName IN VARCHAR2, pnParameterValue IN NUMBER) IS
     BEGIN 
         INSERT INTO PARAMETER_TABLE (id_parameter, parameter_name, parameter_value)
-        VALUES (s_parameter, pcParameterName, pnParameterValue);
+        VALUES (s_parameter.nextval, pcParameterName, pnParameterValue);
         Commit;
     END insertParameter;
 
