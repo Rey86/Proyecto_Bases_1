@@ -6,3 +6,21 @@ CREATE SEQUENCE s_transcripttype
     MAXVALUE 10000000
     NOCACHE
     NOCYCLE;
+    
+-- Sequence to fill id VERDICT.
+CREATE SEQUENCE s_verdict
+    START WITH 0
+    INCREMENT BY 1
+    MINVALUE 0
+    MAXVALUE 10000000
+    NOCACHE
+    NOCYCLE;
+    
+-- Sequence to fill id SENTENCE.
+CREATE SEQUENCE s_sentence
+    START WITH 0
+    INCREMENT BY 1
+    MINVALUE 0
+    MAXVALUE 10000000
+    NOCACHE
+    NOCYCLE;

@@ -50,7 +50,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 -- TranscriptType Table
 -- Function to get a transcript type with specific id to show it in the screen      
     PROCEDURE getTranscriptType (pnIdTranscriptType IN NUMBER) AS
-    CURSOR transcripttype(pnIdTranscript IN NUMBER)
+    CURSOR transcripttype(pnIdTranscriptType IN NUMBER)
     IS
         SELECT id_transcripttype, transcripttype_name
         FROM TRANSCRIPTTYPE
@@ -86,4 +86,152 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         VALUES (s_transcripttype.nextval, pcTranscriptTypeName);
         Commit;
     END insertTranscriptType;
+    
+-- Table Accused
+-- Function to get a accused with specific id to show it in the screen      
+    PROCEDURE getAccused (pcIdAccused IN VARCHAR2) AS
+    CURSOR accused(pnIdAccused IN VARCHAR2)
+    IS
+        SELECT ac.id_accused id_accused, ac.first_name first_name, ac.last_name last_name, ac.second_last_name second_last_name, 
+            ac.birthdate birthdate, g.gender_name gender_name, ac.company_name company_name
+        FROM (SELECT a.id_accused, a.first_name, a.last_name, a.second_last_name, a.birthdate, a.id_gender, c.company_name
+              FROM ACCUSED a
+              INNER JOIN COMPANY c
+              ON a.id_company = c.id_company) ac
+        INNER JOIN GENDER g
+        ON ac.id_gender = g.id_gender
+        WHERE ac.id_accused = NVL(pcIdAccused, ac.id_accused);
+    BEGIN 
+        FOR i in accused(pnIdAccused) LOOP
+            dbms_output.put_line(i.id_accused);
+            dbms_output.put_line(i.first_name);
+            dbms_output.put_line(i.last_name);
+            dbms_output.put_line(i.second_last_name);
+            dbms_output.put_line(i.birthdate);
+            dbms_output.put_line(i.gender_name);
+            dbms_output.put_line(i.company_name);
+        END LOOP;
+    END getAccused;
+
+-- Procedure to set a accused with specific id and the new values wrote by the user  
+    PROCEDURE setAccused (pcIdAccused IN VARCHAR2, pcFirstName IN VARCHAR2, pcLastName IN VARCHAR2, 
+        pcSecondLastName IN VARCHAR2, pdBirthdate IN DATE, pnIdGender IN NUMBER, pnIdCompany IN NUMBER) IS
+    BEGIN
+        UPDATE ACCUSED
+        SET first_name = pcFirstName,
+        last_name = pcLastName,
+        second_last_name = pcSecondLastName,
+        birthdate = pdBirthdate,
+        id_gender = pnIdGender,
+        id_company = pnIdCompany
+        WHERE id_accused = pcIdAccused;
+        Commit;
+    END setAccused;
+
+-- Procedure to delete a specific accused  
+    PROCEDURE deleteAccused (pcIdAccused IN VARCHAR2) IS
+    BEGIN 
+        DELETE FROM ACCUSED
+        WHERE id_accused = pcIdAccused;
+        Commit;
+    END deleteAccused;
+
+-- Procedure to insert a new accused
+    PROCEDURE insertAccused (pcIdAccused IN VARCHAR2, pcFirstName IN VARCHAR2, pcLastName IN VARCHAR2, pcSecondLastName IN VARCHAR2, 
+        pdBirthdate IN DATE, pnIdGender IN NUMBER, pnIdCompany IN NUMBER) IS
+    BEGIN 
+        INSERT INTO ACCUSED (id_accused, first_name, lat_name, second_last_name, birthdate, id_gender, id_company)
+        VALUES (pcIdAccused, pcFirstName, pcLastName, pcSecondLastName, pdBirthdate, pnIdGender, pnIdCompany);
+        Commit;
+    END insertAccused;
+    
+-- Verdict Table
+-- Function to get a verdict with specific id to show it in the screen      
+    PROCEDURE getVerdict (pnIdVerdict IN NUMBER) AS
+    CURSOR verdict(Verdict IN NUMBER)
+    IS
+        SELECT id_verdict, verdict_name
+        FROM VERDICT
+        WHERE id_verdict = NVL(pnIdVerdict, id_verdict);
+    BEGIN 
+        FOR i in verdict(pnIdVerdict) LOOP
+            dbms_output.put_line(i.id_verdict);
+            dbms_output.put_line(i.verdict_name);
+        END LOOP;
+    END getVerdict;
+
+-- Procedure to set a verdict with specific id and the new values wrote by the user  
+    PROCEDURE setVerdict (pnIdVerdict IN NUMBER, pcVerdictName IN VARCHAR2) IS
+    BEGIN
+        UPDATE VERDICT
+        SET verdict_name = pcVerdictName
+        WHERE id_verdict = pnIdVerdict;
+        Commit;
+    END setVerdict;
+
+-- Procedure to delete a specific verdict  
+    PROCEDURE deleteVerdict (pnIdVerdict IN NUMBER) IS
+    BEGIN 
+        DELETE FROM VERDICT
+        WHERE id_verdict = pnIdVerdict;
+        Commit;
+    END deleteVerdict;
+
+-- Procedure to insert a new verdict
+    PROCEDURE insertVerdict (pcVerdictName IN VARCHAR2) IS
+    BEGIN 
+        INSERT INTO VERDICT (id_verdict, verdict_name)
+        VALUES (s_verdict.nextval, pcVerdictName);
+        Commit;
+    END insertVerdict;
+    
+-- Sentence Table
+-- Function to get a sentence with specific id to show it in the screen      
+    PROCEDURE getSentence (pnIdSentence IN NUMBER) AS
+    CURSOR sentence(pnIdSentence IN NUMBER)
+    IS
+        SELECT s.id_sentence id_sentence, s.sentence_name sentence_name, s.start_date start_date, s.end_date end_date,  
+            st.sentencetype_name sentencetype_name
+        FROM SENTENCE s
+        INNER JOIN SENTENCETYPE st
+        ON s.id_sentencetype = st.id_sentencetype
+        WHERE s.id_sentence = NVL(pnIdSentence, s.id_sentence);
+    BEGIN 
+        FOR i in sentence(pnIdSentence) LOOP
+            dbms_output.put_line(i.id_sentence);
+            dbms_output.put_line(i.sentence_name);
+            dbms_output.put_line(i.start_date);
+            dbms_output.put_line(i.end_date);
+            dbms_output.put_line(i.sentencetype_name);
+        END LOOP;
+    END getSentence;
+
+-- Procedure to set a sentence with specific id and the new values wrote by the user  
+    PROCEDURE setSentence (pnIdSentence IN NUMBER, pcSentenceName IN VARCHAR2, pdStartDate IN DATE, 
+        pdEndDate IN DATE, pnIdSentenceType IN NUMBER) IS
+    BEGIN
+        UPDATE SENTENCE
+        SET sentence_name = pcSentenceName,
+        start_date = pdStartDate,
+        end_date = pdEndDate,
+        id_sentencetype = pnIdSentenceType
+        WHERE id_sentence = pnIdSentence;
+        Commit;
+    END setSentence;
+
+-- Procedure to delete a specific sentence  
+    PROCEDURE deleteSentence (pnIdSentence IN NUMBER) IS
+    BEGIN 
+        DELETE FROM SENTENCE
+        WHERE id_sentence = pnIdSentence;
+        Commit;
+    END deleteSentence;
+
+-- Procedure to insert a new sentence
+    PROCEDURE insertSentence (pcSentenceName IN VARCHAR2, pdStartDate IN DATE, pdEndDate IN DATE, pnIdSentenceType IN NUMBER) IS
+    BEGIN 
+        INSERT INTO SENTENCE (id_sentence, sentence_name, start_date, end_date, id_sentencetype)
+        VALUES (s_sentence.nextval, pdStartDate, pdEndDate, pcSentenceName, pnIdCanton);
+        Commit;
+    END insertSentence;
 END TRTables;
