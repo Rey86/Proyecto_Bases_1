@@ -1,12 +1,3 @@
--- Sequence to fill id PERSON.
-CREATE SEQUENCE s_person
-    START WITH 0
-    INCREMENT BY 1
-    MINVALUE 0
-    MAXVALUE 10000000
-    NOCACHE
-    NOCYCLE;
-    
 -- Sequence to fill id COMPANY.
 CREATE SEQUENCE s_company
     START WITH 0

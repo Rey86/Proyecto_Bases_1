@@ -1,7 +1,7 @@
 -- Package to PRSN procedures and functions.
 CREATE OR REPLACE PACKAGE PRSNTables IS
     -- Transcript Table
-    PROCEDURE getPerson (pcIdPerson VARCHAR2);
+    PROCEDURE getPerson (pnIdPerson );
     PROCEDURE setPerson (pcIdPerson VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, 
         pcSecondLastName VARCHAR2, pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER);
     PROCEDURE deletePerson (pcIdPerson VARCHAR2);
@@ -18,10 +18,30 @@ CREATE OR REPLACE PACKAGE PRSNTables IS
     PROCEDURE deleteGender (pnIdGender NUMBER);
     PROCEDURE insertGender (pcGenderName VARCHAR2);
     -- Verdict Table
+    PROCEDURE getGender (pnIdGender NUMBER);
+    PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);
+    PROCEDURE deleteGender (pnIdGender NUMBER);
+    PROCEDURE insertGender (pcGenderName VARCHAR2);
     -- Sentence Table
+    PROCEDURE getGender (pnIdGender NUMBER);
+    PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);
+    PROCEDURE deleteGender (pnIdGender NUMBER);
+    PROCEDURE insertGender (pcGenderName VARCHAR2);
     -- SentenceType Table
+    PROCEDURE getGender (pnIdGender NUMBER);
+    PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);
+    PROCEDURE deleteGender (pnIdGender NUMBER);
+    PROCEDURE insertGender (pcGenderName VARCHAR2);
     -- Crime Table
+    PROCEDURE getGender (pnIdGender NUMBER);
+    PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);
+    PROCEDURE deleteGender (pnIdGender NUMBER);
+    PROCEDURE insertGender (pcGenderName VARCHAR2);
     -- Photo Table
+    PROCEDURE getGender (pnIdGender NUMBER);
+    PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);
+    PROCEDURE deleteGender (pnIdGender NUMBER);
+    PROCEDURE insertGender (pcGenderName VARCHAR2);
 END PlaceTables;
 
 CREATE OR REPLACE PACKAGE BODY PlaceTables AS
