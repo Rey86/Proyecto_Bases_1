@@ -138,3 +138,23 @@ CREATE OR REPLACE TRIGGER TR.beforeUpdateCrime
         :new.date_last_modification:=SYSDATE;
     END beforeUpdateCrime;
     
+-- Insert and Update Triggers of PHOTO table.
+
+CREATE OR REPLACE TRIGGER TR.beforeInsertPhoto
+    BEFORE INSERT
+    ON TR.PHOTO
+    For each row
+    BEGIN
+        :new.user_creation:=USER;
+        :new.date_creation:=SYSDATE;
+    END beforeInsertPhoto;
+    
+CREATE OR REPLACE TRIGGER TR.beforeUpdatePhoto
+    BEFORE UPDATE
+    ON TR.PHOTO
+    For each row
+    BEGIN
+        :new.user_last_modification:=USER;
+        :new.date_last_modification:=SYSDATE;
+    END beforeUpdatePhoto;
+    

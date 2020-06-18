@@ -17,7 +17,11 @@ CREATE OR REPLACE PACKAGE PRSNTables IS
     PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);
     PROCEDURE deleteGender (pnIdGender NUMBER);
     PROCEDURE insertGender (pcGenderName VARCHAR2);
-    -- Verdict
+    -- Verdict Table
+    -- Sentence Table
+    -- SentenceType Table
+    -- Crime Table
+    -- Photo Table
 END PlaceTables;
 
 CREATE OR REPLACE PACKAGE BODY PlaceTables AS
