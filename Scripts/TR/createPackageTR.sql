@@ -145,10 +145,10 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         Commit;
     END insertAccused;
     
--- Verdict Table
+--  Table Verdict
 -- Function to get a verdict with specific id to show it in the screen      
     PROCEDURE getVerdict (pnIdVerdict IN NUMBER) AS
-    CURSOR verdict(Verdict IN NUMBER)
+    CURSOR verdict(pnIdVerdict IN NUMBER)
     IS
         SELECT id_verdict, verdict_name
         FROM VERDICT
@@ -185,7 +185,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         Commit;
     END insertVerdict;
     
--- Sentence Table
+-- Table Sentence 
 -- Function to get a sentence with specific id to show it in the screen      
     PROCEDURE getSentence (pnIdSentence IN NUMBER) AS
     CURSOR sentence(pnIdSentence IN NUMBER)
@@ -228,6 +228,138 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
     END deleteSentence;
 
 -- Procedure to insert a new sentence
+    PROCEDURE insertSentence (pcSentenceName IN VARCHAR2, pdStartDate IN DATE, pdEndDate IN DATE, pnIdSentenceType IN NUMBER) IS
+    BEGIN 
+        INSERT INTO SENTENCE (id_sentence, sentence_name, start_date, end_date, id_sentencetype)
+        VALUES (s_sentence.nextval, pdStartDate, pdEndDate, pcSentenceName, pnIdCanton);
+        Commit;
+    END insertSentence;
+
+-- Table SentenceType
+-- Function to get a sentence type with specific id to show it in the screen      
+    PROCEDURE getSentenceType (pnIdSentenceType IN NUMBER) AS
+    CURSOR sentencetype(pnIdSentenceType IN NUMBER)
+    IS
+        SELECT id_sentencetype, sentencetype_name
+        FROM SENTENCETYPE
+        WHERE id_sentencetype = NVL(pnIdSentenceType, id_sentencetype);
+    BEGIN 
+        FOR i in sentencetype(pnIdSentenceType) LOOP
+            dbms_output.put_line(i.id_sentencetype);
+            dbms_output.put_line(i.sentencetype_name);
+        END LOOP;
+    END getSentenceType;
+
+-- Procedure to set a sentence type with specific id and the new values wrote by the user  
+    PROCEDURE setSentenceType (pnIdSentenceType IN NUMBER, pcSentenceTypeName IN VARCHAR2) IS
+    BEGIN
+        UPDATE SENTENCETYPE
+        SET sentencetype_name = pcSentenceTypeName
+        WHERE id_sentencetype = pnIdSentenceType;
+        Commit;
+    END setSentenceType;
+
+-- Procedure to delete a specific sentence type  
+    PROCEDURE deleteSentenceType (pnIdSentenceType IN NUMBER) IS
+    BEGIN 
+        DELETE FROM SENTENCETYPE
+        WHERE id_sentencetype = pnIdSentenceType;
+        Commit;
+    END deleteSentenceType;
+
+-- Procedure to insert a new sentence type
+    PROCEDURE insertSentenceType (pcSentenceTypeName IN VARCHAR2) IS
+    BEGIN 
+        INSERT INTO SENTENCETYPE (id_sentencetype, sentencetype_name)
+        VALUES (s_sentencetype.nextval, pcSentenceTypeName);
+        Commit;
+    END insertSentenceType;
+
+--  Table Crime
+-- Function to get a crime with specific id to show it in the screen      
+    PROCEDURE getCrime (pnIdCrime IN NUMBER) AS
+    CURSOR crime(pnIdCrime IN NUMBER)
+    IS
+        SELECT id_crime, crime_name, crime_date
+        FROM CRIME
+        WHERE id_crime = NVL(pnIdCrime, id_crime);
+    BEGIN 
+        FOR i in crime(pnIdCrime) LOOP
+            dbms_output.put_line(i.id_crime);
+            dbms_output.put_line(i.crime_name);
+            dbms_output.put_line(i.crime_date);
+        END LOOP;
+    END getCrime;
+
+-- Procedure to set a crime with specific id and the new values wrote by the user  
+    PROCEDURE setCrime (pnIdCrime IN NUMBER, pcCrimeName IN VARCHAR2, pdCrimeDate IN DATE) IS
+    BEGIN
+        UPDATE CRIME
+        SET crime_name = pcCrimeName,
+        crime_date = pdCrimeDate
+        WHERE id_crime = pnIdCrime;
+        Commit;
+    END setCrime;
+
+-- Procedure to delete a specific crime  
+    PROCEDURE deleteCrime (pnIdCrime IN NUMBER) IS
+    BEGIN 
+        DELETE FROM CRIME
+        WHERE id_crime = pnIdCrime;
+        Commit;
+    END deleteCrime;
+
+-- Procedure to insert a new crime
+    PROCEDURE insertCrime (pcCrimeName IN VARCHAR2, pdCrimeDate IN DATE) IS
+    BEGIN 
+        INSERT INTO CRIME (id_crime, crime_name, crime_date)
+        VALUES (s_crime.nextval, pcCrimeName, pdCrimeDate);
+        Commit;
+    END insertCrime;
+
+-- Table Photo
+-- Function to get a photo with specific id to show it in the screen      
+    PROCEDURE getSentence (pnIdSentence IN NUMBER) AS
+    CURSOR sentence(pnIdSentence IN NUMBER)
+    IS
+        SELECT s.id_sentence id_sentence, s.sentence_name sentence_name, s.start_date start_date, s.end_date end_date,  
+            st.sentencetype_name sentencetype_name
+        FROM SENTENCE s
+        INNER JOIN SENTENCETYPE st
+        ON s.id_sentencetype = st.id_sentencetype
+        WHERE s.id_sentence = NVL(pnIdSentence, s.id_sentence);
+    BEGIN 
+        FOR i in sentence(pnIdSentence) LOOP
+            dbms_output.put_line(i.id_sentence);
+            dbms_output.put_line(i.sentence_name);
+            dbms_output.put_line(i.start_date);
+            dbms_output.put_line(i.end_date);
+            dbms_output.put_line(i.sentencetype_name);
+        END LOOP;
+    END getSentence;
+
+-- Procedure to set a photo with specific id and the new values wrote by the user  
+    PROCEDURE setSentence (pnIdSentence IN NUMBER, pcSentenceName IN VARCHAR2, pdStartDate IN DATE, 
+        pdEndDate IN DATE, pnIdSentenceType IN NUMBER) IS
+    BEGIN
+        UPDATE SENTENCE
+        SET sentence_name = pcSentenceName,
+        start_date = pdStartDate,
+        end_date = pdEndDate,
+        id_sentencetype = pnIdSentenceType
+        WHERE id_sentence = pnIdSentence;
+        Commit;
+    END setSentence;
+
+-- Procedure to delete a specific photo 
+    PROCEDURE deleteSentence (pnIdSentence IN NUMBER) IS
+    BEGIN 
+        DELETE FROM SENTENCE
+        WHERE id_sentence = pnIdSentence;
+        Commit;
+    END deleteSentence;
+
+-- Procedure to insert a new photo
     PROCEDURE insertSentence (pcSentenceName IN VARCHAR2, pdStartDate IN DATE, pdEndDate IN DATE, pnIdSentenceType IN NUMBER) IS
     BEGIN 
         INSERT INTO SENTENCE (id_sentence, sentence_name, start_date, end_date, id_sentencetype)
