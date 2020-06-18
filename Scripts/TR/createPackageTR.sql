@@ -1,5 +1,5 @@
--- Package to PRSN procedures and functions.
-CREATE OR REPLACE PACKAGE PRSNTables IS
+-- Package to TR procedures and functions.
+CREATE OR REPLACE PACKAGE TRTables IS
     -- Transcript Table
     PROCEDURE getTranscript (pcTranscriptNumber VARCHAR2);
     PROCEDURE setTranscript (pcTranscriptNumber VARCHAR2, pnValid NUMBER, pcUserName VARCHAR2, pcIdAccused VARCHAR2, 
@@ -35,25 +35,26 @@ CREATE OR REPLACE PACKAGE PRSNTables IS
     PROCEDURE deleteSentenceType (pnIdSentenceType NUMBER);
     PROCEDURE insertSentenceType (pcSentenceTypeName VARCHAR2);
     -- Crime Table
-    PROCEDURE getGender (pnIdGender NUMBER);
-    PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);
-    PROCEDURE deleteGender (pnIdGender NUMBER);
-    PROCEDURE insertGender (pcGenderName VARCHAR2);
+    PROCEDURE getCrime (pnIdCrime NUMBER);
+    PROCEDURE setCrime (pnIdCrime NUMBER, pcCrimeName VARCHAR2, pdCrimeDate DATE);
+    PROCEDURE deleteCrime (pnIdCrime NUMBER);
+    PROCEDURE insertCrime (pcCrimeName VARCHAR2, pdCrimeDate DATE);
     -- Photo Table
-    PROCEDURE getGender (pnIdGender NUMBER);
-    PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);
-    PROCEDURE deleteGender (pnIdGender NUMBER);
-    PROCEDURE insertGender (pcGenderName VARCHAR2);
+    PROCEDURE getPhoto (pnIdPhoto NUMBER);
+    PROCEDURE setPhoto (pnIdPhoto NUMBER, pcPhotoDescription VARCHAR2, pcDirection VARCHAR2, pcIdAccused VARCHAR2);
+    PROCEDURE deletePhoto (pnIdPhoto NUMBER);
+    PROCEDURE insertPhoto (pcPhotoDescription VARCHAR2, pcDirection VARCHAR2, pcIdAccused VARCHAR2);
 END PlaceTables;
 
-CREATE OR REPLACE PACKAGE BODY PlaceTables AS
--- Table Person
--- Function to get a person with specific id to show it in the screen      
-    PROCEDURE getPerson (pcIdPerson IN VARCHAR2) AS
-    CURSOR person(pnIdPerson IN NUMBER)
+CREATE OR REPLACE PACKAGE BODY TRTables AS
+-- Table Transcript
+-- Function to get a transcript with specific number to show it in the screen      
+    PROCEDURE getTranscript (pcTranscriptNumber IN VARCHAR2) AS
+    CURSOR transcript(pcTranscriptNumber IN VARCHAR2)
     IS
-        SELECT pc.id_person id_person, pc.first_name first_name, pc.last_name last_name, pc.second_last_name second_last_name, 
-            pc.birthdate birthdate, g.gender_name gender_name, pc.company_name company_name
+        SELECT valid valid, transcript_number transcript_number, username username, 
+            first_name||' '||last_name||' '||second_last_name accused_name,  transcripttype_name transcripttype_name, 
+            verdict_name verdict_name, community_name 
         FROM (SELECT p.id_person, p.first_name, p.last_name, p.second_last_name, p.birthdate, p.id_gender, c.company_name
               FROM PERSON p
               INNER JOIN COMPANY c
@@ -72,116 +73,4 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
             dbms_output.put_line(i.company_name);
         END LOOP;
     END getPerson;
-
--- Procedure to set a person with specific id and the new values wrote by the user  
-    PROCEDURE setPerson (pcIdPerson IN VARCHAR2, pcFirstName IN VARCHAR2, pcLastName IN VARCHAR2, 
-        pcSecondLastName IN VARCHAR2, pdBirthdate IN DATE, pnIdGender IN NUMBER, pnIdCompany IN NUMBER) IS
-    BEGIN
-        UPDATE PERSON
-        SET first_name = pcFirstName,
-        last_name = pcLastName,
-        second_last_name = pcSecondLastName,
-        birthdate = pdBirthdate,
-        id_gender = pnIdGender,
-        id_company = pnIdCompany
-        WHERE id_person = pcIdPerson;
-        Commit;
-    END setPerson;
-
--- Procedure to delete a specific person  
-    PROCEDURE deletePerson (pcIdPerson IN VARCHAR2) IS
-    BEGIN 
-        DELETE FROM PERSON
-        WHERE id_person = pcIdPerson;
-        Commit;
-    END deletePerson;
-
--- Procedure to insert a new person
-    PROCEDURE insertPerson (pcIdPerson IN VARCHAR2, pcFirstName IN VARCHAR2, pcLastName IN VARCHAR2, pcSecondLastName IN VARCHAR2, 
-        pdBirthdate IN DATE, pnIdGender IN NUMBER, pnIdCompany IN NUMBER) IS
-    BEGIN 
-        INSERT INTO PERSON (id_person, first_name, lat_name, second_last_name, birthdate, id_gender, id_company)
-        VALUES (pcIdPerson, pcFirstName, pcLastName, pcSecondLastName, pdBirthdate, pnIdGender, pnIdCompany);
-        Commit;
-    END insertPerson;
-    
--- Table Company
--- Function to get a company with specific id to show it in the screen      
-    PROCEDURE getCompany (pnIdCompany IN NUMBER) AS
-    CURSOR company(pnIdCompany IN NUMBER)
-    IS
-        SELECT id_company, company_name
-        FROM COMPANY 
-        WHERE id_company = NVL(pnIdCompany, id_company);
-    BEGIN 
-        FOR i in company(pnIdCompany) LOOP
-            dbms_output.put_line(i.id_company);
-            dbms_output.put_line(i.company_name);
-        END LOOP;
-    END getCompany;
-
--- Procedure to set a company with specific id and the new values wrote by the user  
-    PROCEDURE setCompany (pnIdCompany IN NUMBER, pcCompanyName IN VARCHAR2) IS
-    BEGIN
-        UPDATE COMPANY
-        SET company_name = pcCompanyName
-        WHERE id_company = pnIdCompany;
-        Commit;
-    END setCompany;
-
--- Procedure to delete a specific company  
-    PROCEDURE deleteCompany (pnIdCompany IN NUMBER) IS
-    BEGIN 
-        DELETE FROM COMPANY
-        WHERE id_company = pnIdCompany;
-        Commit;
-    END deleteCompany;
-
--- Procedure to insert a new company
-    PROCEDURE insertCompany (pcCompanyName IN VARCHAR2) IS
-    BEGIN 
-        INSERT INTO COMPANY (id_company, company_name)
-        VALUES (s_company, pcCompanyName);
-        Commit;
-    END insertCompany;
-    
--- Table Gender
--- Function to get a gender with specific id to show it in the screen      
-    PROCEDURE getGender (pnIdGender IN NUMBER) AS
-    CURSOR gender(pnIdGender IN NUMBER)
-    IS
-        SELECT id_gender, gender_name
-        FROM GENDER 
-        WHERE id_gender = NVL(pnIdGender, id_gender);
-    BEGIN 
-        FOR i in gender(pnIdGender) LOOP
-            dbms_output.put_line(i.id_gender);
-            dbms_output.put_line(i.gender_name);
-        END LOOP;
-    END getGender;
-
--- Procedure to set a gender with specific id and the new values wrote by the user  
-    PROCEDURE setGender (pnIdGender IN NUMBER, pcGenderName IN VARCHAR2) IS
-    BEGIN
-        UPDATE GENDER
-        SET gender_name = pcGenderName
-        WHERE id_gender = pnIdGender;
-        Commit;
-    END setGender;
-
--- Procedure to delete a specific gender  
-    PROCEDURE deleteGender (pnIdGender IN NUMBER) IS
-    BEGIN 
-        DELETE FROM GENDER
-        WHERE id_gender = pnIdGender;
-        Commit;
-    END deleteGender;
-
--- Procedure to insert a new gender
-    PROCEDURE insertGender (pcGenderName IN VARCHAR2) IS
-    BEGIN 
-        INSERT INTO GENDER (id_gender, gender_name)
-        VALUES (s_gender, pcGenderName);
-        Commit;
-    END insertGender;
-END PRSNTables;
+END TRTables;

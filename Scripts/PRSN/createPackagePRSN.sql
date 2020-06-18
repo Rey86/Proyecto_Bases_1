@@ -19,11 +19,11 @@ CREATE OR REPLACE PACKAGE PRSNTables IS
     PROCEDURE insertGender (pcGenderName VARCHAR2);
 END PlaceTables;
 
-CREATE OR REPLACE PACKAGE BODY PlaceTables AS
+CREATE OR REPLACE PACKAGE BODY PRSNTables AS
 -- Table Person
 -- Function to get a person with specific id to show it in the screen      
     PROCEDURE getPerson (pcIdPerson IN VARCHAR2) AS
-    CURSOR person(pnIdPerson IN NUMBER)
+    CURSOR person(pnIdPerson IN VARCHAR2)
     IS
         SELECT pc.id_person id_person, pc.first_name first_name, pc.last_name last_name, pc.second_last_name second_last_name, 
             pc.birthdate birthdate, g.gender_name gender_name, pc.company_name company_name
