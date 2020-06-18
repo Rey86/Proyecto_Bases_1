@@ -114,7 +114,7 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
     PROCEDURE insertCompany (pcCompanyName IN VARCHAR2) IS
     BEGIN 
         INSERT INTO COMPANY (id_company, company_name)
-        VALUES (s_company, pcCompanyName);
+        VALUES (s_company.nextval, pcCompanyName);
         Commit;
     END insertCompany;
     
@@ -154,7 +154,7 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
     PROCEDURE insertGender (pcGenderName IN VARCHAR2) IS
     BEGIN 
         INSERT INTO GENDER (id_gender, gender_name)
-        VALUES (s_gender, pcGenderName);
+        VALUES (s_gender.nextval, pcGenderName);
         Commit;
     END insertGender;
 END PRSNTables;

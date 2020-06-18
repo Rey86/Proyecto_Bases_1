@@ -47,30 +47,43 @@ CREATE OR REPLACE PACKAGE TRTables IS
 END PlaceTables;
 
 CREATE OR REPLACE PACKAGE BODY TRTables AS
--- Table Transcript
--- Function to get a transcript with specific number to show it in the screen      
-    PROCEDURE getTranscript (pcTranscriptNumber IN VARCHAR2) AS
-    CURSOR transcript(pcTranscriptNumber IN VARCHAR2)
+-- TranscriptType Table
+-- Function to get a transcript type with specific id to show it in the screen      
+    PROCEDURE getTranscriptType (pnIdTranscriptType IN NUMBER) AS
+    CURSOR transcripttype(pnIdTranscript IN NUMBER)
     IS
-        SELECT valid valid, transcript_number transcript_number, username username, 
-            first_name||' '||last_name||' '||second_last_name accused_name,  transcripttype_name transcripttype_name, 
-            verdict_name verdict_name, community_name 
-        FROM (SELECT p.id_person, p.first_name, p.last_name, p.second_last_name, p.birthdate, p.id_gender, c.company_name
-              FROM PERSON p
-              INNER JOIN COMPANY c
-              ON p.id_company = c.id_company) pc
-        INNER JOIN GENDER g
-        ON pc.id_gender = g.id_gender
-        WHERE pc.id_person = NVL(pcIdPerson, pc.id_person);
+        SELECT id_transcripttype, transcripttype_name
+        FROM TRANSCRIPTTYPE
+        WHERE id_transcripttype = NVL(pnIdTranscriptType, id_transcripttype);
     BEGIN 
-        FOR i in person(pnIdPerson) LOOP
-            dbms_output.put_line(i.id_person);
-            dbms_output.put_line(i.first_name);
-            dbms_output.put_line(i.last_name);
-            dbms_output.put_line(i.second_last_name);
-            dbms_output.put_line(i.birthdate);
-            dbms_output.put_line(i.gender_name);
-            dbms_output.put_line(i.company_name);
+        FOR i in transcripttype(pnIdTranscriptType) LOOP
+            dbms_output.put_line(i.id_transcripttype);
+            dbms_output.put_line(i.transcripttype_name);
         END LOOP;
-    END getPerson;
+    END getTranscriptType;
+
+-- Procedure to set a transcript type with specific id and the new values wrote by the user  
+    PROCEDURE setTranscriptType (pnIdTranscriptType IN NUMBER, pcTranscriptTypeName IN VARCHAR2) IS
+    BEGIN
+        UPDATE TRANSCRIPTTYPE
+        SET transcripttype_name = pcTranscriptTypeName
+        WHERE id_transcripttype = pnIdTranscriptType;
+        Commit;
+    END setTranscriptType;
+
+-- Procedure to delete a specific transcript type  
+    PROCEDURE deleteTranscriptType (pnIdTranscriptType IN NUMBER) IS
+    BEGIN 
+        DELETE FROM TRANSCRIPTTYPE
+        WHERE id_transcripttype = pnIdTranscriptType;
+        Commit;
+    END deleteTranscriptType;
+
+-- Procedure to insert a new transcript type
+    PROCEDURE insertTranscriptType (pcTranscriptTypeName IN VARCHAR2) IS
+    BEGIN 
+        INSERT INTO TRANSCRIPTTYPE (id_transcripttype, transcripttype_name)
+        VALUES (s_transcripttype, pcTranscriptTypeName);
+        Commit;
+    END insertTranscriptType;
 END TRTables;
