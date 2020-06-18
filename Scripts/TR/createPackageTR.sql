@@ -83,7 +83,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
     PROCEDURE insertTranscriptType (pcTranscriptTypeName IN VARCHAR2) IS
     BEGIN 
         INSERT INTO TRANSCRIPTTYPE (id_transcripttype, transcripttype_name)
-        VALUES (s_transcripttype, pcTranscriptTypeName);
+        VALUES (s_transcripttype.nextval, pcTranscriptTypeName);
         Commit;
     END insertTranscriptType;
 END TRTables;
