@@ -1,37 +1,39 @@
 -- Package to PRSN procedures and functions.
 CREATE OR REPLACE PACKAGE PRSNTables IS
     -- Transcript Table
-    PROCEDURE getPerson (pnIdPerson );
-    PROCEDURE setPerson (pcIdPerson VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, 
-        pcSecondLastName VARCHAR2, pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER);
-    PROCEDURE deletePerson (pcIdPerson VARCHAR2);
-    PROCEDURE insertPerson (pcIdPerson VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pcSecondLastName VARCHAR2, 
-        pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER);
+    PROCEDURE getTranscript (pcTranscriptNumber VARCHAR2);
+    PROCEDURE setTranscript (pcTranscriptNumber VARCHAR2, pnValid NUMBER, pcUserName VARCHAR2, pcIdAccused VARCHAR2, 
+        pnIdTranscriptType NUMBER, pnIdVerdict NUMBER, pnIdCommunity NUMBER, pnIdSentence NUMBER, pnIdCrime NUMBER, pdDueDate DATE);
+    PROCEDURE deleteTranscript (pcTranscriptNumber VARCHAR2);
+    PROCEDURE insertTranscript (pcTranscriptNumber VARCHAR2, pnValid NUMBER, pcUserName VARCHAR2, pcIdAccused VARCHAR2, 
+        pnIdTranscriptType NUMBER, pnIdVerdict NUMBER, pnIdCommunity NUMBER, pnIdSentence NUMBER, pnIdCrime NUMBER, pdDueDate DATE);
     -- TranscriptType Table
-    PROCEDURE getCompany (pnIdCompany NUMBER);
-    PROCEDURE setCompany (pnIdCompany NUMBER, pcCompanyName VARCHAR2);
-    PROCEDURE deleteCompany (pnIdCompany NUMBER);
-    PROCEDURE insertCompany (pcCompanyName VARCHAR2);
+    PROCEDURE getTranscriptType (pnIdTranscriptType NUMBER);
+    PROCEDURE setTranscriptType (pnIdTranscriptType NUMBER, pcTranscriptTypeName VARCHAR2);
+    PROCEDURE deleteTranscriptType (pnIdTranscriptType NUMBER);
+    PROCEDURE insertTranscriptType (pcTranscriptTypeName VARCHAR2);
     -- Accused Table 
-    PROCEDURE getGender (pnIdGender NUMBER);
-    PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);
-    PROCEDURE deleteGender (pnIdGender NUMBER);
-    PROCEDURE insertGender (pcGenderName VARCHAR2);
+    PROCEDURE getAccused (pcIdAccused VARCHAR2);
+    PROCEDURE setAccused (pcIdAccused VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, 
+        pcSecondLastName VARCHAR2, pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER);
+    PROCEDURE deleteAccused (pcIdAccused VARCHAR2);
+    PROCEDURE insertAccused (pcIdAccused VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pcSecondLastName VARCHAR2, 
+        pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER);
     -- Verdict Table
-    PROCEDURE getGender (pnIdGender NUMBER);
-    PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);
-    PROCEDURE deleteGender (pnIdGender NUMBER);
-    PROCEDURE insertGender (pcGenderName VARCHAR2);
+    PROCEDURE getVerdict (pnIdVerdict NUMBER);
+    PROCEDURE setVerdict (pnIdVerdict NUMBER, pcVerdictName VARCHAR2);
+    PROCEDURE deleteVerdict (pnIdVerdict NUMBER);
+    PROCEDURE insertVerdict (pcVerdictName VARCHAR2);
     -- Sentence Table
-    PROCEDURE getGender (pnIdGender NUMBER);
-    PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);
-    PROCEDURE deleteGender (pnIdGender NUMBER);
-    PROCEDURE insertGender (pcGenderName VARCHAR2);
+    PROCEDURE getSentence (pnIdSentence NUMBER);
+    PROCEDURE setSentence (pnIdSentence NUMBER, pcSentenceName VARCHAR2, pdStartDate DATE, pdEndDate DATE, pnIdSentenceType NUMBER);
+    PROCEDURE deleteSentence (pnIdSentence NUMBER);
+    PROCEDURE insertSentence (pcSentenceName VARCHAR2, pdStartDate DATE, pdEndDate DATE, pnIdSentenceType NUMBER);
     -- SentenceType Table
-    PROCEDURE getGender (pnIdGender NUMBER);
-    PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);
-    PROCEDURE deleteGender (pnIdGender NUMBER);
-    PROCEDURE insertGender (pcGenderName VARCHAR2);
+    PROCEDURE getSentenceType (pnIdSentenceType NUMBER);
+    PROCEDURE setSentenceType (pnIdSentenceType NUMBER, pcSentenceTypeName VARCHAR2);
+    PROCEDURE deleteSentenceType (pnIdSentenceType NUMBER);
+    PROCEDURE insertSentenceType (pcSentenceTypeName VARCHAR2);
     -- Crime Table
     PROCEDURE getGender (pnIdGender NUMBER);
     PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);

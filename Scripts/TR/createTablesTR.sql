@@ -78,6 +78,7 @@ CREATE TABLE SENTENCETYPE(
 CREATE TABLE CRIME(
     id_crime NUMBER(8) CONSTRAINT crime_id_nn NOT NULL,
     crime_name VARCHAR2(30) CONSTRAINT crime_name_nn NOT NULL,
+    crime_date DATE CONSTRAINT crime_date_nn NOT NULL, 
     date_creation DATE CONSTRAINT crime_datecreation_nn NOT NULL,
     user_creation VARCHAR2(15) CONSTRAINT crime_usercreation_nn NOT NULL,
     date_last_modification DATE,
