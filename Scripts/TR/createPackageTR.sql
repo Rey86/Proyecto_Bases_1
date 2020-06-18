@@ -319,51 +319,48 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Table Photo
 -- Function to get a photo with specific id to show it in the screen      
-    PROCEDURE getSentence (pnIdSentence IN NUMBER) AS
-    CURSOR sentence(pnIdSentence IN NUMBER)
+    PROCEDURE getPhoto (pnIdPhoto IN NUMBER) AS
+    CURSOR photo(pnIdPhoto IN NUMBER)
     IS
-        SELECT s.id_sentence id_sentence, s.sentence_name sentence_name, s.start_date start_date, s.end_date end_date,  
-            st.sentencetype_name sentencetype_name
-        FROM SENTENCE s
-        INNER JOIN SENTENCETYPE st
-        ON s.id_sentencetype = st.id_sentencetype
-        WHERE s.id_sentence = NVL(pnIdSentence, s.id_sentence);
+        SELECT p.id_photo id_photo, p.photo_description photo_description, p.direction direction,  
+        a.first_name||' '||a.last_name||' '||a.second_last_name accused_name
+        FROM PHOTO p
+        INNER JOIN ACCUSED a
+        ON p.id_accused = a.id_accused
+        WHERE a.id_photo = NVL(pnIdPhoto, a.id_photo);
     BEGIN 
-        FOR i in sentence(pnIdSentence) LOOP
-            dbms_output.put_line(i.id_sentence);
-            dbms_output.put_line(i.sentence_name);
-            dbms_output.put_line(i.start_date);
-            dbms_output.put_line(i.end_date);
-            dbms_output.put_line(i.sentencetype_name);
+        FOR i in sentence(pnIdPhoto) LOOP
+            dbms_output.put_line(i.id_photo);
+            dbms_output.put_line(i.photo_description);
+            dbms_output.put_line(i.direction);
+            dbms_output.put_line(i.accused_name);
         END LOOP;
-    END getSentence;
+    END getPhoto;
 
 -- Procedure to set a photo with specific id and the new values wrote by the user  
-    PROCEDURE setSentence (pnIdSentence IN NUMBER, pcSentenceName IN VARCHAR2, pdStartDate IN DATE, 
-        pdEndDate IN DATE, pnIdSentenceType IN NUMBER) IS
+    PROCEDURE setPhoto (pnIdPhoto IN NUMBER, pcPhotoDescription IN VARCHAR2, pcDirection IN VARCHAR2, pcIdAccused IN VARCHAR2) IS
     BEGIN
-        UPDATE SENTENCE
-        SET sentence_name = pcSentenceName,
-        start_date = pdStartDate,
-        end_date = pdEndDate,
-        id_sentencetype = pnIdSentenceType
-        WHERE id_sentence = pnIdSentence;
+        UPDATE PHOTO
+        SET photo_description = pcPhotoDescription,
+        direction = pcDirection,
+        id_accused = pdEndDate
+        WHERE id_photo = pnIdPhoto;
         Commit;
-    END setSentence;
+    END setPhoto;
 
 -- Procedure to delete a specific photo 
-    PROCEDURE deleteSentence (pnIdSentence IN NUMBER) IS
+    PROCEDURE deletePhoto (pnIdPhoto IN NUMBER) IS
     BEGIN 
-        DELETE FROM SENTENCE
-        WHERE id_sentence = pnIdSentence;
+        DELETE FROM PHOTO
+        WHERE id_photo = pnIdPhoto;
         Commit;
-    END deleteSentence;
+    END deletePhoto;
 
 -- Procedure to insert a new photo
-    PROCEDURE insertSentence (pcSentenceName IN VARCHAR2, pdStartDate IN DATE, pdEndDate IN DATE, pnIdSentenceType IN NUMBER) IS
+    PROCEDURE insertPhoto (pcPhotoDescription VARCHAR2, pcDirection VARCHAR2, pcIdAccused VARCHAR2) IS
     BEGIN 
-        INSERT INTO SENTENCE (id_sentence, sentence_name, start_date, end_date, id_sentencetype)
-        VALUES (s_sentence.nextval, pdStartDate, pdEndDate, pcSentenceName, pnIdCanton);
+        INSERT INTO PHOTO (id_photo, photo_description, direction, id_accused)
+        VALUES (s_photo.nextval, pcPhotoDescription, pcDirection, pcIdAccused);
         Commit;
-    END insertSentence;
+    END insertPhoto;
 END TRTables;

@@ -34,8 +34,17 @@ CREATE SEQUENCE s_sentencetype
     NOCACHE
     NOCYCLE;
     
-    -- Sequence to fill id CRIME
+-- Sequence to fill id CRIME
 CREATE SEQUENCE s_crime
+    START WITH 0
+    INCREMENT BY 1
+    MINVALUE 0
+    MAXVALUE 10000000
+    NOCACHE
+    NOCYCLE;
+    
+-- Sequence to fill id PHOTO
+CREATE SEQUENCE s_photo
     START WITH 0
     INCREMENT BY 1
     MINVALUE 0
