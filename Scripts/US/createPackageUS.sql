@@ -143,5 +143,43 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         Commit;
     END insertUserType;
     
+-- Table BanReason
+-- Function to get a ban reason with specific id to show it in the screen      
+    PROCEDURE getBanReason (pnIdBanReason IN NUMBER) AS
+    CURSOR banreason(pnIdBanReason IN NUMBER)
+    IS
+        SELECT id_banreason id_banreason, banreason_description banreason_description
+        FROM BANREASON
+        WHERE id_banreason = NVL(pnIdBanReason, id_banreason);
+    BEGIN 
+        FOR i in banreason(pnIdBanReason) LOOP
+            dbms_output.put_line(i.id_banreason);
+            dbms_output.put_line(i.banreason_description);
+        END LOOP;
+    END getBanReason;
 
+-- Procedure to set a ban reason with specific id and the new values wrote by the user  
+    PROCEDURE setBanReason (pnIdBanReason IN NUMBER, pcBanReasonDescription IN VARCHAR2) IS
+    BEGIN
+        UPDATE BANREASON
+        SET banreason_description = pcBanReasonDescription
+        WHERE id_banreason = pnIdBanReason;
+        Commit;
+    END setBanReason;
+
+-- Procedure to delete a specific ban reason 
+    PROCEDURE deleteBanReason (pnIdBanReason IN NUMBER) IS
+    BEGIN 
+        DELETE FROM BANREASON
+        WHERE id_banreason = pnIdBanReason;
+        Commit;
+    END deleteBanReason;
+
+-- Procedure to insert a new ban reason
+    PROCEDURE insertBanReason (pcBanReasonDescription IN VARCHAR2) IS
+    BEGIN 
+        INSERT INTO BANREASON (id_banreason, banreason_description)
+        VALUES (s_banreason.nextval, pcBanReasonDescription);
+        Commit;
+    END insertBanReason;
 END USTables;
