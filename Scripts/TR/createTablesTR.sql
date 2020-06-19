@@ -88,8 +88,8 @@ CREATE TABLE CRIME(
 --Table Photo
 CREATE TABLE PHOTO(
     id_photo NUMBER(8) CONSTRAINT photo_id_nn NOT NULL,
-    direction VARCHAR2 CONSTRAINT photo_direction_nn NOT NULL,
-    photo_description VARCHAR2 CONSTRAINT photo_description_nn NOT NULL,
+    direction VARCHAR2(100) CONSTRAINT photo_direction_nn NOT NULL,
+    photo_description VARCHAR2(30) CONSTRAINT photo_description_nn NOT NULL,
     id_accused VARCHAR2(20) CONSTRAINT photo_accusedId_nn NOT NULL,
     date_creation DATE CONSTRAINT photo_datecreation_nn NOT NULL,
     user_creation VARCHAR2(15) CONSTRAINT photo_usercreation_nn NOT NULL,
