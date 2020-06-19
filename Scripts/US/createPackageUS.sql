@@ -25,7 +25,7 @@ END USTables;
 
 CREATE OR REPLACE PACKAGE BODY USTables AS
 -- Table UserApp
--- Function to get a user app with specific id to show it in the screen      
+-- Function to get a user app with specific name to show it in the screen      
     PROCEDURE getUserApp (pcUserName IN VARCHAR2) AS
     CURSOR userapp(pcUserName IN VARCHAR2)
     IS
@@ -56,7 +56,7 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         END LOOP;
     END getUserApp;
 
--- Procedure to set a user app with specific id and the new values wrote by the user  
+-- Procedure to set a user app with specific name and the new values wrote by the user  
     PROCEDURE setUserApp (pcUserName IN VARCHAR2, pcUserPassword VARCHAR2, pnBanDays IN NUMBER, pnBanned IN NUMBER, pnIdUserType IN NUMBER, 
         pcIdUser IN VARCHAR2, pcFirstName IN VARCHAR2, pcLastName VARCHAR2, pcSecondLastName IN VARCHAR2, pdBirthdate IN DATE, 
         pnIdGender IN NUMBER, pnIdCompany IN NUMBER) IS

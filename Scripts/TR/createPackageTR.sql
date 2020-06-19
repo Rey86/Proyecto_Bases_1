@@ -48,7 +48,88 @@ END PlaceTables;
 
 CREATE OR REPLACE PACKAGE BODY TRTables AS
 -- Transcript Table
+    -- Function to get a transcript with specific number to show it in the screen      
+    PROCEDURE getTranscript (pcTranscriptNumber IN VARCHAR2) AS
+    CURSOR transcript(pcTranscriptNumber IN VARCHAR2)
+    IS
+        SELECT t.transcript_number transcript_number, t.valid valid, t.username username, 
+            a.first_name||' '||a.last_name||' '||a.second_last_name accused_name, tt.transcripttype_name transcripttype_name, 
+            v.verdict_name verdict_name, c.community_name community_name, s.sentence_name sentence_name, s.start_date sentence_start_date,
+            s.end_date sentence_end_date, st.sentencetype_name sentencetype_name, cr.crime_name crime_name, cr.crime_date crime_date,
+            t.due_date due_date
+        FROM TRANSCRIPT t
+        INNER JOIN ACCUSED a
+        ON t.id_accused = a.id_accused 
+        INNER JOIN TRANSCRIPTTYPE tt
+        ON t.id_transcripttype = tt.id_transcripttype
+        INNER JOIN VERDICT v
+        ON t.id_verdict = v.id_verdict
+        INNER JOIN COMMUNITY c
+        ON t.id_community = c.id_community
+        INNER JOIN SENTENCE s
+        ON t.id_sentence = s.id_sentence
+        INNER JOIN SENTENCETYPE st
+        ON s.id_sentencetype = st.id_sentenceype 
+        INNER JOIN CRIME cr
+        ON t.id_crime = cr.id_crime
+        WHERE t.transcript_number = NVL(pcTranscriptNumber , t.transcript_number);
+    BEGIN 
+        FOR i in transcript(pcTranscriptNumber) LOOP
+            dbms_output.put_line(i.transcript_number);
+            dbms_output.put_line(i.valid);
+            dbms_output.put_line(i.username);
+            dbms_output.put_line(i.accused_name);
+            dbms_output.put_line(i.transcripttype_name);
+            dbms_output.put_line(i.verdict_name);
+            dbms_output.put_line(i.community_name);
+            dbms_output.put_line(i.sentence_name);
+            dbms_output.put_line(i.sentence_start_date);
+            dbms_output.put_line(i.sentence_end_date);
+            dbms_output.put_line(i.sentencetype_name);
+            dbms_output.put_line(i.crime_name);
+            dbms_output.put_line(i.crime_date);
+            dbms_output.put_line(i.due_date);
+        END LOOP;
+    END getTranscript;
 
+-- Procedure to set a transcript with specific number and the new values wrote by the user  
+    PROCEDURE setTranscript (pcTranscriptNumber IN VARCHAR2, pnValid IN NUMBER, pcUserName IN VARCHAR2, pcIdAccused IN VARCHAR2, 
+        pnIdTranscriptType IN NUMBER, pnIdVerdict IN NUMBER, pnIdCommunity IN NUMBER, pnIdSentence IN NUMBER, 
+        pnIdCrime IN NUMBER, pdDueDate IN DATE) IS
+    BEGIN
+        UPDATE TRANSCRIPT
+        SET valid = pnValid,
+        username = pcUserName, 
+        id_accused = pcIdAccused,
+        id_transcripttype = pnIdtranscriptType,
+        id_verdict = pnIdVerdict,
+        id_community = pnIdCommunity,
+        id_sentence = pnIdSentence,
+        id_crime = pnIdCrime,
+        due_date = pdDueDate;
+        Commit;
+    END setTranscript;
+
+-- Procedure to delete a specific transcript  
+    PROCEDURE deleteTranscript (pcTranscriptNumber IN VARCHAR2) IS
+    BEGIN 
+        DELETE FROM TRANSCRIPT
+        WHERE transcript_number = pcTranscriptNumber;
+        Commit;
+    END deleteTranscript;
+
+-- Procedure to insert a new transcript
+    PROCEDURE insertTranscript (pcTranscriptNumber IN VARCHAR2, pnValid IN NUMBER, pcUserName IN VARCHAR2, pcIdAccused IN VARCHAR2, 
+        pnIdTranscriptType IN NUMBER, pnIdVerdict IN NUMBER, pnIdCommunity IN NUMBER, pnIdSentence IN NUMBER, 
+        pnIdCrime IN NUMBER, pdDueDate IN DATE) IS
+    BEGIN 
+        INSERT INTO TRANSCRIPT (transcript_number, valid, username, id_accused, id_transcripttype, id_verdict, id_community, id_sentence, 
+        id_crime, due_date)
+        VALUES (pcTranscriptNumber, pnValid, pcUserName, pcIdAccused, pnIdTranscriptType, pnIdVerdict, pnIdCommunity, pnIdSentence, 
+        pnIdCrime, pdDueDate);
+        Commit;
+    END insertTranscript;
+    
 -- TranscriptType Table
 -- Function to get a transcript type with specific id to show it in the screen      
     PROCEDURE getTranscriptType (pnIdTranscriptType IN NUMBER) AS
