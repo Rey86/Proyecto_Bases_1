@@ -329,7 +329,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         ON p.id_accused = a.id_accused
         WHERE a.id_photo = NVL(pnIdPhoto, a.id_photo);
     BEGIN 
-        FOR i in sentence(pnIdPhoto) LOOP
+        FOR i in photo(pnIdPhoto) LOOP
             dbms_output.put_line(i.id_photo);
             dbms_output.put_line(i.photo_description);
             dbms_output.put_line(i.direction);
@@ -357,7 +357,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
     END deletePhoto;
 
 -- Procedure to insert a new photo
-    PROCEDURE insertPhoto (pcPhotoDescription VARCHAR2, pcDirection VARCHAR2, pcIdAccused VARCHAR2) IS
+    PROCEDURE insertPhoto (pcPhotoDescription IN VARCHAR2, pcDirection IN VARCHAR2, pcIdAccused IN VARCHAR2) IS
     BEGIN 
         INSERT INTO PHOTO (id_photo, photo_description, direction, id_accused)
         VALUES (s_photo.nextval, pcPhotoDescription, pcDirection, pcIdAccused);

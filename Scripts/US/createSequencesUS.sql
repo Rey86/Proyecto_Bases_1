@@ -6,3 +6,12 @@ CREATE SEQUENCE s_generallog
     MAXVALUE 10000000
     NOCACHE
     NOCYCLE;
+    
+-- Sequence to fill id USERTYPE table.
+CREATE SEQUENCE s_usertype
+    START WITH 0
+    INCREMENT BY 1
+    MINVALUE 0
+    MAXVALUE 10000000
+    NOCACHE
+    NOCYCLE;

@@ -103,17 +103,45 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         Commit;
     END insertUserApp;
 
-    -- UserType Table
-    PROCEDURE getUserType (pnIdUserType NUMBER);
-    PROCEDURE setUserType (pnIdUserType NUMBER, pcUserTypeDescription VARCHAR2);
-    PROCEDURE deleteUserType (pnIdUserType NUMBER);
-    PROCEDURE insertUserType (pcUserTypeDescription VARCHAR2);
-    -- BanReason Table 
-    PROCEDURE getBanReason (pnIdBanReason NUMBER);
-    PROCEDURE setBanReason (pnIdBanReason NUMBER, pcBanReasonDescription VARCHAR2);
-    PROCEDURE deleteBanReason (pnIdBanReason NUMBER);
-    PROCEDURE insertBanReason (pcBanReasonDescription VARCHAR2);
-    -- BanReasonxUserApp Table 
-    PROCEDURE deleteBanReasonxUserApp (pcIdBanReason NUMBER, pcUserName VARCHAR2);
-    PROCEDURE insertBanReasonxUserApp (pcIdBanReason NUMBER, pcUserName VARCHAR2);
+-- Table UserType
+-- Function to get a user type with specific id to show it in the screen      
+    PROCEDURE getUserType (pnIdUserType IN NUMBER) AS
+    CURSOR usertype(pnIdUserType IN NUMBER)
+    IS
+        SELECT id_usertype id_usertype, usertype_description usertype_description
+        FROM USERTYPE 
+        WHERE id_usertype = NVL(pnIdUserType, id_usertype);
+    BEGIN 
+        FOR i in usertype(pnIdUserType) LOOP
+            dbms_output.put_line(i.id_usertype);
+            dbms_output.put_line(i.usertype_description);
+        END LOOP;
+    END getUserType;
+
+-- Procedure to set a user type with specific id and the new values wrote by the user  
+    PROCEDURE setUserType (pnIdUserType IN NUMBER, pcUserTypeDescription IN VARCHAR2) IS
+    BEGIN
+        UPDATE USERTYPE
+        SET usertype_description = pcUserTypeDescription
+        WHERE id_usertype = pnIdUserType;
+        Commit;
+    END setUserType;
+
+-- Procedure to delete a specific user type 
+    PROCEDURE deleteUserType (pnIdUserType IN NUMBER) IS
+    BEGIN 
+        DELETE FROM USERTYPE
+        WHERE id_usertype = pnIdUserType;
+        Commit;
+    END deleteUserType;
+
+-- Procedure to insert a new user type
+    PROCEDURE insertUserType (pcUserTypeDescription IN VARCHAR2) IS
+    BEGIN 
+        INSERT INTO USERTYPE (id_usertype, usertype_description)
+        VALUES (s_usertype.nextval, pcUserTypeDescription);
+        Commit;
+    END insertUserType;
+    
+
 END USTables;
