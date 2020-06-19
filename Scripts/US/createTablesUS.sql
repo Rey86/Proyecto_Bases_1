@@ -4,7 +4,7 @@ CREATE TABLE USERAPP(
     user_password VARCHAR2(20) CONSTRAINT userapp_userpassword_nn NOT NULL,
     ban_days NUMBER CONSTRAINT userapp_bandays_nn NOT NULL, 
         CONSTRAINT userapp_bandays_min CHECK (ban_days > 0),
-    banned BOOLEAN DEFAULT FALSE,
+    banned NUMBER CONSTRAINT userapp_banned_nn NOT NULL,
     id_usertype NUMBER(8) CONSTRAINT userapp_idusertype_nn NOT NULL,
     first_name VARCHAR2(25) CONSTRAINT userapp_firstname_nn NOT NULL,
     last_name VARCHAR2(25) CONSTRAINT userapp_lastname_nn NOT NULL,
