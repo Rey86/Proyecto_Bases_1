@@ -47,6 +47,8 @@ CREATE OR REPLACE PACKAGE TRTables IS
 END PlaceTables;
 
 CREATE OR REPLACE PACKAGE BODY TRTables AS
+-- Transcript Table
+
 -- TranscriptType Table
 -- Function to get a transcript type with specific id to show it in the screen      
     PROCEDURE getTranscriptType (pnIdTranscriptType IN NUMBER) AS
@@ -92,15 +94,14 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
     PROCEDURE getAccused (pcIdAccused IN VARCHAR2) AS
     CURSOR accused(pnIdAccused IN VARCHAR2)
     IS
-        SELECT ac.id_accused id_accused, ac.first_name first_name, ac.last_name last_name, ac.second_last_name second_last_name, 
-            ac.birthdate birthdate, g.gender_name gender_name, ac.company_name company_name
-        FROM (SELECT a.id_accused, a.first_name, a.last_name, a.second_last_name, a.birthdate, a.id_gender, c.company_name
-              FROM ACCUSED a
-              INNER JOIN COMPANY c
-              ON a.id_company = c.id_company) ac
+        SELECT a.id_accused id_accused, a.first_name first_name, a.last_name last_name, a.second_last_name second_last_name, 
+            a.birthdate birthdate, g.gender_name gender_name, c.company_name company_name
+        FROM ACCUSED a
+        INNER JOIN COMPANY c
+        ON a.id_company = c.id_company 
         INNER JOIN GENDER g
-        ON ac.id_gender = g.id_gender
-        WHERE ac.id_accused = NVL(pcIdAccused, ac.id_accused);
+        ON a.id_gender = g.id_gender
+        WHERE a.id_accused = NVL(pcIdAccused, a.id_accused);
     BEGIN 
         FOR i in accused(pnIdAccused) LOOP
             dbms_output.put_line(i.id_accused);

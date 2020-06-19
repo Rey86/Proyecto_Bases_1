@@ -29,23 +29,17 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
     PROCEDURE getUserApp (pcUserName IN VARCHAR2) AS
     CURSOR userapp(pcUserName IN VARCHAR2)
     IS
-        SELECT utc.user_name user_name, utc.ban_days ban_days, utc.banned banned, utc.usertype_name usertype_name, utc.id_user id_user,
-            utc.first_name first_name, utc.last_name last_name, utc.second_last_name second_last_name, 
-            utc.birthdate birthdate, g.gender_name gender_name, utc.company_name company_name
-        FROM (SELECT ut.user_name user_name, ut.ban_days ban_days, ut.banned banned, ut.usertype_name usertype_name, ut.id_user id_user,
-                ut.first_name first_name, ut.last_name last_name, ut.second_last_name second_last_name, 
-                ut.birthdate birthdate, ut.id_gender id_gender, c.company_name company_name
-              FROM (SELECT ua.user_name user_name, ua.ban_days ban_days, ua.banned banned, ust.usertype_name usertype_name, 
-                      ua.id_user id_user, ua.first_name first_name, ua.last_name last_name, ua.second_last_name second_last_name, 
-                      ua.birthdate birthdate, ua.id_gender id_gender, ua.id_company id_company
-                    FROM USERAPP ua
-                    INNER JOIN USERTYPE ust
-                    ON ua.id_usertype = ust.id_usertype) ut
-              INNER JOIN COMPANY c
-              ON ut.id_company = c.id_company) utc
+        SELECT ua.user_name user_name, ua.ban_days ban_days, ua.banned banned, ut.usertype_name usertype_name, ua.id_user id_user,
+            ua.first_name first_name, ua.last_name last_name, ua.second_last_name second_last_name, 
+            ua.birthdate birthdate, g.gender_name gender_name, c.company_name company_name
+        FROM USERAPP ua
+        INNER JOIN USERTYPE ut
+        ON ua.id_usertype = ut.id_usertype 
+        INNER JOIN COMPANY c
+        ON ua.id_company = c.id_company 
         INNER JOIN GENDER g
-        ON uct.id_gender = g.id_gender
-        WHERE uct.id_user_name = NVL(pcUserName, uct.user_name);
+        ON ua.id_gender = g.id_gender
+        WHERE ua.id_user_name = NVL(pcUserName, ua.user_name);
     BEGIN 
         FOR i in userapp(pcUserName) LOOP
             dbms_output.put_line(i.user_name);

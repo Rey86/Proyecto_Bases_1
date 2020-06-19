@@ -25,15 +25,14 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
     PROCEDURE getPerson (pcIdPerson IN VARCHAR2) AS
     CURSOR person(pnIdPerson IN VARCHAR2)
     IS
-        SELECT pc.id_person id_person, pc.first_name first_name, pc.last_name last_name, pc.second_last_name second_last_name, 
-            pc.birthdate birthdate, g.gender_name gender_name, pc.company_name company_name
-        FROM (SELECT p.id_person, p.first_name, p.last_name, p.second_last_name, p.birthdate, p.id_gender, c.company_name
-              FROM PERSON p
-              INNER JOIN COMPANY c
-              ON p.id_company = c.id_company) pc
+        SELECT p.id_person id_person, p.first_name first_name, p.last_name last_name, p.second_last_name second_last_name, 
+            p.birthdate birthdate, g.gender_name gender_name, c.company_name company_name
+        FROM PERSON p
+        INNER JOIN COMPANY c
+        ON p.id_company = c.id_company
         INNER JOIN GENDER g
-        ON pc.id_gender = g.id_gender
-        WHERE pc.id_person = NVL(pcIdPerson, pc.id_person);
+        ON p.id_gender = g.id_gender
+        WHERE p.id_person = NVL(pcIdPerson, p.id_person);
     BEGIN 
         FOR i in person(pnIdPerson) LOOP
             dbms_output.put_line(i.id_person);
