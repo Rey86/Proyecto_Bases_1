@@ -182,4 +182,22 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         VALUES (s_banreason.nextval, pcBanReasonDescription);
         Commit;
     END insertBanReason;
+    
+-- Table BanReasonxUserApp
+-- Procedure to delete a specific ban reason x user app
+    PROCEDURE deleteBanReasonxUserApp (pnIdBanReason IN NUMBER, pcUserName IN VARCHAR2) IS
+    BEGIN 
+        DELETE FROM BANREASONXUSERAPP
+        WHERE id_banreason = pnIdBanReason and user_name = pcUserName;
+        Commit;
+    END deleteBanReasonxUserApp;
+
+-- Procedure to insert a new ban reason x user app
+    PROCEDURE insertBanReasonxUserApp (pnIdBanReason IN NUMBER, pcUserName IN VARCHAR2) IS
+    BEGIN 
+        INSERT INTO BANREASONXUSERAPP (id_banreason, user_name)
+        VALUES (pnIdBanReason, pcUserName);
+        Commit;
+    END insertBanReasonxUserApp;
+    
 END USTables;
