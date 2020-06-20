@@ -10,7 +10,7 @@ CREATE TABLE COMMUNITY(
     );
 --Comments
 COMMENT ON TABLE COMMUNITY
-    IS 'Table that stores data of communitys';
+    IS 'Table that stores data of communities';
 COMMENT ON COLUMN
     COMMUNITY.id_community IS
     'Identification number of the community';
