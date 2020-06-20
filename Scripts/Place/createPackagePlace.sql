@@ -44,6 +44,12 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
             dbms_output.put_line(i.community_name);
             dbms_output.put_line(i.district_name);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdCommunity');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getCommunity;
 
 -- Procedure to set a community with specific id and the new values wrote by the user  
@@ -54,6 +60,13 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         id_district = pnIdDistict
         WHERE id_community = pnIdCommunity;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdCommunity');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setCommunity;
 
 -- Procedure to delete a specific community  
@@ -62,6 +75,11 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         DELETE FROM COMMUNITY
         WHERE id_community = pnIdCommunity;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdCommunity');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteCommunity;
 
 -- Procedure to insert a new community
@@ -70,6 +88,10 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         INSERT INTO COMMUNITY (id_community, community_name, id_district)
         VALUES (s_community.nextval, pcCommunityName, pnIdDistrict);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertCommunity;
 
 -- Table District
@@ -88,6 +110,12 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
             dbms_output.put_line(i.district_name);
             dbms_output.put_line(i.canton_name);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdDistrict');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getDistrict;
 
 -- Procedure to set a district with specific id and the new values wrote by the user  
@@ -98,6 +126,13 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         id_canton = pnIdCanton
         WHERE id_district = pnIdDistrict;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdDistrict');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setDistrict;
 
 -- Procedure to delete a specific district  
@@ -106,6 +141,11 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         DELETE FROM DISTRICT
         WHERE id_district = pnIdDistrict;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdDistrict');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteDistrict;
 
 -- Procedure to insert a new district
@@ -114,6 +154,10 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         INSERT INTO DISTRICT (id_district, district_name, id_canton)
         VALUES (s_district.nextval, pcDistrictName, pnIdCanton);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertDistrict;
 
 -- Table Canton
@@ -132,6 +176,12 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
             dbms_output.put_line(i.canton_name);
             dbms_output.put_line(i.province_name);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdCanton');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getCanton;
 
 -- Procedure to set a canton with specific id and the new values wrote by the user  
@@ -142,6 +192,13 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         id_province = pnIdProvince
         WHERE id_canton = pnIdCanton;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdCanton');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setCanton;
 
 -- Procedure to delete a specific canton  
@@ -150,6 +207,11 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         DELETE FROM CANTON
         WHERE id_canton = pnIdCanton;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdCanton');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteCanton;
 
 -- Procedure to insert a new canton
@@ -158,6 +220,10 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         INSERT INTO CANTON (id_canton, canton_name, id_province)
         VALUES (s_canton.nextval, pcCantonName, pnIdProvince);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertCanton;
     
 -- Table Province
@@ -176,6 +242,12 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
             dbms_output.put_line(i.province_name);
             dbms_output.put_line(i.country_name);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdProvince');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getProvince;
 
 -- Procedure to set a province with specific id and the new values wrote by the user  
@@ -186,6 +258,13 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         id_country = pnIdCountry
         WHERE id_province = pnIdProvince;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdProvince');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setProvince;
 
 -- Procedure to delete a specific province 
@@ -194,6 +273,11 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         DELETE FROM PROVINCE
         WHERE id_province = pnIdProvince;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdProvince');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteProvince;
 
 -- Procedure to insert a new province
@@ -202,6 +286,10 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         INSERT INTO PROVINCE (id_province, province_name, id_country)
         VALUES (s_province.nextval, pcProvinceName, pnIdCountry);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertProvince;
     
 -- Table Country
@@ -217,6 +305,12 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
             dbms_output.put_line(i.id_country);
             dbms_output.put_line(i.country_name);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdCountry');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getCountry;
 
 -- Procedure to set a country with specific id and the new values wrote by the user  
@@ -226,6 +320,13 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         SET country_name = pcCountryName
         WHERE id_country = pnIdCountry;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdCountry');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setCountry;
 
 -- Procedure to delete a specific country  
@@ -234,6 +335,11 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         DELETE FROM COUNTRY
         WHERE id_country = pnIdCountry;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdCountry');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteCountry;
 
 -- Procedure to insert a new country
@@ -242,6 +348,10 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
         INSERT INTO COUNTRY (id_country, country_name)
         VALUES (s_country.nextval, pcCountryName);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');  
     END insertCountry;
     
 END PlaceTables;

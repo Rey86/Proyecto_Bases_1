@@ -90,6 +90,12 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
             dbms_output.put_line(i.crime_date);
             dbms_output.put_line(i.due_date);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pcTranscriptNumber');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getTranscript;
 
 -- Procedure to set a transcript with specific number and the new values wrote by the user  
@@ -108,6 +114,13 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         id_crime = pnIdCrime,
         due_date = pdDueDate;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcTranscriptNumber');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setTranscript;
 
 -- Procedure to delete a specific transcript  
@@ -116,6 +129,11 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         DELETE FROM TRANSCRIPT
         WHERE transcript_number = pcTranscriptNumber;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcTranscriptNumber');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteTranscript;
 
 -- Procedure to insert a new transcript
@@ -128,6 +146,10 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         VALUES (pcTranscriptNumber, pnValid, pcUserName, pcIdAccused, pnIdTranscriptType, pnIdVerdict, pnIdCommunity, pnIdSentence, 
         pnIdCrime, pdDueDate);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertTranscript;
     
 -- TranscriptType Table
@@ -143,6 +165,12 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
             dbms_output.put_line(i.id_transcripttype);
             dbms_output.put_line(i.transcripttype_name);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdTranscriptType');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getTranscriptType;
 
 -- Procedure to set a transcript type with specific id and the new values wrote by the user  
@@ -152,6 +180,13 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         SET transcripttype_name = pcTranscriptTypeName
         WHERE id_transcripttype = pnIdTranscriptType;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdTranscriptType');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setTranscriptType;
 
 -- Procedure to delete a specific transcript type  
@@ -160,6 +195,11 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         DELETE FROM TRANSCRIPTTYPE
         WHERE id_transcripttype = pnIdTranscriptType;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdTranscriptType');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteTranscriptType;
 
 -- Procedure to insert a new transcript type
@@ -168,6 +208,10 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         INSERT INTO TRANSCRIPTTYPE (id_transcripttype, transcripttype_name)
         VALUES (s_transcripttype.nextval, pcTranscriptTypeName);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertTranscriptType;
     
 -- Table Accused
@@ -193,6 +237,12 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
             dbms_output.put_line(i.gender_name);
             dbms_output.put_line(i.company_name);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pcIdAccused');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getAccused;
 
 -- Procedure to set a accused with specific id and the new values wrote by the user  
@@ -208,6 +258,13 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         id_company = pnIdCompany
         WHERE id_accused = pcIdAccused;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcIdAccused');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setAccused;
 
 -- Procedure to delete a specific accused  
@@ -216,6 +273,11 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         DELETE FROM ACCUSED
         WHERE id_accused = pcIdAccused;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcIdAccused');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteAccused;
 
 -- Procedure to insert a new accused
@@ -225,6 +287,10 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         INSERT INTO ACCUSED (id_accused, first_name, lat_name, second_last_name, birthdate, id_gender, id_company)
         VALUES (pcIdAccused, pcFirstName, pcLastName, pcSecondLastName, pdBirthdate, pnIdGender, pnIdCompany);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertAccused;
     
 --  Table Verdict
@@ -240,6 +306,12 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
             dbms_output.put_line(i.id_verdict);
             dbms_output.put_line(i.verdict_name);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdGVerdict');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getVerdict;
 
 -- Procedure to set a verdict with specific id and the new values wrote by the user  
@@ -249,6 +321,13 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         SET verdict_name = pcVerdictName
         WHERE id_verdict = pnIdVerdict;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdVerdict');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setVerdict;
 
 -- Procedure to delete a specific verdict  
@@ -257,6 +336,11 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         DELETE FROM VERDICT
         WHERE id_verdict = pnIdVerdict;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdVerdict');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteVerdict;
 
 -- Procedure to insert a new verdict
@@ -265,6 +349,10 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         INSERT INTO VERDICT (id_verdict, verdict_name)
         VALUES (s_verdict.nextval, pcVerdictName);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertVerdict;
     
 -- Table Sentence 
@@ -286,6 +374,12 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
             dbms_output.put_line(i.end_date);
             dbms_output.put_line(i.sentencetype_name);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdSentence');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getSentence;
 
 -- Procedure to set a sentence with specific id and the new values wrote by the user  
@@ -299,6 +393,13 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         id_sentencetype = pnIdSentenceType
         WHERE id_sentence = pnIdSentence;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdSentence');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setSentence;
 
 -- Procedure to delete a specific sentence  
@@ -307,6 +408,11 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         DELETE FROM SENTENCE
         WHERE id_sentence = pnIdSentence;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdSentence');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteSentence;
 
 -- Procedure to insert a new sentence
@@ -315,6 +421,10 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         INSERT INTO SENTENCE (id_sentence, sentence_name, start_date, end_date, id_sentencetype)
         VALUES (s_sentence.nextval, pdStartDate, pdEndDate, pcSentenceName, pnIdCanton);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertSentence;
 
 -- Table SentenceType
@@ -330,6 +440,12 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
             dbms_output.put_line(i.id_sentencetype);
             dbms_output.put_line(i.sentencetype_name);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdSentenceType');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getSentenceType;
 
 -- Procedure to set a sentence type with specific id and the new values wrote by the user  
@@ -339,6 +455,13 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         SET sentencetype_name = pcSentenceTypeName
         WHERE id_sentencetype = pnIdSentenceType;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdSentenceType');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setSentenceType;
 
 -- Procedure to delete a specific sentence type  
@@ -347,6 +470,11 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         DELETE FROM SENTENCETYPE
         WHERE id_sentencetype = pnIdSentenceType;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdSentenceType');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteSentenceType;
 
 -- Procedure to insert a new sentence type
@@ -355,6 +483,10 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         INSERT INTO SENTENCETYPE (id_sentencetype, sentencetype_name)
         VALUES (s_sentencetype.nextval, pcSentenceTypeName);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertSentenceType;
 
 --  Table Crime
@@ -371,6 +503,12 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
             dbms_output.put_line(i.crime_name);
             dbms_output.put_line(i.crime_date);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdCrime');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getCrime;
 
 -- Procedure to set a crime with specific id and the new values wrote by the user  
@@ -381,6 +519,13 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         crime_date = pdCrimeDate
         WHERE id_crime = pnIdCrime;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdCrime');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setCrime;
 
 -- Procedure to delete a specific crime  
@@ -389,6 +534,11 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         DELETE FROM CRIME
         WHERE id_crime = pnIdCrime;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdCrime');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteCrime;
 
 -- Procedure to insert a new crime
@@ -397,6 +547,10 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         INSERT INTO CRIME (id_crime, crime_name, crime_date)
         VALUES (s_crime.nextval, pcCrimeName, pdCrimeDate);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertCrime;
 
 -- Table Photo
@@ -417,6 +571,12 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
             dbms_output.put_line(i.direction);
             dbms_output.put_line(i.accused_name);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdPhoto');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getPhoto;
 
 -- Procedure to set a photo with specific id and the new values wrote by the user  
@@ -428,6 +588,13 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         id_accused = pdEndDate
         WHERE id_photo = pnIdPhoto;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdPhoto');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setPhoto;
 
 -- Procedure to delete a specific photo 
@@ -436,6 +603,11 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         DELETE FROM PHOTO
         WHERE id_photo = pnIdPhoto;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdPhoto');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deletePhoto;
 
 -- Procedure to insert a new photo
@@ -444,5 +616,9 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         INSERT INTO PHOTO (id_photo, photo_description, direction, id_accused)
         VALUES (s_photo.nextval, pcPhotoDescription, pcDirection, pcIdAccused);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertPhoto;
 END TRTables;

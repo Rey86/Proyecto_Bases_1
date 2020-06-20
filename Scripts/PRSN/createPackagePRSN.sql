@@ -43,6 +43,12 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
             dbms_output.put_line(i.gender_name);
             dbms_output.put_line(i.company_name);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pcIdPerson');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getPerson;
 
 -- Procedure to set a person with specific id and the new values wrote by the user  
@@ -58,6 +64,13 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
         id_company = pnIdCompany
         WHERE id_person = pcIdPerson;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcIdPerson');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setPerson;
 
 -- Procedure to delete a specific person  
@@ -66,6 +79,11 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
         DELETE FROM PERSON
         WHERE id_person = pcIdPerson;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcIdPerson');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deletePerson;
 
 -- Procedure to insert a new person
@@ -75,6 +93,10 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
         INSERT INTO PERSON (id_person, first_name, lat_name, second_last_name, birthdate, id_gender, id_company)
         VALUES (pcIdPerson, pcFirstName, pcLastName, pcSecondLastName, pdBirthdate, pnIdGender, pnIdCompany);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertPerson;
     
 -- Table Company
@@ -90,6 +112,12 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
             dbms_output.put_line(i.id_company);
             dbms_output.put_line(i.company_name);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdCompany');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getCompany;
 
 -- Procedure to set a company with specific id and the new values wrote by the user  
@@ -99,6 +127,13 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
         SET company_name = pcCompanyName
         WHERE id_company = pnIdCompany;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdCompany');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setCompany;
 
 -- Procedure to delete a specific company  
@@ -107,6 +142,11 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
         DELETE FROM COMPANY
         WHERE id_company = pnIdCompany;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdCompany');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteCompany;
 
 -- Procedure to insert a new company
@@ -115,6 +155,10 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
         INSERT INTO COMPANY (id_company, company_name)
         VALUES (s_company.nextval, pcCompanyName);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertCompany;
     
 -- Table Gender
@@ -130,6 +174,12 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
             dbms_output.put_line(i.id_gender);
             dbms_output.put_line(i.gender_name);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdGender');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getGender;
 
 -- Procedure to set a gender with specific id and the new values wrote by the user  
@@ -139,6 +189,13 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
         SET gender_name = pcGenderName
         WHERE id_gender = pnIdGender;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdGender');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setGender;
 
 -- Procedure to delete a specific gender  
@@ -147,6 +204,11 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
         DELETE FROM GENDER
         WHERE id_gender = pnIdGender;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdGender');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteGender;
 
 -- Procedure to insert a new gender
@@ -155,5 +217,9 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
         INSERT INTO GENDER (id_gender, gender_name)
         VALUES (s_gender.nextval, pcGenderName);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertGender;
 END PRSNTables;

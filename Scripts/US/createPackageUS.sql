@@ -54,6 +54,12 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
             dbms_output.put_line(i.gender_name);
             dbms_output.put_line(i.company_name);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pcUserName');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getUserApp;
 
 -- Procedure to set a user app with specific name and the new values wrote by the user  
@@ -75,6 +81,13 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         id_company = pnIdCompany
         WHERE user_name = pcUserName;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcUsername');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setUserApp;
 
 -- Procedure to delete a specific user app  
@@ -83,6 +96,11 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         DELETE FROM USERAPP
         WHERE user_name = pcUserName;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcUserName');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteUserApp;
 
 -- Procedure to insert a new user app
@@ -95,6 +113,10 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         VALUES (pcUserName, pcUserPassword, pnBanDays, pnBanned, pnIdUserType, pcIdUser, pcFirstName, pcLastName, 
             pcSecondLastName, pdBirthdate, pnIdGender, pnIdCompany);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertUserApp;
 
 -- Table UserType
@@ -110,6 +132,12 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
             dbms_output.put_line(i.id_usertype);
             dbms_output.put_line(i.usertype_description);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdUserType');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getUserType;
 
 -- Procedure to set a user type with specific id and the new values wrote by the user  
@@ -119,6 +147,13 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         SET usertype_description = pcUserTypeDescription
         WHERE id_usertype = pnIdUserType;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdUserType');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setUserType;
 
 -- Procedure to delete a specific user type 
@@ -127,6 +162,11 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         DELETE FROM USERTYPE
         WHERE id_usertype = pnIdUserType;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdUserType');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred'); 
     END deleteUserType;
 
 -- Procedure to insert a new user type
@@ -135,6 +175,10 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         INSERT INTO USERTYPE (id_usertype, usertype_description)
         VALUES (s_usertype.nextval, pcUserTypeDescription);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertUserType;
     
 -- Table BanReason
@@ -150,6 +194,12 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
             dbms_output.put_line(i.id_banreason);
             dbms_output.put_line(i.banreason_description);
         END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdBanReason');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getBanReason;
 
 -- Procedure to set a ban reason with specific id and the new values wrote by the user  
@@ -159,6 +209,13 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         SET banreason_description = pcBanReasonDescription
         WHERE id_banreason = pnIdBanReason;
         Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdBanReason');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END setBanReason;
 
 -- Procedure to delete a specific ban reason 
@@ -167,6 +224,11 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         DELETE FROM BANREASON
         WHERE id_banreason = pnIdBanReason;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdBanReason');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteBanReason;
 
 -- Procedure to insert a new ban reason
@@ -175,6 +237,10 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         INSERT INTO BANREASON (id_banreason, banreason_description)
         VALUES (s_banreason.nextval, pcBanReasonDescription);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertBanReason;
     
 -- Table BanReasonxUserApp
@@ -184,6 +250,11 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         DELETE FROM BANREASONXUSERAPP
         WHERE id_banreason = pnIdBanReason and user_name = pcUserName;
         Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdBanReason');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END deleteBanReasonxUserApp;
 
 -- Procedure to insert a new ban reason x user app
@@ -192,6 +263,10 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         INSERT INTO BANREASONXUSERAPP (id_banreason, user_name)
         VALUES (pnIdBanReason, pcUserName);
         Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertBanReasonxUserApp;
     
 END USTables;
