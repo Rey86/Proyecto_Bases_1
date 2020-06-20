@@ -15,6 +15,48 @@ CREATE TABLE TRANSCRIPT(
     date_last_modification DATE,
     user_last_modification VARCHAR2(15)
     );
+--Comments
+COMMENT ON TABLE TRANSCRIPT
+    IS 'Table that stores data of transcripts';
+COMMENT ON COLUMN
+    TRANSCRIPT.transcript_number IS
+    'Identification code of the transcript';
+COMMENT ON COLUMN
+    TRANSCRIPT.username IS
+    'Identification name of the user who created the transcript';
+COMMENT ON COLUMN
+    TRANSCRIPT.id_accused IS
+    'Identification number of the accused of the transcript';
+COMMENT ON COLUMN
+    TRANSCRIPT.id_transcripttype IS
+    'Identification number of the transcript type of the transcript';
+COMMENT ON COLUMN
+    TRANSCRIPT.id_verdict IS
+    'Identification number of the verdict of the transcript';
+COMMENT ON COLUMN
+    TRANSCRIPT.id_community IS
+    'Identification number of the community of the transcript';
+COMMENT ON COLUMN
+    TRANSCRIPT.id_sentence IS
+    'Identification number of the sentence of the transcript';
+COMMENT ON COLUMN
+    TRANSCRIPT.id_crime IS
+    'Identification number of the crime of the transcript';
+COMMENT ON COLUMN
+    TRANSCRIPT.due_date IS
+    'Date of due of the transcript';
+COMMENT ON COLUMN
+    TRANSCRIPT.date_creation IS
+    'Date of creation';
+COMMENT ON COLUMN
+    TRANSCRIPT.user_creation IS
+    'User who created it';
+COMMENT ON COLUMN
+    TRANSCRIPT.date_last_modification IS
+    'Date of the last modification';
+COMMENT ON COLUMN
+    TRANSCRIPT.user_last_modification IS
+    'Last user who modified it';
     
 -- Table TranscriptType
 CREATE TABLE TRANSCRIPTTYPE(
@@ -25,6 +67,27 @@ CREATE TABLE TRANSCRIPTTYPE(
     date_last_modification DATE,
     user_last_modification VARCHAR2(15)
     );
+--Comments
+COMMENT ON TABLE TRANSCRIPTTYPE
+    IS 'Table that stores data of transcript types';
+COMMENT ON COLUMN
+    TRANSCRIPTTYPE.id_transcripttype IS
+    'Identification number of the transcript type';
+COMMENT ON COLUMN
+    TRANSCRIPTTYPE.transcripttype_name IS
+    'Name of the transcript type';
+COMMENT ON COLUMN
+    TRANSCRIPTTYPE.date_creation IS
+    'Date of creation';
+COMMENT ON COLUMN
+    TRANSCRIPTTYPE.user_creation IS
+    'User who created it';
+COMMENT ON COLUMN
+    TRANSCRIPTTYPE.date_last_modification IS
+    'Date of the last modification';
+COMMENT ON COLUMN
+    TRANSCRIPTTYPE.user_last_modification IS
+    'Last user who modified it';
     
 -- Table Accused
 CREATE TABLE ACCUSED(
@@ -40,6 +103,42 @@ CREATE TABLE ACCUSED(
     date_last_modification DATE,
     user_last_modification VARCHAR2(15)
     );
+--Comments
+COMMENT ON TABLE ACCUSED
+    IS 'Table that stores data of accused';
+COMMENT ON COLUMN
+    ACCUSED.id_accused IS
+    'Identification number of the accused';
+COMMENT ON COLUMN
+    ACCUSED.id_company IS
+    'Identification number of company of the accused';
+COMMENT ON COLUMN
+    ACCUSED.first_name IS
+    'First name of the accused';
+COMMENT ON COLUMN
+    ACCUSED.last_name IS
+    'Last name of the accused';
+COMMENT ON COLUMN
+    ACCUSED.second_last_name IS
+    'Second last name of the accused';
+COMMENT ON COLUMN
+    ACCUSED.birthdate IS
+    'Date of birth of the accused';
+COMMENT ON COLUMN
+    ACCUSED.id_gender IS
+    'Identification number of gender of the accused';
+COMMENT ON COLUMN
+    ACCUSED.date_creation IS
+    'Date of creation';
+COMMENT ON COLUMN
+    ACCUSED.user_creation IS
+    'User who created it';
+COMMENT ON COLUMN
+    ACCUSED.date_last_modification IS
+    'Date of the last modification';
+COMMENT ON COLUMN
+    ACCUSED.user_last_modification IS
+    'Last user who modified it';
 
 -- Table Verdict
 CREATE TABLE VERDICT(
@@ -50,6 +149,27 @@ CREATE TABLE VERDICT(
     date_last_modification DATE,
     user_last_modification VARCHAR2(15)
     );
+--Comments
+COMMENT ON TABLE VERDICT
+    IS 'Table that stores data of verdicts';
+COMMENT ON COLUMN
+    VERDICT.id_verdict IS
+    'Identification number of the verdict';
+COMMENT ON COLUMN
+    VERDICT.verdict_name IS
+    'Name of the verdict';
+COMMENT ON COLUMN
+    VERDICT.date_creation IS
+    'Date of creation';
+COMMENT ON COLUMN
+    VERDICT.user_creation IS
+    'User who created it';
+COMMENT ON COLUMN
+    VERDICT.date_last_modification IS
+    'Date of the last modification';
+COMMENT ON COLUMN
+    VERDICT.user_last_modification IS
+    'Last user who modified it';
     
 --Table Sentence
 CREATE TABLE SENTENCE(
@@ -62,7 +182,37 @@ CREATE TABLE SENTENCE(
     user_creation VARCHAR2(15) CONSTRAINT sentence_usercreation_nn NOT NULL,
     date_last_modification DATE,
     user_last_modification VARCHAR2(15)
-    );  
+    );
+--Comments
+COMMENT ON TABLE SENTENCE
+    IS 'Table that stores data of sentences';
+COMMENT ON COLUMN
+    SENTENCE.id_sentence IS
+    'Identification number of the sentence';
+COMMENT ON COLUMN
+    SENTENCE.sentence_name IS
+    'Name of the sentence';
+COMMENT ON COLUMN
+    SENTENCE.start_date IS
+    'Date when sentence begins';
+COMMENT ON COLUMN
+    SENTENCE.end_date IS
+    'Date when sentence ends';
+COMMENT ON COLUMN
+    SENTENCE.id_sentencetype IS
+    'Identification number of sentence type of the sentence';
+COMMENT ON COLUMN
+    SENTENCE.date_creation IS
+    'Date of creation';
+COMMENT ON COLUMN
+    SENTENCE.user_creation IS
+    'User who created it';
+COMMENT ON COLUMN
+    SENTENCE.date_last_modification IS
+    'Date of the last modification';
+COMMENT ON COLUMN
+    SENTENCE.user_last_modification IS
+    'Last user who modified it';  
     
 --Table SentenceType
 CREATE TABLE SENTENCETYPE(
@@ -73,6 +223,27 @@ CREATE TABLE SENTENCETYPE(
     date_last_modification DATE,
     user_last_modification VARCHAR2(15)
     );
+--Comments
+COMMENT ON TABLE SENTENCETYPE
+    IS 'Table that stores data of sentence types';
+COMMENT ON COLUMN
+    SENTENCETYPE.id_sentencetype IS
+    'Identification number of the sentence type';
+COMMENT ON COLUMN
+    SENTENCETYPE.sentencetype_name IS
+    'Name of the sentence type';
+COMMENT ON COLUMN
+    SENTENCETYPE.date_creation IS
+    'Date of creation';
+COMMENT ON COLUMN
+    SENTENCETYPE.user_creation IS
+    'User who created it';
+COMMENT ON COLUMN
+    SENTENCETYPE.date_last_modification IS
+    'Date of the last modification';
+COMMENT ON COLUMN
+    SENTENCETYPE.user_last_modification IS
+    'Last user who modified it';
     
 --Table Crime
 CREATE TABLE CRIME(
@@ -84,6 +255,30 @@ CREATE TABLE CRIME(
     date_last_modification DATE,
     user_last_modification VARCHAR2(15)
     );
+--Comments
+COMMENT ON TABLE CRIME
+    IS 'Table that stores data of crimes';
+COMMENT ON COLUMN
+    CRIME.id_crime IS
+    'Identification number of the crime';
+COMMENT ON COLUMN
+    CRIME.crime_name IS
+    'Name of the crime';
+COMMENT ON COLUMN
+    CRIME.crime_date IS
+    'Date of the crime';
+COMMENT ON COLUMN
+    CRIME.date_creation IS
+    'Date of creation';
+COMMENT ON COLUMN
+    CRIME.user_creation IS
+    'User who created it';
+COMMENT ON COLUMN
+    CRIME.date_last_modification IS
+    'Date of the last modification';
+COMMENT ON COLUMN
+    CRIME.user_last_modification IS
+    'Last user who modified it';
     
 --Table Photo
 CREATE TABLE PHOTO(
@@ -96,3 +291,30 @@ CREATE TABLE PHOTO(
     date_last_modification DATE,
     user_last_modification VARCHAR2(15)
 );
+--Comments
+COMMENT ON TABLE PHOTO
+    IS 'Table that stores data of photos';
+COMMENT ON COLUMN
+    PHOTO.id_photo IS
+    'Identification number of the photo';
+COMMENT ON COLUMN
+    PHOTO.direction IS
+    'Direction of the photo';
+COMMENT ON COLUMN
+    PHOTO.photo_description IS
+    'Description of the photo';
+COMMENT ON COLUMN
+    PHOTO.id_accused IS
+    'Identification number of the accused in the photo';
+COMMENT ON COLUMN
+    PHOTO.date_creation IS
+    'Date of creation';
+COMMENT ON COLUMN
+    PHOTO.user_creation IS
+    'User who created it';
+COMMENT ON COLUMN
+    PHOTO.date_last_modification IS
+    'Date of the last modification';
+COMMENT ON COLUMN
+    PHOTO.user_last_modification IS
+    'Last user who modified it';
