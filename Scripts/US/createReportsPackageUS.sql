@@ -2,7 +2,7 @@ CREATE OR REPLACE PACKAGE USAdminReports IS
     PROCEDURE getUserPasswordMod(pcUserName VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pnIdUser NUMBER);
 END USAdminReports;
 
-CREATE OR REPLACE PACKAGE BODY USAdminReports IS
+CREATE OR REPLACE PACKAGE BODY USAdminReports AS
     --Function that gets list of users whose passwords have been modified in the past 10 days
     PROCEDURE getUserPasswordMod(pcUserName VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pnIdUser NUMBER) 
     AS CURSOR UserPasswordMod(pcUserName VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pnIdUser NUMBER) IS
@@ -37,7 +37,7 @@ CREATE OR REPLACE PACKAGE USUserReports IS
     PROCEDURE topBanReason(n NUMBER);
 END USUserReports;
 
-CREATE OR REPLACE PACKAGE BODY USUserReports IS
+CREATE OR REPLACE PACKAGE BODY USUserReports AS
     --Function that gets the list of users
     PROCEDURE getUserList AS
     CURSOR UserList IS

@@ -2,7 +2,7 @@ CREATE OR REPLACE PACKAGE TRAdminReports IS
     PROCEDURE getNewTranscripts;
 END TRAdminReports;
 
-CREATE OR REPLACE PACKAGE BODY TRAdminReports IS 
+CREATE OR REPLACE PACKAGE BODY TRAdminReports AS
     --Function to get the newest created transcripts
     PROCEDURE getNewTranscripts AS
     CURSOR NewTranscripts IS
@@ -26,7 +26,7 @@ CREATE OR REPLACE PACKAGE TRUserReports IS
     PROCEDURE topCrimes(n NUMBER);
 END TRUserReports;
 
-CREATE OR REPLACE PACKAGE BODY TRUserReports IS
+CREATE OR REPLACE PACKAGE BODY TRUserReports AS
     --Function to get the top n communities with the most transcripts
     PROCEDURE topTranscriptCommunity(n number) AS
     CURSOR topTranscriptCommunity(n number) IS
