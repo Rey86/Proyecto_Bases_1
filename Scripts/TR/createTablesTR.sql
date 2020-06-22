@@ -19,6 +19,9 @@ CREATE TABLE TRANSCRIPT(
 COMMENT ON TABLE TRANSCRIPT
     IS 'Table that stores data of transcripts';
 COMMENT ON COLUMN
+    TRANSCRIPT.valid IS
+    'It shows if a transcript is valid';
+COMMENT ON COLUMN
     TRANSCRIPT.transcript_number IS
     'Identification code of the transcript';
 COMMENT ON COLUMN
