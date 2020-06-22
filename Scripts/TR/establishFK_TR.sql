@@ -3,7 +3,7 @@
 ALTER TABLE TRANSCRIPT
     ADD CONSTRAINT fk_transcript_user FOREIGN KEY
     (username) REFERENCES
-    USERAPP(username);
+    US.USERAPP(username);
    
     --Accused
 ALTER TABLE TRANSCRIPT
@@ -42,47 +42,11 @@ ALTER TABLE TRANSCRIPT
     CRIME(id_crime);
     
 --Accused's foreign keys
-    --Company
-ALTER TABLE ACCUSED
-    ADD CONSTRAINT fk_accused_company FOREIGN KEY
-    (id_company) REFERENCES
-    PRSN.PERSON(id_company);
-    
     --ID
 ALTER TABLE ACCUSED
     ADD CONSTRAINT fk_accused_id FOREIGN KEY
     (id_accused) REFERENCES
     PRSN.PERSON(id_person);
-    
-    --First Name
-ALTER TABLE ACCUSED
-    ADD CONSTRAINT fk_accused_firstName FOREIGN KEY
-    (first_name) REFERENCES
-    PRSN.PERSON(first_name);
-    
-    --Last Name
-ALTER TABLE ACCUSED
-    ADD CONSTRAINT fk_accused_lastName FOREIGN KEY
-    (last_name) REFERENCES
-    PRSN.PERSON(last_name);
-    
-    --Second Last Name
-ALTER TABLE ACCUSED
-    ADD CONSTRAINT fk_accused_secondLastName FOREIGN KEY
-    (second_last_name) REFERENCES
-    PRSN.PERSON(second_last_name);
-    
-    --Birthdate
-ALTER TABLE ACCUSED
-    ADD CONSTRAINT fk_accused_birthdate FOREIGN KEY
-    (birthdate) REFERENCES
-    PRSN.PERSON(birthdate);
-    
-    --Gender
-ALTER TABLE ACCUSED
-    ADD CONSTRAINT fk_accused_gender FOREIGN KEY
-    (id_gender) REFERENCES
-    PRSN.PERSON(id_gender);
     
 --Sentence's foreign key
     --Sentence Type
