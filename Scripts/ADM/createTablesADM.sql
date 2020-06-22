@@ -5,8 +5,8 @@ CREATE TABLE GENERALLOG(
     table_name VARCHAR2(30) CONSTRAINT generallog_tablename_nn NOT NULL,
     column_name VARCHAR2(30) CONSTRAINT generallog_columnname_nn NOT NULL,
     modification_date DATE CONSTRAINT generallog_modificationdate_nn NOT NULL,
-    currentValue VARCHAR2(20) CONSTRAINT generallog_currentValue_nn NOT NULL,
-    previousValue VARCHAR2(20)
+    current_value VARCHAR2(20) CONSTRAINT generallog_currentValue_nn NOT NULL,
+    previous_value VARCHAR2(20)
     );
 --Comments
 COMMENT ON TABLE GENERALLOG
