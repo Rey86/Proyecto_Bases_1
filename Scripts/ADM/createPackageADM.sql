@@ -9,6 +9,7 @@ END ADMTables;
 CREATE OR REPLACE PACKAGE BODY ADMTables AS
 -- Procedure to get a parameter with specific id to show it in the screen  
     PROCEDURE getParameter (pnIdParameter IN NUMBER) AS
+    vmenError VARCHAR2(50);
     CURSOR parameterTable(pnIdParameter IN NUMBER)
     IS
         SELECT id_parameter, parameter_name, parameter_value
@@ -30,6 +31,7 @@ CREATE OR REPLACE PACKAGE BODY ADMTables AS
 
 -- Procedure to set a parameter with specific id and the new values wrote by the user  
     PROCEDURE setParameterColumns (pnIdParameter IN NUMBER, pcParameterName IN VARCHAR2, pnParameterValue IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN
         UPDATE PARAMETER_TABLE
         SET parameter_name = pcParameterName,
@@ -47,6 +49,7 @@ CREATE OR REPLACE PACKAGE BODY ADMTables AS
 
 -- Procedure to delete a specific parameter  
     PROCEDURE deleteParameter (pnIdParameter IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM PARAMETER_TABLE
         WHERE id_parameter = pnIdParameter;
@@ -60,6 +63,7 @@ CREATE OR REPLACE PACKAGE BODY ADMTables AS
 
 -- Procedure to insert a new parameter
     PROCEDURE insertParameter (pcParameterName IN VARCHAR2, pnParameterValue IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         INSERT INTO PARAMETER_TABLE (id_parameter, parameter_name, parameter_value)
         VALUES (s_parameter.nextval, pcParameterName, pnParameterValue);
