@@ -6,14 +6,8 @@ CREATE TABLE USERAPP(
         CONSTRAINT userapp_bandays_min CHECK (ban_days > 0),
     banned NUMBER CONSTRAINT userapp_banned_nn NOT NULL,
     id_usertype NUMBER(8) CONSTRAINT userapp_idusertype_nn NOT NULL,
-    first_name VARCHAR2(25) CONSTRAINT userapp_firstname_nn NOT NULL,
-    last_name VARCHAR2(25) CONSTRAINT userapp_lastname_nn NOT NULL,
-    second_last_name VARCHAR2(25) CONSTRAINT userapp_secondlastname_nn NOT NULL,
-    birthdate DATE CONSTRAINT userapp_birthdate_nn NOT NULL, 
     id_user VARCHAR2(20) CONSTRAINT userapp_id_nn NOT NULL,
         CONSTRAINT userapp_iduser_uk UNIQUE (id_user),
-    id_gender NUMBER(8) CONSTRAINT userapp_idgender_nn NOT NULL,
-    id_company NUMBER(8) CONSTRAINT userapp_idcompany_nn NOT NULL,
     date_creation DATE CONSTRAINT userapp_datecreation_nn NOT NULL,
     user_creation VARCHAR2(15) CONSTRAINT userapp_usercreation_nn NOT NULL,
     date_last_modification DATE,
@@ -38,26 +32,8 @@ COMMENT ON COLUMN
     USERAPP.id_usertype IS
     'Identification number of user type of the user';
 COMMENT ON COLUMN
-    USERAPP.first_name IS
-    'First name of the user';
-COMMENT ON COLUMN
-    USERAPP.last_name IS
-    'Last name of the user';
-COMMENT ON COLUMN
-    USERAPP.second_last_name IS
-    'Second last name of the user';
-COMMENT ON COLUMN
-    USERAPP.birthdate IS
-    'Date of birth of the user';
-COMMENT ON COLUMN
     USERAPP.id_user IS
     'Identification number of the user';
-COMMENT ON COLUMN
-    USERAPP.id_gender IS
-    'Identification number of gender of the user';
-COMMENT ON COLUMN
-    USERAPP.id_company IS
-    'Identification number of company of the user';
 COMMENT ON COLUMN
     USERAPP.date_creation IS
     'Date of creation';

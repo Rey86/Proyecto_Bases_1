@@ -95,12 +95,6 @@ COMMENT ON COLUMN
 -- Table Accused
 CREATE TABLE ACCUSED(
     id_accused VARCHAR2(20) CONSTRAINT accused_id_nn NOT NULL,
-    id_company NUMBER(8) CONSTRAINT accused_idcompany_nn NOT NULL,
-    first_name VARCHAR2(25) CONSTRAINT accused_firstname_nn NOT NULL,
-    last_name VARCHAR2(25) CONSTRAINT accused_lastname_nn NOT NULL,
-    second_last_name VARCHAR2(25) CONSTRAINT accused_secondlastname_nn NOT NULL,
-    birthdate DATE CONSTRAINT accused_birthdate_nn NOT NULL, 
-    id_gender NUMBER(8) CONSTRAINT accused_idgender_nn NOT NULL,
     date_creation DATE CONSTRAINT accused_datecreation_nn NOT NULL,
     user_creation VARCHAR2(15) CONSTRAINT accused_usercreation_nn NOT NULL,
     date_last_modification DATE,
@@ -112,24 +106,6 @@ COMMENT ON TABLE ACCUSED
 COMMENT ON COLUMN
     ACCUSED.id_accused IS
     'Identification number of the accused';
-COMMENT ON COLUMN
-    ACCUSED.id_company IS
-    'Identification number of company of the accused';
-COMMENT ON COLUMN
-    ACCUSED.first_name IS
-    'First name of the accused';
-COMMENT ON COLUMN
-    ACCUSED.last_name IS
-    'Last name of the accused';
-COMMENT ON COLUMN
-    ACCUSED.second_last_name IS
-    'Second last name of the accused';
-COMMENT ON COLUMN
-    ACCUSED.birthdate IS
-    'Date of birth of the accused';
-COMMENT ON COLUMN
-    ACCUSED.id_gender IS
-    'Identification number of gender of the accused';
 COMMENT ON COLUMN
     ACCUSED.date_creation IS
     'Date of creation';

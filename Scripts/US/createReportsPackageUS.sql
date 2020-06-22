@@ -9,6 +9,8 @@ CREATE OR REPLACE PACKAGE BODY USAdminReports AS
         select ua.username username , ua.first_name||' '|| ua.last_name name , id_user identification from userapp ua
         inner join generallog gl
         on ua.username = gl.username
+        inner join PRSN.PERSON p
+        on ua.id_user = p.id_person
         where sysdate - gl.modification_date < 10 
         and ua.username = NVL(pcUserName, ua.username)
         and ua.first_name = NVL(pcFirstName, ua.first_name)

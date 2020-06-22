@@ -27,7 +27,7 @@ ALTER TABLE TRANSCRIPT
 ALTER TABLE TRANSCRIPT
     ADD CONSTRAINT fk_transcript_community FOREIGN KEY
     (id_community) REFERENCES
-    COMMUNITY(id_community);
+    Place.COMMUNITY(id_community);
     
     --Sentence
 ALTER TABLE TRANSCRIPT
@@ -46,43 +46,43 @@ ALTER TABLE TRANSCRIPT
 ALTER TABLE ACCUSED
     ADD CONSTRAINT fk_accused_company FOREIGN KEY
     (id_company) REFERENCES
-    PERSON(id_company);
+    PRSN.PERSON(id_company);
     
     --ID
 ALTER TABLE ACCUSED
     ADD CONSTRAINT fk_accused_id FOREIGN KEY
     (id_accused) REFERENCES
-    PERSON(id_person);
+    PRSN.PERSON(id_person);
     
     --First Name
 ALTER TABLE ACCUSED
     ADD CONSTRAINT fk_accused_firstName FOREIGN KEY
     (first_name) REFERENCES
-    PERSON(first_name);
+    PRSN.PERSON(first_name);
     
     --Last Name
 ALTER TABLE ACCUSED
     ADD CONSTRAINT fk_accused_lastName FOREIGN KEY
     (last_name) REFERENCES
-    PERSON(last_name);
+    PRSN.PERSON(last_name);
     
     --Second Last Name
 ALTER TABLE ACCUSED
     ADD CONSTRAINT fk_accused_secondLastName FOREIGN KEY
     (second_last_name) REFERENCES
-    PERSON(second_last_name);
+    PRSN.PERSON(second_last_name);
     
     --Birthdate
 ALTER TABLE ACCUSED
     ADD CONSTRAINT fk_accused_birthdate FOREIGN KEY
     (birthdate) REFERENCES
-    PERSON(birthdate);
+    PRSN.PERSON(birthdate);
     
     --Gender
 ALTER TABLE ACCUSED
     ADD CONSTRAINT fk_accused_gender FOREIGN KEY
     (id_gender) REFERENCES
-    PERSON(id_gender);
+    PRSN.PERSON(id_gender);
     
 --Sentence's foreign key
     --Sentence Type
