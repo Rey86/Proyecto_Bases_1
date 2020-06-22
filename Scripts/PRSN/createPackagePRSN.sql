@@ -17,13 +17,14 @@ CREATE OR REPLACE PACKAGE PRSNTables IS
     PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);
     PROCEDURE deleteGender (pnIdGender NUMBER);
     PROCEDURE insertGender (pcGenderName VARCHAR2);
-END PlaceTables;
+END PRSNTables;
 
 CREATE OR REPLACE PACKAGE BODY PRSNTables AS
 -- Table Person
 -- Function to get a person with specific id to show it in the screen      
     PROCEDURE getPerson (pcIdPerson IN VARCHAR2) AS
-    CURSOR person(pnIdPerson IN VARCHAR2)
+    vmenError VARCHAR2(50);
+    CURSOR person(pcIdPerson IN VARCHAR2)
     IS
         SELECT p.id_person id_person, p.first_name first_name, p.last_name last_name, p.second_last_name second_last_name, 
             p.birthdate birthdate, g.gender_name gender_name, c.company_name company_name
@@ -34,7 +35,7 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
         ON p.id_gender = g.id_gender
         WHERE p.id_person = NVL(pcIdPerson, p.id_person);
     BEGIN 
-        FOR i in person(pnIdPerson) LOOP
+        FOR i in person(pcIdPerson) LOOP
             dbms_output.put_line(i.id_person);
             dbms_output.put_line(i.first_name);
             dbms_output.put_line(i.last_name);
@@ -54,6 +55,7 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
 -- Procedure to set a person with specific id and the new values wrote by the user  
     PROCEDURE setPerson (pcIdPerson IN VARCHAR2, pcFirstName IN VARCHAR2, pcLastName IN VARCHAR2, 
         pcSecondLastName IN VARCHAR2, pdBirthdate IN DATE, pnIdGender IN NUMBER, pnIdCompany IN NUMBER) IS
+    vmenError VARCHAR2(50);    
     BEGIN
         UPDATE PERSON
         SET first_name = pcFirstName,
@@ -75,6 +77,7 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
 
 -- Procedure to delete a specific person  
     PROCEDURE deletePerson (pcIdPerson IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM PERSON
         WHERE id_person = pcIdPerson;
@@ -89,8 +92,9 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
 -- Procedure to insert a new person
     PROCEDURE insertPerson (pcIdPerson IN VARCHAR2, pcFirstName IN VARCHAR2, pcLastName IN VARCHAR2, pcSecondLastName IN VARCHAR2, 
         pdBirthdate IN DATE, pnIdGender IN NUMBER, pnIdCompany IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
-        INSERT INTO PERSON (id_person, first_name, lat_name, second_last_name, birthdate, id_gender, id_company)
+        INSERT INTO PERSON (id_person, first_name, last_name, second_last_name, birthdate, id_gender, id_company)
         VALUES (pcIdPerson, pcFirstName, pcLastName, pcSecondLastName, pdBirthdate, pnIdGender, pnIdCompany);
         Commit;
     Exception
@@ -102,6 +106,7 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
 -- Table Company
 -- Function to get a company with specific id to show it in the screen      
     PROCEDURE getCompany (pnIdCompany IN NUMBER) AS
+    vmenError VARCHAR2(50);
     CURSOR company(pnIdCompany IN NUMBER)
     IS
         SELECT id_company, company_name
@@ -122,6 +127,7 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
 
 -- Procedure to set a company with specific id and the new values wrote by the user  
     PROCEDURE setCompany (pnIdCompany IN NUMBER, pcCompanyName IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN
         UPDATE COMPANY
         SET company_name = pcCompanyName
@@ -138,6 +144,7 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
 
 -- Procedure to delete a specific company  
     PROCEDURE deleteCompany (pnIdCompany IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM COMPANY
         WHERE id_company = pnIdCompany;
@@ -151,6 +158,7 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
 
 -- Procedure to insert a new company
     PROCEDURE insertCompany (pcCompanyName IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         INSERT INTO COMPANY (id_company, company_name)
         VALUES (s_company.nextval, pcCompanyName);
@@ -164,6 +172,7 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
 -- Table Gender
 -- Function to get a gender with specific id to show it in the screen      
     PROCEDURE getGender (pnIdGender IN NUMBER) AS
+    vmenError VARCHAR2(50);
     CURSOR gender(pnIdGender IN NUMBER)
     IS
         SELECT id_gender, gender_name
@@ -184,6 +193,7 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
 
 -- Procedure to set a gender with specific id and the new values wrote by the user  
     PROCEDURE setGender (pnIdGender IN NUMBER, pcGenderName IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN
         UPDATE GENDER
         SET gender_name = pcGenderName
@@ -200,6 +210,7 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
 
 -- Procedure to delete a specific gender  
     PROCEDURE deleteGender (pnIdGender IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM GENDER
         WHERE id_gender = pnIdGender;
@@ -213,6 +224,7 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
 
 -- Procedure to insert a new gender
     PROCEDURE insertGender (pcGenderName IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         INSERT INTO GENDER (id_gender, gender_name)
         VALUES (s_gender.nextval, pcGenderName);
