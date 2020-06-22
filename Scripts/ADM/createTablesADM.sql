@@ -27,10 +27,10 @@ COMMENT ON COLUMN
     GENERALLOG.modification_date IS
     'Date of the modification';
 COMMENT ON COLUMN
-    GENERALLOG.currentValue IS
+    GENERALLOG.current_value IS
     'Actual value';
 COMMENT ON COLUMN
-    GENERALLOG.previousValue IS
+    GENERALLOG.previous_value IS
     'Old value';
     
 --Table Parameter
