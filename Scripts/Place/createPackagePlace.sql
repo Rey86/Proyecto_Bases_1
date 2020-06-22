@@ -31,6 +31,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 -- Table Community
 -- Function to get a community with specific id to show it in the screen      
     PROCEDURE getCommunity (pnIdCommunity IN NUMBER) AS
+    vmenError VARCHAR2(50);
     CURSOR community(pnIdCommunity IN NUMBER)
     IS
         SELECT c.id_community id_community, c.community_name community_name, d.district_name district_name
@@ -53,11 +54,12 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     END getCommunity;
 
 -- Procedure to set a community with specific id and the new values wrote by the user  
-    PROCEDURE setCommunity (pnIdCommunity IN NUMBER, pcCommunityName IN VARCHAR2, pnIdDistict IN NUMBER) IS
+    PROCEDURE setCommunity (pnIdCommunity IN NUMBER, pcCommunityName IN VARCHAR2, pnIdDistrict IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN
         UPDATE COMMUNITY
         SET community_name = pcCommunityName,
-        id_district = pnIdDistict
+        id_district = pnIdDistrict
         WHERE id_community = pnIdCommunity;
         Commit;
     Exception
@@ -71,6 +73,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 
 -- Procedure to delete a specific community  
     PROCEDURE deleteCommunity (pnIdCommunity IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM COMMUNITY
         WHERE id_community = pnIdCommunity;
@@ -83,7 +86,8 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     END deleteCommunity;
 
 -- Procedure to insert a new community
-    PROCEDURE insertCommunity (pcCommunityName IN VARCHAR2, pnIdDistict IN NUMBER) IS
+    PROCEDURE insertCommunity (pcCommunityName IN VARCHAR2, pnIdDistrict IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         INSERT INTO COMMUNITY (id_community, community_name, id_district)
         VALUES (s_community.nextval, pcCommunityName, pnIdDistrict);
@@ -97,6 +101,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 -- Table District
 -- Function to get a district with specific id to show it in the screen      
     PROCEDURE getDistrict (pnIdDistrict IN NUMBER) AS
+    vmenError VARCHAR2(50);
     CURSOR district(pnIdDistrict IN NUMBER)
     IS
         SELECT d.id_district id_district, d.district_name district_name, c.canton_name canton_name
@@ -120,6 +125,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 
 -- Procedure to set a district with specific id and the new values wrote by the user  
     PROCEDURE setDistrict (pnIdDistrict IN NUMBER, pcDistrictName IN VARCHAR2, pnIdCanton IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN
         UPDATE DISTRICT
         SET district_name = pcDistrictName,
@@ -137,6 +143,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 
 -- Procedure to delete a specific district  
     PROCEDURE deleteDistrict (pnIdDistrict IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM DISTRICT
         WHERE id_district = pnIdDistrict;
@@ -150,6 +157,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 
 -- Procedure to insert a new district
     PROCEDURE insertDistrict (pcDistrictName IN VARCHAR2, pnIdCanton IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         INSERT INTO DISTRICT (id_district, district_name, id_canton)
         VALUES (s_district.nextval, pcDistrictName, pnIdCanton);
@@ -163,6 +171,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 -- Table Canton
 -- Function to get a canton with specific id to show it in the screen      
     PROCEDURE getCanton (pnIdCanton IN NUMBER) AS
+    vmenError VARCHAR2(50);
     CURSOR canton(pnIdCanton IN NUMBER)
     IS
         SELECT c.id_canton id_canton, c.canton_name canton_name, p.province_name province_name
@@ -186,6 +195,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 
 -- Procedure to set a canton with specific id and the new values wrote by the user  
     PROCEDURE setCanton (pnIdCanton IN NUMBER, pcCantonName IN VARCHAR2, pnIdProvince IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN
         UPDATE CANTON
         SET canton_name = pcCantonName,
@@ -203,6 +213,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 
 -- Procedure to delete a specific canton  
     PROCEDURE deleteCanton (pnIdCanton IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM CANTON
         WHERE id_canton = pnIdCanton;
@@ -216,6 +227,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 
 -- Procedure to insert a new canton
     PROCEDURE insertCanton (pcCantonName IN VARCHAR2, pnIdProvince IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         INSERT INTO CANTON (id_canton, canton_name, id_province)
         VALUES (s_canton.nextval, pcCantonName, pnIdProvince);
@@ -229,12 +241,13 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 -- Table Province
 -- Function to get a province with specific id to show it in the screen      
     PROCEDURE getProvince (pnIdProvince IN NUMBER) AS
+    vmenError VARCHAR2(50);
     CURSOR province(pnIdProvince IN NUMBER)
     IS
-        SELECT p.id_province id_province, p.province_name province_name, c.country_name province_name
+        SELECT p.id_province id_province, p.province_name province_name, c.country_name country_name
         FROM PROVINCE p
         INNER JOIN COUNTRY c
-        ON p.id_province = c.id_province
+        ON p.id_country = c.id_country
         WHERE p.id_province = NVL(pnIdProvince, p.id_province);
     BEGIN 
         FOR i in province(pnIdProvince) LOOP
@@ -252,6 +265,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 
 -- Procedure to set a province with specific id and the new values wrote by the user  
     PROCEDURE setProvince (pnIdProvince IN NUMBER, pcProvinceName IN VARCHAR2, pnIdCountry IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN
         UPDATE PROVINCE
         SET province_name = pcProvinceName,
@@ -269,6 +283,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 
 -- Procedure to delete a specific province 
     PROCEDURE deleteProvince (pnIdProvince IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM PROVINCE
         WHERE id_province = pnIdProvince;
@@ -282,6 +297,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 
 -- Procedure to insert a new province
     PROCEDURE insertProvince (pcProvinceName IN VARCHAR2, pnIdCountry IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         INSERT INTO PROVINCE (id_province, province_name, id_country)
         VALUES (s_province.nextval, pcProvinceName, pnIdCountry);
@@ -295,6 +311,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 -- Table Country
 -- Function to get a country with specific id to show it in the screen      
     PROCEDURE getCountry (pnIdCountry IN NUMBER) AS
+    vmenError VARCHAR2(50);
     CURSOR country(pnIdCountry IN NUMBER)
     IS
         SELECT id_country, country_name
@@ -315,6 +332,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 
 -- Procedure to set a country with specific id and the new values wrote by the user  
     PROCEDURE setCountry (pnIdCountry IN NUMBER, pcCountryName IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN
         UPDATE COUNTRY
         SET country_name = pcCountryName
@@ -331,6 +349,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 
 -- Procedure to delete a specific country  
     PROCEDURE deleteCountry (pnIdCountry IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM COUNTRY
         WHERE id_country = pnIdCountry;
@@ -344,6 +363,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
 
 -- Procedure to insert a new country
     PROCEDURE insertCountry (pcCountryName IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         INSERT INTO COUNTRY (id_country, country_name)
         VALUES (s_country.nextval, pcCountryName);
