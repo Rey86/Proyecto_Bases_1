@@ -14,11 +14,8 @@ CREATE OR REPLACE PACKAGE TRTables IS
     PROCEDURE insertTranscriptType (pcTranscriptTypeName VARCHAR2);
     -- Accused Table 
     PROCEDURE getAccused (pcIdAccused VARCHAR2);
-    PROCEDURE setAccused (pcIdAccused VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, 
-        pcSecondLastName VARCHAR2, pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER);
     PROCEDURE deleteAccused (pcIdAccused VARCHAR2);
-    PROCEDURE insertAccused (pcIdAccused VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pcSecondLastName VARCHAR2, 
-        pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER);
+    PROCEDURE insertAccused (pcIdAccused VARCHAR2);
     -- Verdict Table
     PROCEDURE getVerdict (pnIdVerdict NUMBER);
     PROCEDURE setVerdict (pnIdVerdict NUMBER, pcVerdictName VARCHAR2);
@@ -44,32 +41,35 @@ CREATE OR REPLACE PACKAGE TRTables IS
     PROCEDURE setPhoto (pnIdPhoto NUMBER, pcPhotoDescription VARCHAR2, pcDirection VARCHAR2, pcIdAccused VARCHAR2);
     PROCEDURE deletePhoto (pnIdPhoto NUMBER);
     PROCEDURE insertPhoto (pcPhotoDescription VARCHAR2, pcDirection VARCHAR2, pcIdAccused VARCHAR2);
-END PlaceTables;
+END TRTables;
 
 CREATE OR REPLACE PACKAGE BODY TRTables AS
 -- Transcript Table
     -- Function to get a transcript with specific number to show it in the screen      
     PROCEDURE getTranscript (pcTranscriptNumber IN VARCHAR2) AS
+    vmenError VARCHAR2(50);
     CURSOR transcript(pcTranscriptNumber IN VARCHAR2)
     IS
         SELECT t.transcript_number transcript_number, t.valid valid, t.username username, 
-            a.first_name||' '||a.last_name||' '||a.second_last_name accused_name, tt.transcripttype_name transcripttype_name, 
+            p.first_name||' '||p.last_name||' '||p.second_last_name accused_name, tt.transcripttype_name transcripttype_name, 
             v.verdict_name verdict_name, c.community_name community_name, s.sentence_name sentence_name, s.start_date sentence_start_date,
             s.end_date sentence_end_date, st.sentencetype_name sentencetype_name, cr.crime_name crime_name, cr.crime_date crime_date,
             t.due_date due_date
         FROM TRANSCRIPT t
         INNER JOIN ACCUSED a
         ON t.id_accused = a.id_accused 
+        INNER JOIN PRSN.PERSON p
+        ON a.id_accused = p.id_person
         INNER JOIN TRANSCRIPTTYPE tt
         ON t.id_transcripttype = tt.id_transcripttype
         INNER JOIN VERDICT v
         ON t.id_verdict = v.id_verdict
-        INNER JOIN COMMUNITY c
+        INNER JOIN Place.COMMUNITY c
         ON t.id_community = c.id_community
         INNER JOIN SENTENCE s
         ON t.id_sentence = s.id_sentence
         INNER JOIN SENTENCETYPE st
-        ON s.id_sentencetype = st.id_sentenceype 
+        ON s.id_sentencetype = st.id_sentencetype 
         INNER JOIN CRIME cr
         ON t.id_crime = cr.id_crime
         WHERE t.transcript_number = NVL(pcTranscriptNumber , t.transcript_number);
@@ -102,6 +102,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
     PROCEDURE setTranscript (pcTranscriptNumber IN VARCHAR2, pnValid IN NUMBER, pcUserName IN VARCHAR2, pcIdAccused IN VARCHAR2, 
         pnIdTranscriptType IN NUMBER, pnIdVerdict IN NUMBER, pnIdCommunity IN NUMBER, pnIdSentence IN NUMBER, 
         pnIdCrime IN NUMBER, pdDueDate IN DATE) IS
+    vmenError VARCHAR2(50);
     BEGIN
         UPDATE TRANSCRIPT
         SET valid = pnValid,
@@ -125,6 +126,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to delete a specific transcript  
     PROCEDURE deleteTranscript (pcTranscriptNumber IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM TRANSCRIPT
         WHERE transcript_number = pcTranscriptNumber;
@@ -140,6 +142,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
     PROCEDURE insertTranscript (pcTranscriptNumber IN VARCHAR2, pnValid IN NUMBER, pcUserName IN VARCHAR2, pcIdAccused IN VARCHAR2, 
         pnIdTranscriptType IN NUMBER, pnIdVerdict IN NUMBER, pnIdCommunity IN NUMBER, pnIdSentence IN NUMBER, 
         pnIdCrime IN NUMBER, pdDueDate IN DATE) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         INSERT INTO TRANSCRIPT (transcript_number, valid, username, id_accused, id_transcripttype, id_verdict, id_community, id_sentence, 
         id_crime, due_date)
@@ -155,6 +158,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 -- TranscriptType Table
 -- Function to get a transcript type with specific id to show it in the screen      
     PROCEDURE getTranscriptType (pnIdTranscriptType IN NUMBER) AS
+    vmenError VARCHAR2(50);
     CURSOR transcripttype(pnIdTranscriptType IN NUMBER)
     IS
         SELECT id_transcripttype, transcripttype_name
@@ -175,6 +179,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to set a transcript type with specific id and the new values wrote by the user  
     PROCEDURE setTranscriptType (pnIdTranscriptType IN NUMBER, pcTranscriptTypeName IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN
         UPDATE TRANSCRIPTTYPE
         SET transcripttype_name = pcTranscriptTypeName
@@ -191,6 +196,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to delete a specific transcript type  
     PROCEDURE deleteTranscriptType (pnIdTranscriptType IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM TRANSCRIPTTYPE
         WHERE id_transcripttype = pnIdTranscriptType;
@@ -204,6 +210,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to insert a new transcript type
     PROCEDURE insertTranscriptType (pcTranscriptTypeName IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         INSERT INTO TRANSCRIPTTYPE (id_transcripttype, transcripttype_name)
         VALUES (s_transcripttype.nextval, pcTranscriptTypeName);
@@ -217,18 +224,21 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 -- Table Accused
 -- Function to get a accused with specific id to show it in the screen      
     PROCEDURE getAccused (pcIdAccused IN VARCHAR2) AS
-    CURSOR accused(pnIdAccused IN VARCHAR2)
+    vmenError VARCHAR2(50);
+    CURSOR accused(pcIdAccused IN VARCHAR2)
     IS
-        SELECT a.id_accused id_accused, a.first_name first_name, a.last_name last_name, a.second_last_name second_last_name, 
-            a.birthdate birthdate, g.gender_name gender_name, c.company_name company_name
+        SELECT a.id_accused id_accused, p.first_name first_name, p.last_name last_name, p.second_last_name second_last_name, 
+            p.birthdate birthdate, g.gender_name gender_name, c.company_name company_name
         FROM ACCUSED a
-        INNER JOIN COMPANY c
-        ON a.id_company = c.id_company 
-        INNER JOIN GENDER g
-        ON a.id_gender = g.id_gender
+        INNER JOIN PRSN.PERSON p
+        ON a.id_accused = p.id_person
+        INNER JOIN PRSN.COMPANY c
+        ON p.id_company = c.id_company 
+        INNER JOIN PRSN.GENDER g
+        ON p.id_gender = g.id_gender
         WHERE a.id_accused = NVL(pcIdAccused, a.id_accused);
     BEGIN 
-        FOR i in accused(pnIdAccused) LOOP
+        FOR i in accused(pcIdAccused) LOOP
             dbms_output.put_line(i.id_accused);
             dbms_output.put_line(i.first_name);
             dbms_output.put_line(i.last_name);
@@ -243,32 +253,11 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END getAccused;
-
--- Procedure to set a accused with specific id and the new values wrote by the user  
-    PROCEDURE setAccused (pcIdAccused IN VARCHAR2, pcFirstName IN VARCHAR2, pcLastName IN VARCHAR2, 
-        pcSecondLastName IN VARCHAR2, pdBirthdate IN DATE, pnIdGender IN NUMBER, pnIdCompany IN NUMBER) IS
-    BEGIN
-        UPDATE ACCUSED
-        SET first_name = pcFirstName,
-        last_name = pcLastName,
-        second_last_name = pcSecondLastName,
-        birthdate = pdBirthdate,
-        id_gender = pnIdGender,
-        id_company = pnIdCompany
-        WHERE id_accused = pcIdAccused;
-        Commit;
-    Exception
-        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
-        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcIdAccused');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END setAccused;
+    END getAccused; 
 
 -- Procedure to delete a specific accused  
     PROCEDURE deleteAccused (pcIdAccused IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM ACCUSED
         WHERE id_accused = pcIdAccused;
@@ -281,11 +270,11 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
     END deleteAccused;
 
 -- Procedure to insert a new accused
-    PROCEDURE insertAccused (pcIdAccused IN VARCHAR2, pcFirstName IN VARCHAR2, pcLastName IN VARCHAR2, pcSecondLastName IN VARCHAR2, 
-        pdBirthdate IN DATE, pnIdGender IN NUMBER, pnIdCompany IN NUMBER) IS
+    PROCEDURE insertAccused (pcIdAccused IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN 
-        INSERT INTO ACCUSED (id_accused, first_name, lat_name, second_last_name, birthdate, id_gender, id_company)
-        VALUES (pcIdAccused, pcFirstName, pcLastName, pcSecondLastName, pdBirthdate, pnIdGender, pnIdCompany);
+        INSERT INTO ACCUSED (id_accused)
+        VALUES (pcIdAccused);
         Commit;
     Exception
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
@@ -296,6 +285,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 --  Table Verdict
 -- Function to get a verdict with specific id to show it in the screen      
     PROCEDURE getVerdict (pnIdVerdict IN NUMBER) AS
+    vmenError VARCHAR2(50);
     CURSOR verdict(pnIdVerdict IN NUMBER)
     IS
         SELECT id_verdict, verdict_name
@@ -316,6 +306,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to set a verdict with specific id and the new values wrote by the user  
     PROCEDURE setVerdict (pnIdVerdict IN NUMBER, pcVerdictName IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN
         UPDATE VERDICT
         SET verdict_name = pcVerdictName
@@ -332,6 +323,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to delete a specific verdict  
     PROCEDURE deleteVerdict (pnIdVerdict IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM VERDICT
         WHERE id_verdict = pnIdVerdict;
@@ -345,6 +337,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to insert a new verdict
     PROCEDURE insertVerdict (pcVerdictName IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         INSERT INTO VERDICT (id_verdict, verdict_name)
         VALUES (s_verdict.nextval, pcVerdictName);
@@ -358,6 +351,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 -- Table Sentence 
 -- Function to get a sentence with specific id to show it in the screen      
     PROCEDURE getSentence (pnIdSentence IN NUMBER) AS
+    vmenError VARCHAR2(50);
     CURSOR sentence(pnIdSentence IN NUMBER)
     IS
         SELECT s.id_sentence id_sentence, s.sentence_name sentence_name, s.start_date start_date, s.end_date end_date,  
@@ -385,6 +379,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 -- Procedure to set a sentence with specific id and the new values wrote by the user  
     PROCEDURE setSentence (pnIdSentence IN NUMBER, pcSentenceName IN VARCHAR2, pdStartDate IN DATE, 
         pdEndDate IN DATE, pnIdSentenceType IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN
         UPDATE SENTENCE
         SET sentence_name = pcSentenceName,
@@ -404,6 +399,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to delete a specific sentence  
     PROCEDURE deleteSentence (pnIdSentence IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM SENTENCE
         WHERE id_sentence = pnIdSentence;
@@ -417,9 +413,10 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to insert a new sentence
     PROCEDURE insertSentence (pcSentenceName IN VARCHAR2, pdStartDate IN DATE, pdEndDate IN DATE, pnIdSentenceType IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         INSERT INTO SENTENCE (id_sentence, sentence_name, start_date, end_date, id_sentencetype)
-        VALUES (s_sentence.nextval, pdStartDate, pdEndDate, pcSentenceName, pnIdCanton);
+        VALUES (s_sentence.nextval, pcSentenceName, pdStartDate, pdEndDate, pnIdSentenceType);
         Commit;
     Exception
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
@@ -430,6 +427,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 -- Table SentenceType
 -- Function to get a sentence type with specific id to show it in the screen      
     PROCEDURE getSentenceType (pnIdSentenceType IN NUMBER) AS
+    vmenError VARCHAR2(50);
     CURSOR sentencetype(pnIdSentenceType IN NUMBER)
     IS
         SELECT id_sentencetype, sentencetype_name
@@ -450,6 +448,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to set a sentence type with specific id and the new values wrote by the user  
     PROCEDURE setSentenceType (pnIdSentenceType IN NUMBER, pcSentenceTypeName IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN
         UPDATE SENTENCETYPE
         SET sentencetype_name = pcSentenceTypeName
@@ -466,6 +465,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to delete a specific sentence type  
     PROCEDURE deleteSentenceType (pnIdSentenceType IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM SENTENCETYPE
         WHERE id_sentencetype = pnIdSentenceType;
@@ -479,6 +479,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to insert a new sentence type
     PROCEDURE insertSentenceType (pcSentenceTypeName IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         INSERT INTO SENTENCETYPE (id_sentencetype, sentencetype_name)
         VALUES (s_sentencetype.nextval, pcSentenceTypeName);
@@ -492,6 +493,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 --  Table Crime
 -- Function to get a crime with specific id to show it in the screen      
     PROCEDURE getCrime (pnIdCrime IN NUMBER) AS
+    vmenError VARCHAR2(50);
     CURSOR crime(pnIdCrime IN NUMBER)
     IS
         SELECT id_crime, crime_name, crime_date
@@ -513,6 +515,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to set a crime with specific id and the new values wrote by the user  
     PROCEDURE setCrime (pnIdCrime IN NUMBER, pcCrimeName IN VARCHAR2, pdCrimeDate IN DATE) IS
+    vmenError VARCHAR2(50);
     BEGIN
         UPDATE CRIME
         SET crime_name = pcCrimeName,
@@ -530,6 +533,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to delete a specific crime  
     PROCEDURE deleteCrime (pnIdCrime IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM CRIME
         WHERE id_crime = pnIdCrime;
@@ -543,6 +547,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to insert a new crime
     PROCEDURE insertCrime (pcCrimeName IN VARCHAR2, pdCrimeDate IN DATE) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         INSERT INTO CRIME (id_crime, crime_name, crime_date)
         VALUES (s_crime.nextval, pcCrimeName, pdCrimeDate);
@@ -556,14 +561,17 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 -- Table Photo
 -- Function to get a photo with specific id to show it in the screen      
     PROCEDURE getPhoto (pnIdPhoto IN NUMBER) AS
+    vmenError VARCHAR2(50);
     CURSOR photo(pnIdPhoto IN NUMBER)
     IS
         SELECT p.id_photo id_photo, p.photo_description photo_description, p.direction direction,  
-        a.first_name||' '||a.last_name||' '||a.second_last_name accused_name
+        pe.first_name||' '||pe.last_name||' '||pe.second_last_name accused_name
         FROM PHOTO p
         INNER JOIN ACCUSED a
         ON p.id_accused = a.id_accused
-        WHERE a.id_photo = NVL(pnIdPhoto, a.id_photo);
+        INNER JOIN PRSN.PERSON pe
+        ON a.id_accused = pe.id_person
+        WHERE p.id_photo = NVL(pnIdPhoto, p.id_photo);
     BEGIN 
         FOR i in photo(pnIdPhoto) LOOP
             dbms_output.put_line(i.id_photo);
@@ -581,11 +589,12 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to set a photo with specific id and the new values wrote by the user  
     PROCEDURE setPhoto (pnIdPhoto IN NUMBER, pcPhotoDescription IN VARCHAR2, pcDirection IN VARCHAR2, pcIdAccused IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN
         UPDATE PHOTO
         SET photo_description = pcPhotoDescription,
         direction = pcDirection,
-        id_accused = pdEndDate
+        id_accused = pcIdAccused
         WHERE id_photo = pnIdPhoto;
         Commit;
     Exception
@@ -599,6 +608,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to delete a specific photo 
     PROCEDURE deletePhoto (pnIdPhoto IN NUMBER) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         DELETE FROM PHOTO
         WHERE id_photo = pnIdPhoto;
@@ -612,6 +622,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
 
 -- Procedure to insert a new photo
     PROCEDURE insertPhoto (pcPhotoDescription IN VARCHAR2, pcDirection IN VARCHAR2, pcIdAccused IN VARCHAR2) IS
+    vmenError VARCHAR2(50);
     BEGIN 
         INSERT INTO PHOTO (id_photo, photo_description, direction, id_accused)
         VALUES (s_photo.nextval, pcPhotoDescription, pcDirection, pcIdAccused);
