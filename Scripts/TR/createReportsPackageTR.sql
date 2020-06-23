@@ -22,7 +22,7 @@ CREATE OR REPLACE PACKAGE BODY TRAdminReports AS
     vmenError VARCHAR2(50);
     CURSOR ValidTranscripts IS 
         select tt.transcripttype_name transcripttype, t.transcript_number transcript_number, t.valid,
-        t.username username, p.first_name||' '||p.last_name||' '||p.second_last_name accused_name , 
+        t.username username, p.first_name||' '||p.last_name||' '||p.second_last_name accused_name, 
         p.id_gender gender , c.community_name community_name
         from transcript t 
         inner join accused a on a.id_accused = t.id_accused 
@@ -80,12 +80,13 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
     CURSOR TranscriptPerType(pnIdTranscriptType NUMBER, pdDateCreation DATE, pdDateLastModification DATE, pnIdCommunity NUMBER) IS 
         select  tt.transcripttype_name transcripttype, t.transcript_number transcript_number, t.valid,
         t.username username, p.first_name||' '||p.last_name||' '||p.second_last_name accused_name , 
-        p.id_gender gender , c.community_name community_name, t.date_creation date_creation, t.date_last_modification date_last_modification
+        g.gender_name gender , c.community_name community_name, t.date_creation date_creation, t.date_last_modification date_last_modification
         from transcript t 
         inner join accused a on a.id_accused = t.id_accused 
         inner join PRSN.person p on a.id_accused = p.id_person
         inner join transcripttype tt on tt.id_transcripttype = t.id_transcripttype
-        inner join Place.community c on c.id_community = t.id_community 
+        inner join Place.community c on c.id_community = t.id_community
+        inner join PRSN.gender g on g.id_gender = p.id_gender 
         where t.id_transcripttype = NVL(pnIdTranscriptType, t.id_transcripttype)
         and t.date_creation = NVL(pdDateCreation, t.date_creation)
         and t.date_last_modification =  NVL(pdDateLastModification, t.date_last_modification)
@@ -167,12 +168,12 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
     PROCEDURE topCrimes(n NUMBER) AS
     vmenError VARCHAR2(50);
     CURSOR topCrimes(n NUMBER) IS
-        select c.crime_name crime from transcript t 
-        inner join crime c on t.id_crime = c.id_crime 
-        where rownum <=n order by t.id_crime desc;
+        select tt.transcripttype_name transcripttype_name from transcript t 
+        inner join transcripttype tt on t.id_transcripttype = tt.id_transcripttype 
+        where rownum <=n order by t.id_transcripttype desc;
     BEGIN
         FOR i in topCrimes(n) LOOP
-            dbms_output.put_line(i.crime);
+            dbms_output.put_line(i.transcripttype_name);
         END LOOP;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
