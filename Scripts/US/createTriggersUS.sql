@@ -85,8 +85,8 @@ CREATE OR REPLACE TRIGGER US.beforeUpdateUserPassword
     ON USERAPP
     for each row
     BEGIN
-        INSERT INTO GENERALLOG
-        (id_generallog, scheme_name, table_name, column_name, modification_date, username, previous_value ,current_value)
+        INSERT INTO ADM.GENERALLOG
+        (id_generallog, scheme_name, table_name, column_name, modification_date, username, previous_value, current_value)
         VALUES (s_generallog.nextval, 'US', 'USERAPP', 'USER_PASSWORD', SYSDATE, :old.username, :old.user_password, :new.user_password);
     END beforeUpdateUserPassword;
         

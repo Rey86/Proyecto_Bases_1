@@ -5,9 +5,10 @@ CREATE TABLE GENERALLOG(
     table_name VARCHAR2(30) CONSTRAINT generallog_tablename_nn NOT NULL,
     column_name VARCHAR2(30) CONSTRAINT generallog_columnname_nn NOT NULL,
     modification_date DATE CONSTRAINT generallog_modificationdate_nn NOT NULL,
+    username VARCHAR2(30) CONSTRAINT generallog_username_nn NOT NULL,
     current_value VARCHAR2(20) CONSTRAINT generallog_currentValue_nn NOT NULL,
     previous_value VARCHAR2(20)
-    );
+    );  
 --Comments
 COMMENT ON TABLE GENERALLOG
     IS 'Table that register every change of value in the database';
@@ -26,6 +27,9 @@ COMMENT ON COLUMN
 COMMENT ON COLUMN
     GENERALLOG.modification_date IS
     'Date of the modification';
+COMMENT ON COLUMN
+    GENERALLOG.username IS
+    'Username that modificated his password';
 COMMENT ON COLUMN
     GENERALLOG.current_value IS
     'Actual value';

@@ -3,7 +3,7 @@ CREATE TABLE USERAPP(
     username VARCHAR2(30) CONSTRAINT userapp_username_nn NOT NULL,
     user_password VARCHAR2(20) CONSTRAINT userapp_userpassword_nn NOT NULL,
     ban_days NUMBER CONSTRAINT userapp_bandays_nn NOT NULL, 
-        CONSTRAINT userapp_bandays_min CHECK (ban_days > 0),
+        CONSTRAINT userapp_bandays_min CHECK (ban_days >= 0),
     banned NUMBER CONSTRAINT userapp_banned_nn NOT NULL,
     id_usertype NUMBER(8) CONSTRAINT userapp_idusertype_nn NOT NULL,
     id_user VARCHAR2(20) CONSTRAINT userapp_id_nn NOT NULL,
