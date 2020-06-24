@@ -8,7 +8,7 @@ CREATE OR REPLACE PACKAGE BODY USAdminReports AS
     vmenError VARCHAR2(100);
     CURSOR UserPasswordMod(pcUserName VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pnIdUser NUMBER) IS
         select ua.username username , p.first_name||' '|| p.last_name name , id_user identification from userapp ua
-        inner join generallog gl
+        inner join ADM.generallog gl
         on ua.username = gl.username
         inner join PRSN.PERSON p
         on ua.id_user = p.id_person
@@ -43,19 +43,21 @@ END USUserReports;
 CREATE OR REPLACE PACKAGE BODY USUserReports AS
     --Function that gets the list of users
     PROCEDURE getUserList AS
+    vmenError VARCHAR2(100);
     CURSOR UserList IS
-        select username, first_name||' '|| last_name||' '|| second_last_name Name, birthdate,
-        id_user, username, id_gender gender, id_company company
-        from userapp;
+        select u.username username, p.first_name||' '|| p.last_name||' '|| p.second_last_name Name, p.birthdate birthdate,
+        u.id_user id_user, g.gender_name gender from userapp u
+        inner join PRSN.PERSON p
+        on ua.id_user = p.id_person 
+        inner join PRSN.gender g
+        on p.id_gender = g.id_gender;
     BEGIN 
         FOR i in UserList LOOP
             dbms_output.put_line(i.username);
             dbms_output.put_line(i.Name);
             dbms_output.put_line(i.birthdate);
             dbms_output.put_line(i.id_user);
-            dbms_output.put_line(i.username);
             dbms_output.put_line(i.gender);
-            dbms_output.put_line(i.company);
         END LOOP;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
@@ -63,6 +65,7 @@ CREATE OR REPLACE PACKAGE BODY USUserReports AS
     END;
     --Function that gets list of banned users and the reason 
     PROCEDURE getBannedUserList AS
+    vmenError VARCHAR2(100);
     CURSOR BannedUserList IS
         Select u.id_user id_user, u.username username, b.banreason_description ban_reason From userapp u 
         inner join banreason b On u.id_banreason = b.id_banreason;
@@ -78,6 +81,7 @@ CREATE OR REPLACE PACKAGE BODY USUserReports AS
     END getBannedUserList;
     --Function that gets the top sentence type
     PROCEDURE topSentenceTime(n NUMBER) AS
+    vmenError VARCHAR2(100);
     CURSOR SentenceTime(n NUMBER) IS
         select id_banreason, ban_days
         from banreason 
@@ -96,6 +100,7 @@ CREATE OR REPLACE PACKAGE BODY USUserReports AS
     END topSentenceTime;
     --Function that gets the top reason for bans
     PROCEDURE topBanReason(n NUMBER)  AS
+    vmenError VARCHAR2(100);
     CURSOR topBanReason(n NUMBER) IS
         select b.banreason_description banreason_description from userapp u 
         inner join banreason b on b.id_banreason = u.id_banreason 

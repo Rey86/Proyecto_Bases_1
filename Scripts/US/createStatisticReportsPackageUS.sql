@@ -8,18 +8,21 @@ CREATE OR REPLACE PACKAGE BODY USStatisticReports IS
     PROCEDURE getAgeRangePercentageUsers AS 
     vmenError VARCHAR2(100);
     CURSOR AgeRangePercentageUsers IS
-        SELECT  round(100*ratio_to_report(count(*)) over (), 2) percentage FROM 
-        (SELECT username FROM userapp WHERE SYSDATE - Birthdate <= 18 AND SYSDATE - BIRTHDATE >= 0) UNION
-        (SELECT username FROM userapp WHERE SYSDATE - Birthdate <= 30 AND SYSDATE - BIRTHDATE >= 19) UNION
-        (SELECT username FROM userapp WHERE SYSDATE - Birthdate <= 45 AND SYSDATE - BIRTHDATE >= 31) UNION
-        (SELECT username FROM userapp WHERE SYSDATE - Birthdate <= 55 AND SYSDATE - BIRTHDATE >= 46) UNION
-        (SELECT username FROM userapp WHERE SYSDATE - Birthdate <= 65 AND SYSDATE - BIRTHDATE >= 56) UNION
-        (SELECT username FROM userapp WHERE SYSDATE - Birthdate <= 75 AND SYSDATE - BIRTHDATE >= 66) UNION
-        (SELECT username FROM userapp WHERE SYSDATE - Birthdate <= 85 AND SYSDATE - BIRTHDATE >= 76) UNION
-        (SELECT username FROM userapp WHERE SYSDATE - BIRTHDATE >= 86);
-        ORDER BY Birthdate;
+        SELECT u.user_age_range user_age_range, round(100*ratio_to_report(count(*)) over (), 2) percentage FROM 
+        (SELECT CASE WHEN (SYSDATE-p.birthdate) >= 0 and (SYSDATE-p.birthdate) <= 18 then '0-18'
+        WHEN (SYSDATE-p.birthdate) >= 19 and (SYSDATE-p.birthdate) <= 30 then '19-30'
+        WHEN (SYSDATE-p.birthdate) >= 31 and (SYSDATE-p.birthdate) <= 45 then '31-45'
+        WHEN (SYSDATE-p.birthdate) >= 46 and (SYSDATE-p.birthdate) <= 55 then '46-55'
+        WHEN (SYSDATE-p.birthdate) >= 56 and (SYSDATE-p.birthdate) <= 65 then '56-65'
+        WHEN (SYSDATE-p.birthdate) >= 66 and (SYSDATE-p.birthdate) <= 75 then '66-75'
+        WHEN (SYSDATE-p.birthdate) >= 76 and (SYSDATE-p.birthdate) <= 85 then '76-85'
+        ELSE '85+' end as accused_age_range
+        FROM userapp u INNER JOIN PRSN.person p ON p.id_person = u.id_user
+        ORDER BY p.birthdate) t
+        GROUP BY u.user_age_range;
     BEGIN 
         FOR i IN AgeRangePercentageUsers LOOP
+            dbms_output.put_line(i.user_age_range);
             dbms_output.put_line(i.percentage);
         END LOOP;
     EXCEPTION 
