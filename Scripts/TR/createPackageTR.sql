@@ -1,244 +1,52 @@
--- Package to TR procedures and functions.
-CREATE OR REPLACE PACKAGE TRTables IS
-    -- Transcript Table
-    PROCEDURE getTranscript (pcTranscriptNumber VARCHAR2);
-    PROCEDURE setTranscript (pcTranscriptNumber VARCHAR2, pnValid NUMBER, pcIdAccused VARCHAR2, 
-        pnIdTranscriptType NUMBER, pnIdVerdict NUMBER, pnIdCommunity NUMBER, pnIdSentence NUMBER, pnIdCrime NUMBER, pdDueDate DATE);
-    PROCEDURE deleteTranscript (pcTranscriptNumber VARCHAR2);
-    PROCEDURE insertTranscript (pcTranscriptNumber VARCHAR2, pnValid NUMBER, pcUserName VARCHAR2, pcIdAccused VARCHAR2, 
-        pnIdTranscriptType NUMBER, pnIdVerdict NUMBER, pnIdCommunity NUMBER, pnIdSentence NUMBER, pnIdCrime NUMBER, pdDueDate DATE);
-    -- TranscriptType Table
-    PROCEDURE getTranscriptType (pnIdTranscriptType NUMBER);
-    PROCEDURE setTranscriptType (pnIdTranscriptType NUMBER, pcTranscriptTypeName VARCHAR2);
-    PROCEDURE deleteTranscriptType (pnIdTranscriptType NUMBER);
-    PROCEDURE insertTranscriptType (pcTranscriptTypeName VARCHAR2);
-    -- Accused Table 
-    PROCEDURE getAccused (pcIdAccused VARCHAR2);
-    PROCEDURE deleteAccused (pcIdAccused VARCHAR2);
-    PROCEDURE insertAccused (pcIdAccused VARCHAR2);
-    -- Verdict Table
-    PROCEDURE getVerdict (pnIdVerdict NUMBER);
-    PROCEDURE setVerdict (pnIdVerdict NUMBER, pcVerdictName VARCHAR2);
-    PROCEDURE deleteVerdict (pnIdVerdict NUMBER);
-    PROCEDURE insertVerdict (pcVerdictName VARCHAR2);
-    -- Sentence Table
-    PROCEDURE getSentence (pnIdSentence NUMBER);
-    PROCEDURE setSentence (pnIdSentence NUMBER, pdStartDate DATE, pdEndDate DATE, pnIdSentenceType NUMBER);
-    PROCEDURE deleteSentence (pnIdSentence NUMBER);
-    PROCEDURE insertSentence (pdStartDate DATE, pdEndDate DATE, pnIdSentenceType NUMBER);
-    -- SentenceType Table
-    PROCEDURE getSentenceType (pnIdSentenceType NUMBER);
-    PROCEDURE setSentenceType (pnIdSentenceType NUMBER, pcSentenceTypeName VARCHAR2);
-    PROCEDURE deleteSentenceType (pnIdSentenceType NUMBER);
-    PROCEDURE insertSentenceType (pcSentenceTypeName VARCHAR2);
-    -- Crime Table
-    PROCEDURE getCrime (pnIdCrime NUMBER);
-    PROCEDURE setCrime (pnIdCrime NUMBER, pcCrimeDescription VARCHAR2, pdCrimeDate DATE);
-    PROCEDURE deleteCrime (pnIdCrime NUMBER);
-    PROCEDURE insertCrime (pcCrimeDescription VARCHAR2, pdCrimeDate DATE);
-    -- Photo Table
-    PROCEDURE getPhoto (pnIdPhoto NUMBER);
-    PROCEDURE setPhoto (pnIdPhoto NUMBER, pcPhotoDescription VARCHAR2, pcDirection VARCHAR2, pcIdAccused VARCHAR2);
-    PROCEDURE deletePhoto (pnIdPhoto NUMBER);
-    PROCEDURE insertPhoto (pcPhotoDescription VARCHAR2, pcDirection VARCHAR2, pcIdAccused VARCHAR2);
-END TRTables;
+CREATE OR REPLACE PACKAGE USTables IS
+    -- UserApp Table
+    PROCEDURE getUserApp (pcUserName VARCHAR2);
+    PROCEDURE setUserApp (pcUserName VARCHAR2, pnBanDays NUMBER, pnBanned NUMBER, pnIdUserType NUMBER, pcIdUser VARCHAR2);
+    PROCEDURE deleteUserApp (pcUserName VARCHAR2);
+    PROCEDURE insertUserApp (pcUserName VARCHAR2, pcUserPassword VARCHAR2, pnBanDays NUMBER, pnBanned NUMBER, pnIdUserType NUMBER, 
+        pcIdUser VARCHAR2);
+    -- UserType Table
+    PROCEDURE getUserType (pnIdUserType NUMBER);
+    PROCEDURE setUserType (pnIdUserType NUMBER, pcUserTypeDescription VARCHAR2);
+    PROCEDURE deleteUserType (pnIdUserType NUMBER);
+    PROCEDURE insertUserType (pcUserTypeDescription VARCHAR2);
+    -- BanReason Table 
+    PROCEDURE getBanReason (pnIdBanReason NUMBER);
+    PROCEDURE setBanReason (pnIdBanReason NUMBER, pcBanReasonDescription VARCHAR2);
+    PROCEDURE deleteBanReason (pnIdBanReason NUMBER);
+    PROCEDURE insertBanReason (pcBanReasonDescription VARCHAR2);
+    -- BanReasonxUserApp Table 
+    PROCEDURE deleteBanReasonxUserApp (pnIdBanReason NUMBER, pcUserName VARCHAR2);
+    PROCEDURE insertBanReasonxUserApp (pnIdBanReason NUMBER, pcUserName VARCHAR2);
+END USTables;
 
-CREATE OR REPLACE PACKAGE BODY TRTables AS
--- Transcript Table
-    -- Function to get a transcript with specific number to show it in the screen      
-    PROCEDURE getTranscript (pcTranscriptNumber IN VARCHAR2) AS
-    vmenError VARCHAR2(50);
-    CURSOR transcript(pcTranscriptNumber IN VARCHAR2)
+CREATE OR REPLACE PACKAGE BODY USTables AS
+-- Table UserApp
+-- Function to get a user app with specific name to show it in the screen      
+    PROCEDURE getUserApp (pcUserName IN VARCHAR2) AS
+    vmenError VARCHAR2(100);
+    CURSOR userapp(pcUserName IN VARCHAR2)
     IS
-        SELECT t.transcript_number transcript_number, t.valid valid, t.username username, 
-            p.first_name||' '||p.last_name||' '||p.second_last_name accused_name, tt.transcripttype_name transcripttype_name, 
-            v.verdict_name verdict_name, c.community_name community_name, s.start_date sentence_start_date,
-            s.end_date sentence_end_date, s.start_date-s.end_date sentence_time, st.sentencetype_name sentencetype_name, 
-            cr.crime_description crime_description, cr.crime_date crime_date, t.due_date due_date
-        FROM TRANSCRIPT t
-        INNER JOIN ACCUSED a
-        ON t.id_accused = a.id_accused 
-        INNER JOIN PRSN.PERSON p
-        ON a.id_accused = p.id_person
-        INNER JOIN TRANSCRIPTTYPE tt
-        ON t.id_transcripttype = tt.id_transcripttype
-        INNER JOIN VERDICT v
-        ON t.id_verdict = v.id_verdict
-        INNER JOIN Place.COMMUNITY c
-        ON t.id_community = c.id_community
-        INNER JOIN SENTENCE s
-        ON t.id_sentence = s.id_sentence
-        INNER JOIN SENTENCETYPE st
-        ON s.id_sentencetype = st.id_sentencetype 
-        INNER JOIN CRIME cr
-        ON t.id_crime = cr.id_crime
-        WHERE t.transcript_number = NVL(pcTranscriptNumber , t.transcript_number);
-    BEGIN 
-        FOR i in transcript(pcTranscriptNumber) LOOP
-            dbms_output.put_line(i.transcript_number);
-            dbms_output.put_line(i.valid);
-            dbms_output.put_line(i.username);
-            dbms_output.put_line(i.accused_name);
-            dbms_output.put_line(i.transcripttype_name);
-            dbms_output.put_line(i.verdict_name);
-            dbms_output.put_line(i.community_name);
-            dbms_output.put_line(i.sentence_start_date);
-            dbms_output.put_line(i.sentence_end_date);
-            dbms_output.put_line(i.sentence_time);
-            dbms_output.put_line(i.sentencetype_name);
-            dbms_output.put_line(i.crime_description);
-            dbms_output.put_line(i.crime_date);
-            dbms_output.put_line(i.due_date);
-        END LOOP;
-    Exception
-        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
-        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pcTranscriptNumber');
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END getTranscript;
-
--- Procedure to set a transcript with specific number and the new values wrote by the user  
-    PROCEDURE setTranscript (pcTranscriptNumber IN VARCHAR2, pnValid IN NUMBER, pcIdAccused IN VARCHAR2, 
-        pnIdTranscriptType IN NUMBER, pnIdVerdict IN NUMBER, pnIdCommunity IN NUMBER, pnIdSentence IN NUMBER, 
-        pnIdCrime IN NUMBER, pdDueDate IN DATE) IS
-    vmenError VARCHAR2(50);
-    BEGIN
-        UPDATE TRANSCRIPT
-        SET valid = pnValid,
-        id_accused = pcIdAccused,
-        id_transcripttype = pnIdtranscriptType,
-        id_verdict = pnIdVerdict,
-        id_community = pnIdCommunity,
-        id_sentence = pnIdSentence,
-        id_crime = pnIdCrime,
-        due_date = pdDueDate;
-        Commit;
-    Exception
-        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
-        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcTranscriptNumber');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END setTranscript;
-
--- Procedure to delete a specific transcript  
-    PROCEDURE deleteTranscript (pcTranscriptNumber IN VARCHAR2) IS
-    vmenError VARCHAR2(50);
-    BEGIN 
-        DELETE FROM TRANSCRIPT
-        WHERE transcript_number = pcTranscriptNumber;
-        Commit;
-    Exception
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcTranscriptNumber');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END deleteTranscript;
-
--- Procedure to insert a new transcript
-    PROCEDURE insertTranscript (pcTranscriptNumber IN VARCHAR2, pnValid IN NUMBER, pcUserName IN VARCHAR2, pcIdAccused IN VARCHAR2, 
-        pnIdTranscriptType IN NUMBER, pnIdVerdict IN NUMBER, pnIdCommunity IN NUMBER, pnIdSentence IN NUMBER, 
-        pnIdCrime IN NUMBER, pdDueDate IN DATE) IS
-    vmenError VARCHAR2(50);
-    BEGIN 
-        INSERT INTO TRANSCRIPT (transcript_number, valid, username, id_accused, id_transcripttype, id_verdict, id_community, id_sentence, 
-        id_crime, due_date)
-        VALUES (pcTranscriptNumber, pnValid, pcUserName, pcIdAccused, pnIdTranscriptType, pnIdVerdict, pnIdCommunity, pnIdSentence, 
-        pnIdCrime, pdDueDate);
-        Commit;
-    Exception
-        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END insertTranscript;
-    
--- TranscriptType Table
--- Function to get a transcript type with specific id to show it in the screen      
-    PROCEDURE getTranscriptType (pnIdTranscriptType IN NUMBER) AS
-    vmenError VARCHAR2(50);
-    CURSOR transcripttype(pnIdTranscriptType IN NUMBER)
-    IS
-        SELECT id_transcripttype, transcripttype_name
-        FROM TRANSCRIPTTYPE
-        WHERE id_transcripttype = NVL(pnIdTranscriptType, id_transcripttype);
-    BEGIN 
-        FOR i in transcripttype(pnIdTranscriptType) LOOP
-            dbms_output.put_line(i.id_transcripttype);
-            dbms_output.put_line(i.transcripttype_name);
-        END LOOP;
-    Exception
-        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
-        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdTranscriptType');
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END getTranscriptType;
-
--- Procedure to set a transcript type with specific id and the new values wrote by the user  
-    PROCEDURE setTranscriptType (pnIdTranscriptType IN NUMBER, pcTranscriptTypeName IN VARCHAR2) IS
-    vmenError VARCHAR2(50);
-    BEGIN
-        UPDATE TRANSCRIPTTYPE
-        SET transcripttype_name = pcTranscriptTypeName
-        WHERE id_transcripttype = pnIdTranscriptType;
-        Commit;
-    Exception
-        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
-        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdTranscriptType');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END setTranscriptType;
-
--- Procedure to delete a specific transcript type  
-    PROCEDURE deleteTranscriptType (pnIdTranscriptType IN NUMBER) IS
-    vmenError VARCHAR2(50);
-    BEGIN 
-        DELETE FROM TRANSCRIPTTYPE
-        WHERE id_transcripttype = pnIdTranscriptType;
-        Commit;
-    Exception
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdTranscriptType');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END deleteTranscriptType;
-
--- Procedure to insert a new transcript type
-    PROCEDURE insertTranscriptType (pcTranscriptTypeName IN VARCHAR2) IS
-    vmenError VARCHAR2(50);
-    BEGIN 
-        INSERT INTO TRANSCRIPTTYPE (id_transcripttype, transcripttype_name)
-        VALUES (s_transcripttype.nextval, pcTranscriptTypeName);
-        Commit;
-    Exception
-        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END insertTranscriptType;
-    
--- Table Accused
--- Function to get a accused with specific id to show it in the screen      
-    PROCEDURE getAccused (pcIdAccused IN VARCHAR2) AS
-    vmenError VARCHAR2(50);
-    CURSOR accused(pcIdAccused IN VARCHAR2)
-    IS
-        SELECT a.id_accused id_accused, p.first_name first_name, p.last_name last_name, p.second_last_name second_last_name, 
+        SELECT ua.username user_name, ua.ban_days ban_days, ua.banned banned, ut.usertype_description usertype_description, ua.id_user id_user,
+            p.first_name first_name, p.last_name last_name, p.second_last_name second_last_name, 
             p.birthdate birthdate, g.gender_name gender_name, c.company_name company_name
-        FROM ACCUSED a
+        FROM USERAPP ua
         INNER JOIN PRSN.PERSON p
-        ON a.id_accused = p.id_person
+        ON ua.id_user = p.id_person
+        INNER JOIN USERTYPE ut
+        ON ua.id_usertype = ut.id_usertype 
         INNER JOIN PRSN.COMPANY c
         ON p.id_company = c.id_company 
         INNER JOIN PRSN.GENDER g
         ON p.id_gender = g.id_gender
-        WHERE a.id_accused = NVL(pcIdAccused, a.id_accused);
+        WHERE ua.username = NVL(pcUserName, ua.username);
     BEGIN 
-        FOR i in accused(pcIdAccused) LOOP
-            dbms_output.put_line(i.id_accused);
+        FOR i in userapp(pcUserName) LOOP
+            dbms_output.put_line(i.user_name);
+            dbms_output.put_line(i.ban_days);
+            dbms_output.put_line(i.banned);
+            dbms_output.put_line(i.usertype_description);
+            dbms_output.put_line(i.id_user);
             dbms_output.put_line(i.first_name);
             dbms_output.put_line(i.last_name);
             dbms_output.put_line(i.second_last_name);
@@ -248,385 +56,218 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         END LOOP;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
-        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pcIdAccused');
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pcUserName');
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END getAccused; 
+    END getUserApp;
 
--- Procedure to delete a specific accused  
-    PROCEDURE deleteAccused (pcIdAccused IN VARCHAR2) IS
-    vmenError VARCHAR2(50);
+-- Procedure to set a user app with specific name and the new values wrote by the user  
+    PROCEDURE setUserApp (pcUserName IN VARCHAR2, pnBanDays IN NUMBER, pnBanned IN NUMBER, pnIdUserType IN NUMBER, pcIdUser IN VARCHAR2) IS
+        vmenError VARCHAR2(100);
+    BEGIN
+        UPDATE USERAPP
+        SET ban_days = pnBanDays,
+        banned = pnBanned,
+        id_usertype = pnIdUserType,
+        id_user = pcIdUser
+        WHERE username = pcUserName;
+        Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcUsername');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
+    END setUserApp;
+
+-- Procedure to delete a specific user app  
+    PROCEDURE deleteUserApp (pcUserName IN VARCHAR2) IS
+    vmenError VARCHAR2(100);
     BEGIN 
-        DELETE FROM ACCUSED
-        WHERE id_accused = pcIdAccused;
+        DELETE FROM USERAPP
+        WHERE username = pcUserName;
         Commit;
     Exception
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcIdAccused');
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcUserName');
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END deleteAccused;
+    END deleteUserApp;
 
--- Procedure to insert a new accused
-    PROCEDURE insertAccused (pcIdAccused IN VARCHAR2) IS
-    vmenError VARCHAR2(50);
+-- Procedure to insert a new user app
+    PROCEDURE insertUserApp (pcUserName IN VARCHAR2, pcUserPassword VARCHAR2, pnBanDays IN NUMBER, pnBanned IN NUMBER, pnIdUserType IN NUMBER, 
+        pcIdUser IN VARCHAR2) IS
+    vmenError VARCHAR2(100);
     BEGIN 
-        INSERT INTO ACCUSED (id_accused)
-        VALUES (pcIdAccused);
+        INSERT INTO USERAPP (username, user_password, ban_days, banned, id_usertype, id_user)
+        VALUES (pcUserName, pcUserPassword, pnBanDays, pnBanned, pnIdUserType, pcIdUser);
         Commit;
     Exception
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END insertAccused;
+    END insertUserApp;
+
+-- Table UserType
+-- Function to get a user type with specific id to show it in the screen      
+    PROCEDURE getUserType (pnIdUserType IN NUMBER) AS
+    vmenError VARCHAR2(100);
+    CURSOR usertype(pnIdUserType IN NUMBER)
+    IS
+        SELECT id_usertype id_usertype, usertype_description usertype_description
+        FROM USERTYPE 
+        WHERE id_usertype = NVL(pnIdUserType, id_usertype);
+    BEGIN 
+        FOR i in usertype(pnIdUserType) LOOP
+            dbms_output.put_line(i.id_usertype);
+            dbms_output.put_line(i.usertype_description);
+        END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdUserType');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
+    END getUserType;
+
+-- Procedure to set a user type with specific id and the new values wrote by the user  
+    PROCEDURE setUserType (pnIdUserType IN NUMBER, pcUserTypeDescription IN VARCHAR2) IS
+    vmenError VARCHAR2(100);
+    BEGIN
+        UPDATE USERTYPE
+        SET usertype_description = pcUserTypeDescription
+        WHERE id_usertype = pnIdUserType;
+        Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdUserType');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
+    END setUserType;
+
+-- Procedure to delete a specific user type 
+    PROCEDURE deleteUserType (pnIdUserType IN NUMBER) IS
+    vmenError VARCHAR2(100);
+    BEGIN 
+        DELETE FROM USERTYPE
+        WHERE id_usertype = pnIdUserType;
+        Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdUserType');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred'); 
+    END deleteUserType;
+
+-- Procedure to insert a new user type
+    PROCEDURE insertUserType (pcUserTypeDescription IN VARCHAR2) IS
+    vmenError VARCHAR2(100);
+    BEGIN 
+        INSERT INTO USERTYPE (id_usertype, usertype_description)
+        VALUES (s_usertype.nextval, pcUserTypeDescription);
+        Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
+    END insertUserType;
     
---  Table Verdict
--- Function to get a verdict with specific id to show it in the screen      
-    PROCEDURE getVerdict (pnIdVerdict IN NUMBER) AS
-    vmenError VARCHAR2(50);
-    CURSOR verdict(pnIdVerdict IN NUMBER)
+-- Table BanReason
+-- Function to get a ban reason with specific id to show it in the screen      
+    PROCEDURE getBanReason (pnIdBanReason IN NUMBER) AS
+    vmenError VARCHAR2(100);
+    CURSOR banreason(pnIdBanReason IN NUMBER)
     IS
-        SELECT id_verdict, verdict_name
-        FROM VERDICT
-        WHERE id_verdict = NVL(pnIdVerdict, id_verdict);
+        SELECT id_banreason id_banreason, banreason_description banreason_description
+        FROM BANREASON
+        WHERE id_banreason = NVL(pnIdBanReason, id_banreason);
     BEGIN 
-        FOR i in verdict(pnIdVerdict) LOOP
-            dbms_output.put_line(i.id_verdict);
-            dbms_output.put_line(i.verdict_name);
+        FOR i in banreason(pnIdBanReason) LOOP
+            dbms_output.put_line(i.id_banreason);
+            dbms_output.put_line(i.banreason_description);
         END LOOP;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
-        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdGVerdict');
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdBanReason');
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END getVerdict;
+    END getBanReason;
 
--- Procedure to set a verdict with specific id and the new values wrote by the user  
-    PROCEDURE setVerdict (pnIdVerdict IN NUMBER, pcVerdictName IN VARCHAR2) IS
-    vmenError VARCHAR2(50);
+-- Procedure to set a ban reason with specific id and the new values wrote by the user  
+    PROCEDURE setBanReason (pnIdBanReason IN NUMBER, pcBanReasonDescription IN VARCHAR2) IS
+    vmenError VARCHAR2(100);
     BEGIN
-        UPDATE VERDICT
-        SET verdict_name = pcVerdictName
-        WHERE id_verdict = pnIdVerdict;
+        UPDATE BANREASON
+        SET banreason_description = pcBanReasonDescription
+        WHERE id_banreason = pnIdBanReason;
         Commit;
     Exception
         WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdVerdict');
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdBanReason');
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END setVerdict;
+    END setBanReason;
 
--- Procedure to delete a specific verdict  
-    PROCEDURE deleteVerdict (pnIdVerdict IN NUMBER) IS
-    vmenError VARCHAR2(50);
+-- Procedure to delete a specific ban reason 
+    PROCEDURE deleteBanReason (pnIdBanReason IN NUMBER) IS
+    vmenError VARCHAR2(100);
     BEGIN 
-        DELETE FROM VERDICT
-        WHERE id_verdict = pnIdVerdict;
+        DELETE FROM BANREASON
+        WHERE id_banreason = pnIdBanReason;
         Commit;
     Exception
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdVerdict');
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdBanReason');
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END deleteVerdict;
+    END deleteBanReason;
 
--- Procedure to insert a new verdict
-    PROCEDURE insertVerdict (pcVerdictName IN VARCHAR2) IS
-    vmenError VARCHAR2(50);
+-- Procedure to insert a new ban reason
+    PROCEDURE insertBanReason (pcBanReasonDescription IN VARCHAR2) IS
+    vmenError VARCHAR2(100);
     BEGIN 
-        INSERT INTO VERDICT (id_verdict, verdict_name)
-        VALUES (s_verdict.nextval, pcVerdictName);
+        INSERT INTO BANREASON (id_banreason, banreason_description)
+        VALUES (s_banreason.nextval, pcBanReasonDescription);
         Commit;
     Exception
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END insertVerdict;
+    END insertBanReason;
     
--- Table Sentence 
--- Function to get a sentence with specific id to show it in the screen      
-    PROCEDURE getSentence (pnIdSentence IN NUMBER) AS
-    vmenError VARCHAR2(50);
-    CURSOR sentence(pnIdSentence IN NUMBER)
-    IS
-        SELECT s.id_sentence id_sentence, s.start_date start_date, s.end_date end_date, s.start_date-s.end_date sentence_time,
-            st.sentencetype_name sentencetype_name
-        FROM SENTENCE s
-        INNER JOIN SENTENCETYPE st
-        ON s.id_sentencetype = st.id_sentencetype
-        WHERE s.id_sentence = NVL(pnIdSentence, s.id_sentence);
+-- Table BanReasonxUserApp
+-- Procedure to delete a specific ban reason x user app
+    PROCEDURE deleteBanReasonxUserApp (pnIdBanReason IN NUMBER, pcUserName IN VARCHAR2) IS
+    vmenError VARCHAR2(100);
     BEGIN 
-        FOR i in sentence(pnIdSentence) LOOP
-            dbms_output.put_line(i.id_sentence);
-            dbms_output.put_line(i.start_date);
-            dbms_output.put_line(i.end_date);
-            dbms_output.put_line(i.sentence_time);
-            dbms_output.put_line(i.sentencetype_name);
-        END LOOP;
-    Exception
-        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
-        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdSentence');
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END getSentence;
-
--- Procedure to set a sentence with specific id and the new values wrote by the user  
-    PROCEDURE setSentence (pnIdSentence IN NUMBER, pdStartDate IN DATE, pdEndDate IN DATE, pnIdSentenceType IN NUMBER) IS
-    vmenError VARCHAR2(50);
-    BEGIN
-        UPDATE SENTENCE
-        SET start_date = pdStartDate,
-        end_date = pdEndDate,
-        id_sentencetype = pnIdSentenceType
-        WHERE id_sentence = pnIdSentence;
-        Commit;
-    Exception
-        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
-        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdSentence');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END setSentence;
-
--- Procedure to delete a specific sentence  
-    PROCEDURE deleteSentence (pnIdSentence IN NUMBER) IS
-    vmenError VARCHAR2(50);
-    BEGIN 
-        DELETE FROM SENTENCE
-        WHERE id_sentence = pnIdSentence;
+        DELETE FROM BANREASONXUSERAPP
+        WHERE id_banreason = pnIdBanReason and username = pcUserName;
         Commit;
     Exception
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdSentence');
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdBanReason');
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END deleteSentence;
+    END deleteBanReasonxUserApp;
 
--- Procedure to insert a new sentence
-    PROCEDURE insertSentence (pdStartDate IN DATE, pdEndDate IN DATE, pnIdSentenceType IN NUMBER) IS
-    vmenError VARCHAR2(50);
+-- Procedure to insert a new ban reason x user app
+    PROCEDURE insertBanReasonxUserApp (pnIdBanReason IN NUMBER, pcUserName IN VARCHAR2) IS
+    vmenError VARCHAR2(100);
     BEGIN 
-        INSERT INTO SENTENCE (id_sentence, start_date, end_date, id_sentencetype)
-        VALUES (s_sentence.nextval, pdStartDate, pdEndDate, pnIdSentenceType);
+        INSERT INTO BANREASONXUSERAPP (id_banreason, username)
+        VALUES (pnIdBanReason, pcUserName);
         Commit;
     Exception
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END insertSentence;
-
--- Table SentenceType
--- Function to get a sentence type with specific id to show it in the screen      
-    PROCEDURE getSentenceType (pnIdSentenceType IN NUMBER) AS
-    vmenError VARCHAR2(50);
-    CURSOR sentencetype(pnIdSentenceType IN NUMBER)
-    IS
-        SELECT id_sentencetype, sentencetype_name
-        FROM SENTENCETYPE
-        WHERE id_sentencetype = NVL(pnIdSentenceType, id_sentencetype);
-    BEGIN 
-        FOR i in sentencetype(pnIdSentenceType) LOOP
-            dbms_output.put_line(i.id_sentencetype);
-            dbms_output.put_line(i.sentencetype_name);
-        END LOOP;
-    Exception
-        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
-        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdSentenceType');
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END getSentenceType;
-
--- Procedure to set a sentence type with specific id and the new values wrote by the user  
-    PROCEDURE setSentenceType (pnIdSentenceType IN NUMBER, pcSentenceTypeName IN VARCHAR2) IS
-    vmenError VARCHAR2(50);
-    BEGIN
-        UPDATE SENTENCETYPE
-        SET sentencetype_name = pcSentenceTypeName
-        WHERE id_sentencetype = pnIdSentenceType;
-        Commit;
-    Exception
-        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
-        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdSentenceType');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END setSentenceType;
-
--- Procedure to delete a specific sentence type  
-    PROCEDURE deleteSentenceType (pnIdSentenceType IN NUMBER) IS
-    vmenError VARCHAR2(50);
-    BEGIN 
-        DELETE FROM SENTENCETYPE
-        WHERE id_sentencetype = pnIdSentenceType;
-        Commit;
-    Exception
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdSentenceType');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END deleteSentenceType;
-
--- Procedure to insert a new sentence type
-    PROCEDURE insertSentenceType (pcSentenceTypeName IN VARCHAR2) IS
-    vmenError VARCHAR2(50);
-    BEGIN 
-        INSERT INTO SENTENCETYPE (id_sentencetype, sentencetype_name)
-        VALUES (s_sentencetype.nextval, pcSentenceTypeName);
-        Commit;
-    Exception
-        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END insertSentenceType;
-
---  Table Crime
--- Function to get a crime with specific id to show it in the screen      
-    PROCEDURE getCrime (pnIdCrime IN NUMBER) AS
-    vmenError VARCHAR2(50);
-    CURSOR crime(pnIdCrime IN NUMBER)
-    IS
-        SELECT id_crime, crime_description, crime_date
-        FROM CRIME
-        WHERE id_crime = NVL(pnIdCrime, id_crime);
-    BEGIN 
-        FOR i in crime(pnIdCrime) LOOP
-            dbms_output.put_line(i.id_crime);
-            dbms_output.put_line(i.crime_description);
-            dbms_output.put_line(i.crime_date);
-        END LOOP;
-    Exception
-        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
-        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdCrime');
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END getCrime;
-
--- Procedure to set a crime with specific id and the new values wrote by the user  
-    PROCEDURE setCrime (pnIdCrime IN NUMBER, pcCrimeDescription IN VARCHAR2, pdCrimeDate IN DATE) IS
-    vmenError VARCHAR2(50);
-    BEGIN
-        UPDATE CRIME
-        SET crime_description = pcCrimeDescription,
-        crime_date = pdCrimeDate
-        WHERE id_crime = pnIdCrime;
-        Commit;
-    Exception
-        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
-        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdCrime');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END setCrime;
-
--- Procedure to delete a specific crime  
-    PROCEDURE deleteCrime (pnIdCrime IN NUMBER) IS
-    vmenError VARCHAR2(50);
-    BEGIN 
-        DELETE FROM CRIME
-        WHERE id_crime = pnIdCrime;
-        Commit;
-    Exception
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdCrime');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END deleteCrime;
-
--- Procedure to insert a new crime
-    PROCEDURE insertCrime (pcCrimeDescription IN VARCHAR2, pdCrimeDate IN DATE) IS
-    vmenError VARCHAR2(50);
-    BEGIN 
-        INSERT INTO CRIME (id_crime, crime_description, crime_date)
-        VALUES (s_crime.nextval, pcCrimeDescription, pdCrimeDate);
-        Commit;
-    Exception
-        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END insertCrime;
-
--- Table Photo
--- Function to get a photo with specific id to show it in the screen      
-    PROCEDURE getPhoto (pnIdPhoto IN NUMBER) AS
-    vmenError VARCHAR2(50);
-    CURSOR photo(pnIdPhoto IN NUMBER)
-    IS
-        SELECT p.id_photo id_photo, p.photo_description photo_description, p.direction direction,  
-        pe.first_name||' '||pe.last_name||' '||pe.second_last_name accused_name
-        FROM PHOTO p
-        INNER JOIN ACCUSED a
-        ON p.id_accused = a.id_accused
-        INNER JOIN PRSN.PERSON pe
-        ON a.id_accused = pe.id_person
-        WHERE p.id_photo = NVL(pnIdPhoto, p.id_photo);
-    BEGIN 
-        FOR i in photo(pnIdPhoto) LOOP
-            dbms_output.put_line(i.id_photo);
-            dbms_output.put_line(i.photo_description);
-            dbms_output.put_line(i.direction);
-            dbms_output.put_line(i.accused_name);
-        END LOOP;
-    Exception
-        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
-        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdPhoto');
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END getPhoto;
-
--- Procedure to set a photo with specific id and the new values wrote by the user  
-    PROCEDURE setPhoto (pnIdPhoto IN NUMBER, pcPhotoDescription IN VARCHAR2, pcDirection IN VARCHAR2, pcIdAccused IN VARCHAR2) IS
-    vmenError VARCHAR2(50);
-    BEGIN
-        UPDATE PHOTO
-        SET photo_description = pcPhotoDescription,
-        direction = pcDirection,
-        id_accused = pcIdAccused
-        WHERE id_photo = pnIdPhoto;
-        Commit;
-    Exception
-        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
-        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdPhoto');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END setPhoto;
-
--- Procedure to delete a specific photo 
-    PROCEDURE deletePhoto (pnIdPhoto IN NUMBER) IS
-    vmenError VARCHAR2(50);
-    BEGIN 
-        DELETE FROM PHOTO
-        WHERE id_photo = pnIdPhoto;
-        Commit;
-    Exception
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdPhoto');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END deletePhoto;
-
--- Procedure to insert a new photo
-    PROCEDURE insertPhoto (pcPhotoDescription IN VARCHAR2, pcDirection IN VARCHAR2, pcIdAccused IN VARCHAR2) IS
-    vmenError VARCHAR2(50);
-    BEGIN 
-        INSERT INTO PHOTO (id_photo, photo_description, direction, id_accused)
-        VALUES (s_photo.nextval, pcPhotoDescription, pcDirection, pcIdAccused);
-        Commit;
-    Exception
-        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END insertPhoto;
-END TRTables;
+    END insertBanReasonxUserApp;
+    
+END USTables;

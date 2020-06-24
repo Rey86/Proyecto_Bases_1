@@ -1,42 +1,52 @@
--- Package to PRSN procedures and functions.
-CREATE OR REPLACE PACKAGE PRSNTables IS
-    -- Person Table
-    PROCEDURE getPerson (pcIdPerson VARCHAR2);
-    PROCEDURE setPerson (pcIdPerson VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, 
-        pcSecondLastName VARCHAR2, pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER);
-    PROCEDURE deletePerson (pcIdPerson VARCHAR2);
-    PROCEDURE insertPerson (pcIdPerson VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pcSecondLastName VARCHAR2, 
-        pdBirthdate DATE, pnIdGender NUMBER, pnIdCompany NUMBER);
-    -- Company Table
-    PROCEDURE getCompany (pnIdCompany NUMBER);
-    PROCEDURE setCompany (pnIdCompany NUMBER, pcCompanyName VARCHAR2);
-    PROCEDURE deleteCompany (pnIdCompany NUMBER);
-    PROCEDURE insertCompany (pcCompanyName VARCHAR2);
-    -- Gender Table 
-    PROCEDURE getGender (pnIdGender NUMBER);
-    PROCEDURE setGender (pnIdGender NUMBER, pcGenderName VARCHAR2);
-    PROCEDURE deleteGender (pnIdGender NUMBER);
-    PROCEDURE insertGender (pcGenderName VARCHAR2);
-END PRSNTables;
+CREATE OR REPLACE PACKAGE USTables IS
+    -- UserApp Table
+    PROCEDURE getUserApp (pcUserName VARCHAR2);
+    PROCEDURE setUserApp (pcUserName VARCHAR2, pnBanDays NUMBER, pnBanned NUMBER, pnIdUserType NUMBER, pcIdUser VARCHAR2);
+    PROCEDURE deleteUserApp (pcUserName VARCHAR2);
+    PROCEDURE insertUserApp (pcUserName VARCHAR2, pcUserPassword VARCHAR2, pnBanDays NUMBER, pnBanned NUMBER, pnIdUserType NUMBER, 
+        pcIdUser VARCHAR2);
+    -- UserType Table
+    PROCEDURE getUserType (pnIdUserType NUMBER);
+    PROCEDURE setUserType (pnIdUserType NUMBER, pcUserTypeDescription VARCHAR2);
+    PROCEDURE deleteUserType (pnIdUserType NUMBER);
+    PROCEDURE insertUserType (pcUserTypeDescription VARCHAR2);
+    -- BanReason Table 
+    PROCEDURE getBanReason (pnIdBanReason NUMBER);
+    PROCEDURE setBanReason (pnIdBanReason NUMBER, pcBanReasonDescription VARCHAR2);
+    PROCEDURE deleteBanReason (pnIdBanReason NUMBER);
+    PROCEDURE insertBanReason (pcBanReasonDescription VARCHAR2);
+    -- BanReasonxUserApp Table 
+    PROCEDURE deleteBanReasonxUserApp (pnIdBanReason NUMBER, pcUserName VARCHAR2);
+    PROCEDURE insertBanReasonxUserApp (pnIdBanReason NUMBER, pcUserName VARCHAR2);
+END USTables;
 
-CREATE OR REPLACE PACKAGE BODY PRSNTables AS
--- Table Person
--- Function to get a person with specific id to show it in the screen      
-    PROCEDURE getPerson (pcIdPerson IN VARCHAR2) AS
-    vmenError VARCHAR2(50);
-    CURSOR person(pcIdPerson IN VARCHAR2)
+CREATE OR REPLACE PACKAGE BODY USTables AS
+-- Table UserApp
+-- Function to get a user app with specific name to show it in the screen      
+    PROCEDURE getUserApp (pcUserName IN VARCHAR2) AS
+    vmenError VARCHAR2(100);
+    CURSOR userapp(pcUserName IN VARCHAR2)
     IS
-        SELECT p.id_person id_person, p.first_name first_name, p.last_name last_name, p.second_last_name second_last_name, 
+        SELECT ua.username user_name, ua.ban_days ban_days, ua.banned banned, ut.usertype_description usertype_description, ua.id_user id_user,
+            p.first_name first_name, p.last_name last_name, p.second_last_name second_last_name, 
             p.birthdate birthdate, g.gender_name gender_name, c.company_name company_name
-        FROM PERSON p
-        INNER JOIN COMPANY c
-        ON p.id_company = c.id_company
-        INNER JOIN GENDER g
+        FROM USERAPP ua
+        INNER JOIN PRSN.PERSON p
+        ON ua.id_user = p.id_person
+        INNER JOIN USERTYPE ut
+        ON ua.id_usertype = ut.id_usertype 
+        INNER JOIN PRSN.COMPANY c
+        ON p.id_company = c.id_company 
+        INNER JOIN PRSN.GENDER g
         ON p.id_gender = g.id_gender
-        WHERE p.id_person = NVL(pcIdPerson, p.id_person);
+        WHERE ua.username = NVL(pcUserName, ua.username);
     BEGIN 
-        FOR i in person(pcIdPerson) LOOP
-            dbms_output.put_line(i.id_person);
+        FOR i in userapp(pcUserName) LOOP
+            dbms_output.put_line(i.user_name);
+            dbms_output.put_line(i.ban_days);
+            dbms_output.put_line(i.banned);
+            dbms_output.put_line(i.usertype_description);
+            dbms_output.put_line(i.id_user);
             dbms_output.put_line(i.first_name);
             dbms_output.put_line(i.last_name);
             dbms_output.put_line(i.second_last_name);
@@ -46,192 +56,218 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
         END LOOP;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
-        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pcIdPerson');
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pcUserName');
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END getPerson;
+    END getUserApp;
 
--- Procedure to set a person with specific id and the new values wrote by the user  
-    PROCEDURE setPerson (pcIdPerson IN VARCHAR2, pcFirstName IN VARCHAR2, pcLastName IN VARCHAR2, 
-        pcSecondLastName IN VARCHAR2, pdBirthdate IN DATE, pnIdGender IN NUMBER, pnIdCompany IN NUMBER) IS
-    vmenError VARCHAR2(50);    
+-- Procedure to set a user app with specific name and the new values wrote by the user  
+    PROCEDURE setUserApp (pcUserName IN VARCHAR2, pnBanDays IN NUMBER, pnBanned IN NUMBER, pnIdUserType IN NUMBER, pcIdUser IN VARCHAR2) IS
+        vmenError VARCHAR2(100);
     BEGIN
-        UPDATE PERSON
-        SET first_name = pcFirstName,
-        last_name = pcLastName,
-        second_last_name = pcSecondLastName,
-        birthdate = pdBirthdate,
-        id_gender = pnIdGender,
-        id_company = pnIdCompany
-        WHERE id_person = pcIdPerson;
+        UPDATE USERAPP
+        SET ban_days = pnBanDays,
+        banned = pnBanned,
+        id_usertype = pnIdUserType,
+        id_user = pcIdUser
+        WHERE username = pcUserName;
         Commit;
     Exception
         WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcIdPerson');
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcUsername');
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END setPerson;
+    END setUserApp;
 
--- Procedure to delete a specific person  
-    PROCEDURE deletePerson (pcIdPerson IN VARCHAR2) IS
-    vmenError VARCHAR2(50);
+-- Procedure to delete a specific user app  
+    PROCEDURE deleteUserApp (pcUserName IN VARCHAR2) IS
+    vmenError VARCHAR2(100);
     BEGIN 
-        DELETE FROM PERSON
-        WHERE id_person = pcIdPerson;
+        DELETE FROM USERAPP
+        WHERE username = pcUserName;
         Commit;
     Exception
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcIdPerson');
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcUserName');
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END deletePerson;
+    END deleteUserApp;
 
--- Procedure to insert a new person
-    PROCEDURE insertPerson (pcIdPerson IN VARCHAR2, pcFirstName IN VARCHAR2, pcLastName IN VARCHAR2, pcSecondLastName IN VARCHAR2, 
-        pdBirthdate IN DATE, pnIdGender IN NUMBER, pnIdCompany IN NUMBER) IS
-    vmenError VARCHAR2(50);
+-- Procedure to insert a new user app
+    PROCEDURE insertUserApp (pcUserName IN VARCHAR2, pcUserPassword VARCHAR2, pnBanDays IN NUMBER, pnBanned IN NUMBER, pnIdUserType IN NUMBER, 
+        pcIdUser IN VARCHAR2) IS
+    vmenError VARCHAR2(100);
     BEGIN 
-        INSERT INTO PERSON (id_person, first_name, last_name, second_last_name, birthdate, id_gender, id_company)
-        VALUES (pcIdPerson, pcFirstName, pcLastName, pcSecondLastName, pdBirthdate, pnIdGender, pnIdCompany);
+        INSERT INTO USERAPP (username, user_password, ban_days, banned, id_usertype, id_user)
+        VALUES (pcUserName, pcUserPassword, pnBanDays, pnBanned, pnIdUserType, pcIdUser);
         Commit;
     Exception
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END insertPerson;
-    
--- Table Company
--- Function to get a company with specific id to show it in the screen      
-    PROCEDURE getCompany (pnIdCompany IN NUMBER) AS
-    vmenError VARCHAR2(50);
-    CURSOR company(pnIdCompany IN NUMBER)
+    END insertUserApp;
+
+-- Table UserType
+-- Function to get a user type with specific id to show it in the screen      
+    PROCEDURE getUserType (pnIdUserType IN NUMBER) AS
+    vmenError VARCHAR2(100);
+    CURSOR usertype(pnIdUserType IN NUMBER)
     IS
-        SELECT id_company, company_name
-        FROM COMPANY 
-        WHERE id_company = NVL(pnIdCompany, id_company);
+        SELECT id_usertype id_usertype, usertype_description usertype_description
+        FROM USERTYPE 
+        WHERE id_usertype = NVL(pnIdUserType, id_usertype);
     BEGIN 
-        FOR i in company(pnIdCompany) LOOP
-            dbms_output.put_line(i.id_company);
-            dbms_output.put_line(i.company_name);
+        FOR i in usertype(pnIdUserType) LOOP
+            dbms_output.put_line(i.id_usertype);
+            dbms_output.put_line(i.usertype_description);
         END LOOP;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
-        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdCompany');
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdUserType');
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END getCompany;
+    END getUserType;
 
--- Procedure to set a company with specific id and the new values wrote by the user  
-    PROCEDURE setCompany (pnIdCompany IN NUMBER, pcCompanyName IN VARCHAR2) IS
-    vmenError VARCHAR2(50);
+-- Procedure to set a user type with specific id and the new values wrote by the user  
+    PROCEDURE setUserType (pnIdUserType IN NUMBER, pcUserTypeDescription IN VARCHAR2) IS
+    vmenError VARCHAR2(100);
     BEGIN
-        UPDATE COMPANY
-        SET company_name = pcCompanyName
-        WHERE id_company = pnIdCompany;
+        UPDATE USERTYPE
+        SET usertype_description = pcUserTypeDescription
+        WHERE id_usertype = pnIdUserType;
         Commit;
     Exception
         WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdCompany');
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdUserType');
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END setCompany;
+    END setUserType;
 
--- Procedure to delete a specific company  
-    PROCEDURE deleteCompany (pnIdCompany IN NUMBER) IS
-    vmenError VARCHAR2(50);
+-- Procedure to delete a specific user type 
+    PROCEDURE deleteUserType (pnIdUserType IN NUMBER) IS
+    vmenError VARCHAR2(100);
     BEGIN 
-        DELETE FROM COMPANY
-        WHERE id_company = pnIdCompany;
+        DELETE FROM USERTYPE
+        WHERE id_usertype = pnIdUserType;
         Commit;
     Exception
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdCompany');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END deleteCompany;
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdUserType');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred'); 
+    END deleteUserType;
 
--- Procedure to insert a new company
-    PROCEDURE insertCompany (pcCompanyName IN VARCHAR2) IS
-    vmenError VARCHAR2(50);
+-- Procedure to insert a new user type
+    PROCEDURE insertUserType (pcUserTypeDescription IN VARCHAR2) IS
+    vmenError VARCHAR2(100);
     BEGIN 
-        INSERT INTO COMPANY (id_company, company_name)
-        VALUES (s_company.nextval, pcCompanyName);
+        INSERT INTO USERTYPE (id_usertype, usertype_description)
+        VALUES (s_usertype.nextval, pcUserTypeDescription);
         Commit;
     Exception
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END insertCompany;
+    END insertUserType;
     
--- Table Gender
--- Function to get a gender with specific id to show it in the screen      
-    PROCEDURE getGender (pnIdGender IN NUMBER) AS
-    vmenError VARCHAR2(50);
-    CURSOR gender(pnIdGender IN NUMBER)
+-- Table BanReason
+-- Function to get a ban reason with specific id to show it in the screen      
+    PROCEDURE getBanReason (pnIdBanReason IN NUMBER) AS
+    vmenError VARCHAR2(100);
+    CURSOR banreason(pnIdBanReason IN NUMBER)
     IS
-        SELECT id_gender, gender_name
-        FROM GENDER 
-        WHERE id_gender = NVL(pnIdGender, id_gender);
+        SELECT id_banreason id_banreason, banreason_description banreason_description
+        FROM BANREASON
+        WHERE id_banreason = NVL(pnIdBanReason, id_banreason);
     BEGIN 
-        FOR i in gender(pnIdGender) LOOP
-            dbms_output.put_line(i.id_gender);
-            dbms_output.put_line(i.gender_name);
+        FOR i in banreason(pnIdBanReason) LOOP
+            dbms_output.put_line(i.id_banreason);
+            dbms_output.put_line(i.banreason_description);
         END LOOP;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
-        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdGender');
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdBanReason');
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END getGender;
+    END getBanReason;
 
--- Procedure to set a gender with specific id and the new values wrote by the user  
-    PROCEDURE setGender (pnIdGender IN NUMBER, pcGenderName IN VARCHAR2) IS
-    vmenError VARCHAR2(50);
+-- Procedure to set a ban reason with specific id and the new values wrote by the user  
+    PROCEDURE setBanReason (pnIdBanReason IN NUMBER, pcBanReasonDescription IN VARCHAR2) IS
+    vmenError VARCHAR2(100);
     BEGIN
-        UPDATE GENDER
-        SET gender_name = pcGenderName
-        WHERE id_gender = pnIdGender;
+        UPDATE BANREASON
+        SET banreason_description = pcBanReasonDescription
+        WHERE id_banreason = pnIdBanReason;
         Commit;
     Exception
         WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdGender');
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdBanReason');
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END setGender;
+    END setBanReason;
 
--- Procedure to delete a specific gender  
-    PROCEDURE deleteGender (pnIdGender IN NUMBER) IS
-    vmenError VARCHAR2(50);
+-- Procedure to delete a specific ban reason 
+    PROCEDURE deleteBanReason (pnIdBanReason IN NUMBER) IS
+    vmenError VARCHAR2(100);
     BEGIN 
-        DELETE FROM GENDER
-        WHERE id_gender = pnIdGender;
+        DELETE FROM BANREASON
+        WHERE id_banreason = pnIdBanReason;
         Commit;
     Exception
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdGender');
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdBanReason');
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END deleteGender;
+    END deleteBanReason;
 
--- Procedure to insert a new gender
-    PROCEDURE insertGender (pcGenderName IN VARCHAR2) IS
-    vmenError VARCHAR2(50);
+-- Procedure to insert a new ban reason
+    PROCEDURE insertBanReason (pcBanReasonDescription IN VARCHAR2) IS
+    vmenError VARCHAR2(100);
     BEGIN 
-        INSERT INTO GENDER (id_gender, gender_name)
-        VALUES (s_gender.nextval, pcGenderName);
+        INSERT INTO BANREASON (id_banreason, banreason_description)
+        VALUES (s_banreason.nextval, pcBanReasonDescription);
         Commit;
     Exception
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END insertGender;
-END PRSNTables;
+    END insertBanReason;
+    
+-- Table BanReasonxUserApp
+-- Procedure to delete a specific ban reason x user app
+    PROCEDURE deleteBanReasonxUserApp (pnIdBanReason IN NUMBER, pcUserName IN VARCHAR2) IS
+    vmenError VARCHAR2(100);
+    BEGIN 
+        DELETE FROM BANREASONXUSERAPP
+        WHERE id_banreason = pnIdBanReason and username = pcUserName;
+        Commit;
+    Exception
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pnIdBanReason');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
+    END deleteBanReasonxUserApp;
+
+-- Procedure to insert a new ban reason x user app
+    PROCEDURE insertBanReasonxUserApp (pnIdBanReason IN NUMBER, pcUserName IN VARCHAR2) IS
+    vmenError VARCHAR2(100);
+    BEGIN 
+        INSERT INTO BANREASONXUSERAPP (id_banreason, username)
+        VALUES (pnIdBanReason, pcUserName);
+        Commit;
+    Exception
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
+    END insertBanReasonxUserApp;
+    
+END USTables;

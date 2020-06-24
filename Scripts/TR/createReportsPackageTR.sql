@@ -6,7 +6,7 @@ END TRAdminReports;
 CREATE OR REPLACE PACKAGE BODY TRAdminReports AS
     --Function to get the newest created transcripts
     PROCEDURE getNewTranscripts AS
-    vmenError VARCHAR2(50);
+    vmenError VARCHAR2(100);
     CURSOR NewTranscripts IS
         SELECT transcript_number FROM transcript where SYSDATE = date_creation;
     BEGIN 
@@ -19,7 +19,7 @@ CREATE OR REPLACE PACKAGE BODY TRAdminReports AS
     END getNewTranscripts;
     
     PROCEDURE getValidTranscripts AS 
-    vmenError VARCHAR2(50);
+    vmenError VARCHAR2(100);
     CURSOR ValidTranscripts IS 
         select tt.transcripttype_name transcripttype, t.transcript_number transcript_number, t.valid,
         t.username username, p.first_name||' '||p.last_name||' '||p.second_last_name accused_name, 
@@ -58,7 +58,7 @@ END TRUserReports;
 CREATE OR REPLACE PACKAGE BODY TRUserReports AS
     --Function to get the top n communities with the most transcripts
     PROCEDURE topTranscriptCommunity(n number) AS
-    vmenError VARCHAR2(50);
+    vmenError VARCHAR2(100);
     CURSOR topTranscriptCommunity(n number) IS
         select c.community_name community_name , count(t.id_community) transcript_quantity
         from transcript t inner join Place.community c on t.id_community = c.id_community
@@ -76,7 +76,7 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
     END topTranscriptCommunity;
     --Function that gets the transcripts classified by type
     PROCEDURE getTranscriptPerType(pnIdTranscriptType NUMBER, pdDateCreation DATE, pdDateLastModification DATE, pnIdCommunity NUMBER)  AS
-    vmenError VARCHAR2(50);
+    vmenError VARCHAR2(100);
     CURSOR TranscriptPerType(pnIdTranscriptType NUMBER, pdDateCreation DATE, pdDateLastModification DATE, pnIdCommunity NUMBER) IS 
         select  tt.transcripttype_name transcripttype, t.transcript_number transcript_number, t.valid,
         t.username username, p.first_name||' '||p.last_name||' '||p.second_last_name accused_name , 
@@ -111,7 +111,7 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
     END gettranscriptPerType;
     
     PROCEDURE getDueTranscripts(pdDateCreation Date, pdDateLastModification DATE) AS
-    vmenError VARCHAR2(50);
+    vmenError VARCHAR2(100);
     CURSOR DueTranscripts (pdDateCreation Date, pdDateLastModification DATE) IS
         select t.transcript_number transcript_number, t.username username, c.company_name company_name,
         p.first_name||' '||p.last_name||' '||p.second_last_name accused_name, p.birthdate birthdate, g.gender_name gender 
@@ -142,7 +142,7 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
     END getDueTranscripts;
     
     PROCEDURE getAccusedPerCompany(PnID_Company NUMBER) AS
-    vmenError VARCHAR2(50);
+    vmenError VARCHAR2(100);
     CURSOR AccusedPerCompany(PnID_Company NUMBER) IS
         select a.id_accused id_accused,  p.first_name||' '||p.last_name||' '||p.second_last_name Name, p.birthdate birthdate, g.gender_name gender
         from accused a
@@ -166,7 +166,7 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
     END getAccusedPerCompany;
     
     PROCEDURE topCrimes(n NUMBER) AS
-    vmenError VARCHAR2(50);
+    vmenError VARCHAR2(100);
     CURSOR topCrimes(n NUMBER) IS
         select tt.transcripttype_name transcripttype_name from transcript t 
         inner join transcripttype tt on t.id_transcripttype = tt.id_transcripttype 

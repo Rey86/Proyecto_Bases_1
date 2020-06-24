@@ -6,6 +6,7 @@ END USStatisticReports;
 CREATE OR REPLACE PACKAGE BODY USStatisticReports IS 
     --Function that gets the percentage of users per age range 
     PROCEDURE getAgeRangePercentageUsers AS 
+    vmenError VARCHAR2(100);
     CURSOR AgeRangePercentageUsers IS
         SELECT  round(100*ratio_to_report(count(*)) over (), 2) percentage FROM 
         (SELECT username FROM userapp WHERE SYSDATE - Birthdate <= 18 AND SYSDATE - BIRTHDATE >= 0) UNION

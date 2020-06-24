@@ -4,8 +4,9 @@ END USAdminReports;
 
 CREATE OR REPLACE PACKAGE BODY USAdminReports AS
     --Function that gets list of users whose passwords have been modified in the past 10 days
-    PROCEDURE getUserPasswordMod(pcUserName VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pnIdUser NUMBER) 
-    AS CURSOR UserPasswordMod(pcUserName VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pnIdUser NUMBER) IS
+    PROCEDURE getUserPasswordMod(pcUserName VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pnIdUser NUMBER) AS 
+    vmenError VARCHAR2(100);
+    CURSOR UserPasswordMod(pcUserName VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pnIdUser NUMBER) IS
         select ua.username username , p.first_name||' '|| p.last_name name , id_user identification from userapp ua
         inner join generallog gl
         on ua.username = gl.username
