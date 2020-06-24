@@ -53,6 +53,7 @@ CREATE OR REPLACE PACKAGE TRUserReports IS
     PROCEDURE getDueTranscripts(pdDateCreation Date, pdDateLastModification DATE);
     PROCEDURE getAccusedPerCompany(PnID_Company NUMBER);
     PROCEDURE topCrimes(n NUMBER);
+    PROCEDURE topSentenceTime(n NUMBER);
 END TRUserReports;
 
 CREATE OR REPLACE PACKAGE BODY TRUserReports AS
@@ -182,4 +183,24 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END topCrimes;
+    
+    --Function that gets the top sentence type
+    PROCEDURE topSentenceTime(n NUMBER) AS
+    vmenError VARCHAR2(100);
+    CURSOR SentenceTime(n NUMBER) IS
+        select s.start_date - s.end_date sentence_time
+        from transcript t
+        inner join sentence s on s.id_sentence = t.id_sentence
+        where rownum <= n order by sentence_time desc;
+    BEGIN 
+        FOR i IN SentenceTime(n) LOOP
+            dbms_output.put_line(i.sentence_time);
+        END LOOP;
+    Exception
+        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned'); 
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
+    END topSentenceTime;
 END TRUserReports;

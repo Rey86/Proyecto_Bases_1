@@ -16,9 +16,9 @@ CREATE OR REPLACE PACKAGE BODY USStatisticReports IS
         WHEN (SYSDATE-p.birthdate) >= 56 and (SYSDATE-p.birthdate) <= 65 then '56-65'
         WHEN (SYSDATE-p.birthdate) >= 66 and (SYSDATE-p.birthdate) <= 75 then '66-75'
         WHEN (SYSDATE-p.birthdate) >= 76 and (SYSDATE-p.birthdate) <= 85 then '76-85'
-        ELSE '85+' end as accused_age_range
+        ELSE '85+' end as user_age_range
         FROM userapp u INNER JOIN PRSN.person p ON p.id_person = u.id_user
-        ORDER BY p.birthdate) t
+        ORDER BY p.birthdate) u
         GROUP BY u.user_age_range;
     BEGIN 
         FOR i IN AgeRangePercentageUsers LOOP
