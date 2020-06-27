@@ -1,13 +1,15 @@
 CREATE OR REPLACE PACKAGE USStatisticReports IS 
-    PROCEDURE getAgeRangePercentageUsers;
+    FUNCTION getAgeRangePercentageUsers RETURN SYS_REFCURSOR;
 END USStatisticReports;
 
 
 CREATE OR REPLACE PACKAGE BODY USStatisticReports IS 
     --Function that gets the percentage of users per age range 
-    PROCEDURE getAgeRangePercentageUsers AS 
+    FUNCTION getAgeRangePercentageUsers RETURN SYS_REFCURSOR IS
     vmenError VARCHAR2(100);
-    CURSOR AgeRangePercentageUsers IS
+    AgeRangePercentageUsers SYS_REFCURSOR ;
+    BEGIN
+    OPEN agerangepercentageusers FOR
         SELECT u.user_age_range user_age_range, round(100*ratio_to_report(count(*)) over (), 2) percentage FROM 
         (SELECT CASE WHEN (SYSDATE-p.birthdate) >= 0 and (SYSDATE-p.birthdate) <= 18 then '0-18'
         WHEN (SYSDATE-p.birthdate) >= 19 and (SYSDATE-p.birthdate) <= 30 then '19-30'
@@ -20,11 +22,7 @@ CREATE OR REPLACE PACKAGE BODY USStatisticReports IS
         FROM userapp u INNER JOIN PRSN.person p ON p.id_person = u.id_user
         ORDER BY p.birthdate) u
         GROUP BY u.user_age_range;
-    BEGIN 
-        FOR i IN AgeRangePercentageUsers LOOP
-            dbms_output.put_line(i.user_age_range);
-            dbms_output.put_line(i.percentage);
-        END LOOP;
+    RETURN agerangepercentageusers;
     EXCEPTION 
         WHEN no_data_found then vmenError:= ('No rows returned');  
         WHEN PROGRAM_ERROR THEN vmenError:= ('An internal error has ocurred');

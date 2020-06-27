@@ -1,17 +1,17 @@
 CREATE OR REPLACE PACKAGE USTables IS
     -- UserApp Table
-    PROCEDURE getUserApp (pcUserName VARCHAR2);
+    FUNCTION getUserApp (pcUserName VARCHAR2) RETURN SYS_REFCURSOR;
     PROCEDURE setUserApp (pcUserName VARCHAR2, pnBanDays NUMBER, pnBanned NUMBER, pnIdUserType NUMBER, pcIdUser VARCHAR2);
     PROCEDURE deleteUserApp (pcUserName VARCHAR2);
     PROCEDURE insertUserApp (pcUserName VARCHAR2, pcUserPassword VARCHAR2, pnBanDays NUMBER, pnBanned NUMBER, pnIdUserType NUMBER, 
         pcIdUser VARCHAR2);
     -- UserType Table
-    PROCEDURE getUserType (pnIdUserType NUMBER);
+    FUNCTION getUserType (pnIdUserType NUMBER) RETURN SYS_REFCURSOR;
     PROCEDURE setUserType (pnIdUserType NUMBER, pcUserTypeDescription VARCHAR2);
     PROCEDURE deleteUserType (pnIdUserType NUMBER);
     PROCEDURE insertUserType (pcUserTypeDescription VARCHAR2);
     -- BanReason Table 
-    PROCEDURE getBanReason (pnIdBanReason NUMBER);
+    FUNCTION getBanReason (pnIdBanReason NUMBER) RETURN SYS_REFCURSOR;
     PROCEDURE setBanReason (pnIdBanReason NUMBER, pcBanReasonDescription VARCHAR2);
     PROCEDURE deleteBanReason (pnIdBanReason NUMBER);
     PROCEDURE insertBanReason (pcBanReasonDescription VARCHAR2);
@@ -23,10 +23,11 @@ END USTables;
 CREATE OR REPLACE PACKAGE BODY USTables AS
 -- Table UserApp
 -- Function to get a user app with specific name to show it in the screen      
-    PROCEDURE getUserApp (pcUserName IN VARCHAR2) AS
+    FUNCTION getUserApp (pcUserName IN VARCHAR2) RETURN SYS_REFCURSOR IS
     vmenError VARCHAR2(100);
-    CURSOR userapp(pcUserName IN VARCHAR2)
-    IS
+    userapp SYS_REFCURSOR;
+    BEGIN 
+    OPEN userapp FOR
         SELECT ua.username user_name, ua.ban_days ban_days, ua.banned banned, ut.usertype_description usertype_description, ua.id_user id_user,
             p.first_name first_name, p.last_name last_name, p.second_last_name second_last_name, 
             p.birthdate birthdate, g.gender_name gender_name, c.company_name company_name
@@ -40,20 +41,7 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         INNER JOIN PRSN.GENDER g
         ON p.id_gender = g.id_gender
         WHERE ua.username = NVL(pcUserName, ua.username);
-    BEGIN 
-        FOR i in userapp(pcUserName) LOOP
-            dbms_output.put_line(i.user_name);
-            dbms_output.put_line(i.ban_days);
-            dbms_output.put_line(i.banned);
-            dbms_output.put_line(i.usertype_description);
-            dbms_output.put_line(i.id_user);
-            dbms_output.put_line(i.first_name);
-            dbms_output.put_line(i.last_name);
-            dbms_output.put_line(i.second_last_name);
-            dbms_output.put_line(i.birthdate);
-            dbms_output.put_line(i.gender_name);
-            dbms_output.put_line(i.company_name);
-        END LOOP;
+    RETURN userapp; 
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
         when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pcUserName');
@@ -112,18 +100,15 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
 
 -- Table UserType
 -- Function to get a user type with specific id to show it in the screen      
-    PROCEDURE getUserType (pnIdUserType IN NUMBER) AS
+    FUNCTION getUserType (pnIdUserType IN NUMBER) RETURN SYS_REFCURSOR IS
     vmenError VARCHAR2(100);
-    CURSOR usertype(pnIdUserType IN NUMBER)
-    IS
+    usertype SYS_REFCURSOR;
+    BEGIN 
+    OPEN usertype FOR
         SELECT id_usertype id_usertype, usertype_description usertype_description
         FROM USERTYPE 
         WHERE id_usertype = NVL(pnIdUserType, id_usertype);
-    BEGIN 
-        FOR i in usertype(pnIdUserType) LOOP
-            dbms_output.put_line(i.id_usertype);
-            dbms_output.put_line(i.usertype_description);
-        END LOOP;
+    RETURN usertype;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
         when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdUserType');
@@ -178,18 +163,15 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
     
 -- Table BanReason
 -- Function to get a ban reason with specific id to show it in the screen      
-    PROCEDURE getBanReason (pnIdBanReason IN NUMBER) AS
+    FUNCTION getBanReason (pnIdBanReason IN NUMBER) RETURN SYS_REFCURSOR IS
     vmenError VARCHAR2(100);
-    CURSOR banreason(pnIdBanReason IN NUMBER)
-    IS
+    banreason SYS_REFCURSOR;
+    BEGIN
+    OPEN banreason FOR
         SELECT id_banreason id_banreason, banreason_description banreason_description
         FROM BANREASON
         WHERE id_banreason = NVL(pnIdBanReason, id_banreason);
-    BEGIN 
-        FOR i in banreason(pnIdBanReason) LOOP
-            dbms_output.put_line(i.id_banreason);
-            dbms_output.put_line(i.banreason_description);
-        END LOOP;
+    RETURN banreason;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
         when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdBanReason');

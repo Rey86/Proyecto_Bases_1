@@ -1,26 +1,27 @@
 CREATE OR REPLACE PACKAGE TRAdminReports IS 
-    PROCEDURE getNewTranscripts;
-    PROCEDURE getValidTranscripts;
+    FUNCTION getNewTranscripts RETURN SYS_REFCURSOR;
+    FUNCTION getValidTranscripts RETURN SYS_REFCURSOR;
 END TRAdminReports;
 
 CREATE OR REPLACE PACKAGE BODY TRAdminReports AS
     --Function to get the newest created transcripts
-    PROCEDURE getNewTranscripts AS
+    FUNCTION getNewTranscripts RETURN SYS_REFCURSOR IS
     vmenError VARCHAR2(100);
-    CURSOR NewTranscripts IS
-        SELECT transcript_number FROM transcript where SYSDATE = date_creation;
+    NewTranscripts SYS_REFCURSOR;
     BEGIN 
-        FOR i IN NewTranscripts LOOP
-            dbms_output.put_line(i.transcript_number);
-        END LOOP;
+    OPEN NewTranscripts FOR
+        SELECT transcript_number FROM transcript where SYSDATE = date_creation;
+    RETURN NewTranscripts;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getNewTranscripts;
     
-    PROCEDURE getValidTranscripts AS 
+    FUNCTION getValidTranscripts RETURN SYS_REFCURSOR IS 
     vmenError VARCHAR2(100);
-    CURSOR ValidTranscripts IS 
+    ValidTranscripts SYS_REFCURSOR;
+    BEGIN
+    OPEN ValidTranscripts FOR
         select tt.transcripttype_name transcripttype, t.transcript_number transcript_number, t.valid,
         t.username username, p.first_name||' '||p.last_name||' '||p.second_last_name accused_name, 
         p.id_gender gender , c.community_name community_name
@@ -30,15 +31,7 @@ CREATE OR REPLACE PACKAGE BODY TRAdminReports AS
         inner join transcripttype tt on tt.id_transcripttype = t.id_transcripttype
         inner join Place.community c on c.id_community = t.id_community 
         where t.valid = 1;
-     BEGIN
-        FOR i in ValidTranscripts LOOP
-            dbms_output.put_line(i.transcripttype);
-            dbms_output.put_line(i.transcript_number);
-            dbms_output.put_line(i.username);
-            dbms_output.put_line(i.accused_name);
-            dbms_output.put_line(i.gender);
-            dbms_output.put_line(i.community_name);
-        END LOOP;
+    RETURN ValidTranscripts;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned'); 
@@ -48,37 +41,38 @@ CREATE OR REPLACE PACKAGE BODY TRAdminReports AS
 END TRAdminReports;
 
 CREATE OR REPLACE PACKAGE TRUserReports IS 
-    PROCEDURE topTranscriptCommunity(n number);
-    PROCEDURE getTranscriptPerType(pnIdTranscriptType NUMBER, pdDateCreation DATE, pdDateLastModification DATE, pnIdCommunity NUMBER);
-    PROCEDURE getDueTranscripts(pdDateCreation Date, pdDateLastModification DATE);
-    PROCEDURE getAccusedPerCompany(PnID_Company NUMBER);
-    PROCEDURE topCrimes(n NUMBER);
-    PROCEDURE topSentenceTime(n NUMBER);
+    FUNCTION getTopTranscriptCommunity(n number) RETURN SYS_REFCURSOR;
+    FUNCTION getTranscriptPerType(pnIdTranscriptType NUMBER, pdDateCreation DATE,
+    pdDateLastModification DATE, pnIdCommunity NUMBER) RETURN SYS_REFCURSOR;
+    FUNCTION getDueTranscripts(pdDateCreation Date, pdDateLastModification DATE) RETURN SYS_REFCURSOR;
+    FUNCTION getAccusedPerCompany(PnID_Company NUMBER) RETURN SYS_REFCURSOR;
+    FUNCTION getTopCrimes(n NUMBER) RETURN SYS_REFCURSOR;
+    FUNCTION getTopSentenceTime(n NUMBER) RETURN SYS_REFCURSOR;
 END TRUserReports;
 
 CREATE OR REPLACE PACKAGE BODY TRUserReports AS
     --Function to get the top n communities with the most transcripts
-    PROCEDURE topTranscriptCommunity(n number) AS
+    FUNCTION getTopTranscriptCommunity(n number) RETURN SYS_REFCURSOR IS
     vmenError VARCHAR2(100);
-    CURSOR topTranscriptCommunity(n number) IS
+    topTranscriptCommunity SYS_REFCURSOR;
+    BEGIN
+    OPEN topTranscriptCommunity FOR
         select c.community_name community_name , count(t.id_community) transcript_quantity
         from transcript t inner join Place.community c on t.id_community = c.id_community
         where rownum <=n group by c.community_name 
         order by t.id_community desc;
-    BEGIN
-        FOR i in topTranscriptCommunity(n) LOOP
-            dbms_output.put_line(i.community_name);
-            dbms_output.put_line(i.transcript_quantity);
-        END LOOP;
+    RETURN toptranscriptcommunity;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned'); 
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END topTranscriptCommunity;
+    END getTopTranscriptCommunity;
     --Function that gets the transcripts classified by type
-    PROCEDURE getTranscriptPerType(pnIdTranscriptType NUMBER, pdDateCreation DATE, pdDateLastModification DATE, pnIdCommunity NUMBER)  AS
+    FUNCTION getTranscriptPerType(pnIdTranscriptType NUMBER, pdDateCreation DATE, pdDateLastModification DATE, pnIdCommunity NUMBER)  RETURN SYS_REFCURSOR IS
     vmenError VARCHAR2(100);
-    CURSOR TranscriptPerType(pnIdTranscriptType NUMBER, pdDateCreation DATE, pdDateLastModification DATE, pnIdCommunity NUMBER) IS 
+    TranscriptPerType SYS_REFCURSOR;
+    BEGIN 
+    OPEN TranscriptPerType FOR
         select  tt.transcripttype_name transcripttype, t.transcript_number transcript_number, t.valid,
         t.username username, p.first_name||' '||p.last_name||' '||p.second_last_name accused_name , 
         g.gender_name gender , c.community_name community_name, t.date_creation date_creation, t.date_last_modification date_last_modification
@@ -93,17 +87,7 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
         and t.date_last_modification =  NVL(pdDateLastModification, t.date_last_modification)
         and t.id_community = NVL(pnIdCommunity, t.id_community)
         order by t.id_transcripttype;
-    BEGIN
-        FOR i in TranscriptPerType(pnIdTranscriptType, pdDateCreation, pdDateLastModification, pnIdCommunity) LOOP
-            dbms_output.put_line(i.transcripttype);
-            dbms_output.put_line(i.transcript_number);
-            dbms_output.put_line(i.username);
-            dbms_output.put_line(i.accused_name);
-            dbms_output.put_line(i.gender);
-            dbms_output.put_line(i.community_name);
-            dbms_output.put_line(i.date_creation);
-            dbms_output.put_line(i.date_last_modification);
-        END LOOP;
+    RETURN transcriptpertype;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned'); 
@@ -111,9 +95,11 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END gettranscriptPerType;
     
-    PROCEDURE getDueTranscripts(pdDateCreation Date, pdDateLastModification DATE) AS
+    FUNCTION getDueTranscripts(pdDateCreation Date, pdDateLastModification DATE) RETURN SYS_REFCURSOR IS
     vmenError VARCHAR2(100);
-    CURSOR DueTranscripts (pdDateCreation Date, pdDateLastModification DATE) IS
+    DueTranscripts SYS_REFCURSOR;
+    BEGIN
+    OPEN duetranscripts FOR
         select t.transcript_number transcript_number, t.username username, c.company_name company_name,
         p.first_name||' '||p.last_name||' '||p.second_last_name accused_name, p.birthdate birthdate, g.gender_name gender 
         from transcript t 
@@ -124,15 +110,7 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
         where t.due_date = sysdate
         and t.date_creation = NVL(pdDateCreation, t.date_creation)
         and t.date_last_modification = NVL(pdDateLastModification, t.date_last_modification);
-    BEGIN    
-        FOR i in DueTranscripts(pdDateCreation, pdDateLastModification) LOOP
-            dbms_output.put_line(i.transcript_number);
-            dbms_output.put_line(i.username);
-            dbms_output.put_line(i.company_name);
-            dbms_output.put_line(i.accused_name);
-            dbms_output.put_line(i.birthdate);
-            dbms_output.put_line(i.gender);
-        END LOOP;
+    RETURN duetranscripts;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned'); 
@@ -142,21 +120,17 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getDueTranscripts;
     
-    PROCEDURE getAccusedPerCompany(PnID_Company NUMBER) AS
+    FUNCTION getAccusedPerCompany(PnID_Company NUMBER) RETURN SYS_REFCURSOR IS
     vmenError VARCHAR2(100);
-    CURSOR AccusedPerCompany(PnID_Company NUMBER) IS
+    AccusedPerCompany  SYS_REFCURSOR;
+    BEGIN 
+    OPEN accusedpercompany FOR
         select a.id_accused id_accused,  p.first_name||' '||p.last_name||' '||p.second_last_name Name, p.birthdate birthdate, g.gender_name gender
         from accused a
         inner join PRSN.person p on a.id_accused = p.id_person
         inner join PRSN.gender g on p.id_gender = g.id_gender
         where p.id_company = PnID_Company; 
-    BEGIN
-         FOR i in AccusedPerCompany(PnID_Company) LOOP
-            dbms_output.put_line(i.id_accused);
-            dbms_output.put_line(i.Name);
-            dbms_output.put_line(i.birthdate);
-            dbms_output.put_line(i.gender);
-         END LOOP;
+    RETURN accusedpercompany;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned'); 
@@ -166,41 +140,39 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getAccusedPerCompany;
     
-    PROCEDURE topCrimes(n NUMBER) AS
+    FUNCTION getTopCrimes(n NUMBER) RETURN SYS_REFCURSOR IS
     vmenError VARCHAR2(100);
-    CURSOR topCrimes(n NUMBER) IS
+    topCrimes SYS_REFCURSOR;
+    BEGIN
+    OPEN topcrimes FOR 
         select tt.transcripttype_name transcripttype_name from transcript t 
         inner join transcripttype tt on t.id_transcripttype = tt.id_transcripttype 
         where rownum <=n order by t.id_transcripttype desc;
-    BEGIN
-        FOR i in topCrimes(n) LOOP
-            dbms_output.put_line(i.transcripttype_name);
-        END LOOP;
+    RETURN topcrimes;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned'); 
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END topCrimes;
+    END getTopCrimes;
     
     --Function that gets the top sentence type
-    PROCEDURE topSentenceTime(n NUMBER) AS
+    FUNCTION getTopSentenceTime(n NUMBER) RETURN SYS_REFCURSOR IS
     vmenError VARCHAR2(100);
-    CURSOR SentenceTime(n NUMBER) IS
+    topSentenceTime SYS_REFCURSOR;
+    BEGIN
+    OPEN topsentencetime FOR
         select s.start_date - s.end_date sentence_time
         from transcript t
         inner join sentence s on s.id_sentence = t.id_sentence
         where rownum <= n order by sentence_time desc;
-    BEGIN 
-        FOR i IN SentenceTime(n) LOOP
-            dbms_output.put_line(i.sentence_time);
-        END LOOP;
+    RETURN topsentencetime;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned'); 
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END topSentenceTime;
+    END getTopSentenceTime;
 END TRUserReports;
