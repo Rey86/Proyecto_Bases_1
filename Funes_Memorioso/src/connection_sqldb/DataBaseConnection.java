@@ -5,8 +5,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.sql.Date;
 import java.sql.Types;
+import java.time.LocalDate;
 import oracle.jdbc.OracleTypes;
 
 public class DataBaseConnection {
@@ -22,20 +23,14 @@ public class DataBaseConnection {
     
     // Parameter
     // Function to get all parameters of the system
-    public static ArrayList<String> getParameters() throws SQLException{
-        ArrayList<String> parameters = new ArrayList<String>();
+    public static ResultSet getParameters() throws SQLException{
         Connection con = getConnectionDataBase();
         CallableStatement stmt = con.prepareCall("{?= call ADM.ADMTables.getParameter(?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.setNull(2, Types.INTEGER);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
-        
-        while(r.next()){
-            parameters.add("ID: " + Integer.toString(r.getInt("ID_PARAMETER")) + " Nombre: " + 
-                r.getString("PARAMETER_NAME") + " Valor: " + Integer.toString(r.getInt("PARAMETER_VALUE")));
-        }
-        return parameters;
+        return r;
     }
     
     // Function to get a parameter of the system
@@ -81,20 +76,14 @@ public class DataBaseConnection {
     
     // Community
     // Function to get all communities of the system
-    public static ArrayList<String> getCommunities() throws SQLException{
-        ArrayList<String> communities = new ArrayList<String>();
+    public static ResultSet getCommunities() throws SQLException{
         Connection con = getConnectionDataBase();
         CallableStatement stmt = con.prepareCall("{?= call Place.PlaceTables.getCommunity(?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.setNull(2, Types.INTEGER);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
-        
-        while(r.next()){
-            communities.add("ID: " + Integer.toString(r.getInt("ID_COMMUNITY")) + " Nombre: " + 
-                r.getString("COMMUNITY_NAME") + " ID distrito: " + Integer.toString(r.getInt("ID_DISTRICT")));
-        }
-        return communities;
+        return r;
     }
     
     // Function to get a community of the system
@@ -140,20 +129,14 @@ public class DataBaseConnection {
     
     // District
     // Function to get all communities of the system
-    public static ArrayList<String> getDistricts() throws SQLException{
-        ArrayList<String> districts = new ArrayList<String>();
+    public static ResultSet getDistricts() throws SQLException{
         Connection con = getConnectionDataBase();
         CallableStatement stmt = con.prepareCall("{?= call Place.PlaceTables.getDistrict(?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.setNull(2, Types.INTEGER);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
-        
-        while(r.next()){
-            districts.add("ID: " + Integer.toString(r.getInt("ID_DISTRICT")) + " Nombre: " + 
-                r.getString("DISTRICT_NAME") + " ID canton: " + Integer.toString(r.getInt("ID_CANTON")));
-        }
-        return districts;
+        return r;
     }
     
     // Function to get a community of the system
@@ -199,20 +182,14 @@ public class DataBaseConnection {
     
     // Canton
     // Function to get all cantons of the system
-    public static ArrayList<String> getCantons() throws SQLException{
-        ArrayList<String> cantons = new ArrayList<String>();
+    public static ResultSet getCantons() throws SQLException{
         Connection con = getConnectionDataBase();
         CallableStatement stmt = con.prepareCall("{?= call Place.PlaceTables.getCanton(?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.setNull(2, Types.INTEGER);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
-        
-        while(r.next()){
-            cantons.add("ID: " + Integer.toString(r.getInt("ID_CANTON")) + " Nombre: " + 
-                r.getString("CANTON_NAME") + " ID canton: " + Integer.toString(r.getInt("ID_PROVINCE")));
-        }
-        return cantons;
+        return r;
     }
     
     // Function to get a canton of the system
@@ -239,20 +216,14 @@ public class DataBaseConnection {
     
     // Province
     // Function to get all provinces of the system
-    public static ArrayList<String> getProvinces() throws SQLException{
-        ArrayList<String> provinces = new ArrayList<String>();
+    public static ResultSet getProvinces() throws SQLException{
         Connection con = getConnectionDataBase();
         CallableStatement stmt = con.prepareCall("{?= call Place.PlaceTables.getProvince(?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.setNull(2, Types.INTEGER);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
-        
-        while(r.next()){
-            provinces.add("ID: " + Integer.toString(r.getInt("ID_PROVINCE")) + " Nombre: " + 
-                r.getString("PROVINCE_NAME") + " ID canton: " + Integer.toString(r.getInt("ID_COUNTRY")));
-        }
-        return provinces;
+        return r;
     }
     
     // Function to get a province of the system
@@ -297,20 +268,15 @@ public class DataBaseConnection {
     }
     
     // Country
-    // Function to get a country of the system
-    public static ArrayList<String> getCountries() throws SQLException{
-        ArrayList<String> countries = new ArrayList<String>();
+    // Function to get a countries of the system
+    public static ResultSet getCountries() throws SQLException{
         Connection con = getConnectionDataBase();
         CallableStatement stmt = con.prepareCall("{?= call Place.PlaceTables.getCountry(?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.setNull(2, Types.INTEGER);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
-        
-        while(r.next()){
-            countries.add("ID: " + Integer.toString(r.getInt("ID_COUNTRY")) + " Nombre: " + r.getString("COUNTRY_NAME"));
-        }
-        return countries;
+        return r;
     }
     
     // Function to get a country of the system
@@ -352,18 +318,79 @@ public class DataBaseConnection {
         stmt.execute();
     }
     
+    //Person
+    // Function to get a person of the system
+    public static ResultSet getPersons() throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call PRSN.PRSNTables.getPerson(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setNull(2, Types.VARCHAR);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get a person of the system
+    public static ResultSet getPerson(String pcIdPerson) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call PRSN.PRSNTables.getPerson(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setString(2, pcIdPerson);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to set a person of the system
+    public static void setPerson(String pcIdPerson, String pcFirstName, String pcLastName, 
+            String pcSecondLastName, Date pdBirthdate, Integer pnIdGender, Integer pnIdCompany) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call PRSN.PRSNTables.setPerson(?,?,?,?,?,?,?)}");
+        
+        stmt.setString(1, pcIdPerson);
+        stmt.setString(2, pcFirstName);
+        stmt.setString(3, pcLastName);
+        stmt.setString(4, pcSecondLastName);
+        stmt.setDate(5, pdBirthdate);
+        stmt.setInt(6, pnIdGender);
+        stmt.setInt(7, pnIdCompany);
+        stmt.execute();
+    }
+    
+    // Function to delete a person of the system
+    public static void deletePerson(String pcIdPerson) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call PRSN.PRSNTables.deletePerson(?)}");
+        
+        stmt.setString(1, pcIdPerson);
+        stmt.execute();
+    }
+    
+    // Procedure to insert a person in the system
+    public static void insertPerson(String pcIdPerson, String pcFirstName, String pcLastName, 
+            String pcSecondLastName, Date pdBirthdate, Integer pnIdGender, Integer pnIdCompany) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call PRSN.PRSNTables.insertPerson(?,?,?,?,?,?,?)}");
+        
+        stmt.setString(1, pcIdPerson);
+        stmt.setString(2, pcFirstName);
+        stmt.setString(3, pcLastName);
+        stmt.setString(4, pcSecondLastName);
+        stmt.setDate(5, pdBirthdate);
+        stmt.setInt(6, pnIdGender);
+        stmt.setInt(7, pnIdCompany);
+        stmt.execute();
+    }
+    
     //Reports
     // Function to get the top sentence time in the base's transcripts
-    public static void getTopSentenceTime(Integer n) throws SQLException {
+    public static ResultSet getTopSentenceTime(Integer n) throws SQLException {
         Connection con = getConnectionDataBase();
         CallableStatement stmt = con.prepareCall("{?= call TR.TRUserReports.topSentenceTime(?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.setInt(2, n);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
-        
-        while(r.next()){
-            System.out.println(r.getString("SENTENCE_TIME"));
-        }
+        return r;
     }
 }
