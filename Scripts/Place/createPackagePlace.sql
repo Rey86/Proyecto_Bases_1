@@ -21,7 +21,7 @@ CREATE OR REPLACE PACKAGE PlaceTables IS
     PROCEDURE deleteProvince (pnIdProvince NUMBER);
     PROCEDURE insertProvince (pcProvinceName VARCHAR2, pnIdCountry NUMBER);
     -- Country Table
-    PROCEDURE getCountry (pnIdCountry NUMBER);
+    FUNCTION getCountry (pnIdCountry NUMBER) RETURN SYS_REFCURSOR;
     PROCEDURE setCountry (pnIdCountry NUMBER, pcCountryName VARCHAR2);
     PROCEDURE deleteCountry (pnIdCountry NUMBER);
     PROCEDURE insertCountry (pcCountryName VARCHAR2);
@@ -310,18 +310,15 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     
 -- Table Country
 -- Function to get a country with specific id to show it in the screen      
-    PROCEDURE getCountry (pnIdCountry IN NUMBER) AS
+    FUNCTION getCountry (pnIdCountry IN NUMBER) RETURN SYS_REFCURSOR IS
+    country SYS_REFCURSOR;
     vmenError VARCHAR2(100);
-    CURSOR country(pnIdCountry IN NUMBER)
-    IS
-        SELECT id_country, country_name
-        FROM COUNTRY 
-        WHERE id_country = NVL(pnIdCountry, id_country);
-    BEGIN 
-        FOR i in country(pnIdCountry) LOOP
-            dbms_output.put_line(i.id_country);
-            dbms_output.put_line(i.country_name);
-        END LOOP;
+    BEGIN
+        OPEN country FOR 
+            SELECT id_country, country_name
+            FROM COUNTRY 
+            WHERE id_country = NVL(pnIdCountry, id_country);
+        RETURN country;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
         when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pnIdCountry');

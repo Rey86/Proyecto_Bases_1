@@ -1,5 +1,5 @@
 CREATE TABLESPACE HR_Data
-    DATAFILE 'C:\app\Dell\oradata\DBPROJECT1\hrData01.dbf'
+    DATAFILE 'C:\app\Reyner\oradata\DBPROJECT1\hrData01.dbf'
     SIZE 10M
     REUSE
     AUTOEXTEND ON
@@ -7,7 +7,7 @@ CREATE TABLESPACE HR_Data
     MAXSIZE 200M;
 	
 CREATE TABLESPACE HR_Ind
-    DATAFILE 'C:\app\Dell\oradata\DBPROJECT1\hrInd01.dbf'
+    DATAFILE 'C:\app\Reyner\oradata\DBPROJECT1\hrInd01.dbf'
     SIZE 10M
     REUSE
     AUTOEXTEND ON
@@ -24,3 +24,7 @@ CREATE USER HR
 GRANT CONNECT TO HR;
 
 GRANT CREATE SESSION TO HR;
+
+GRANT EXECUTE ON Place.PlaceTables TO HR;
+
+GRANT EXECUTE ON TR.TRUserReports TO HR;
