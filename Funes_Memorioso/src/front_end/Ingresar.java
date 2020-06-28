@@ -17,6 +17,7 @@ public class Ingresar extends javax.swing.JDialog {
     public Ingresar(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
