@@ -17,6 +17,7 @@ public class crearExpediente extends javax.swing.JDialog {
     public crearExpediente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
