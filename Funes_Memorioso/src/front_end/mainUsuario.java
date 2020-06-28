@@ -30,7 +30,8 @@ public class mainUsuario extends javax.swing.JDialog {
 
         btnCrearExpediente = new javax.swing.JButton();
         btnEditarDatos = new javax.swing.JButton();
-        btnConsultas = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
+        btnConsultas1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -38,7 +39,9 @@ public class mainUsuario extends javax.swing.JDialog {
 
         btnEditarDatos.setText("Editar Datos");
 
-        btnConsultas.setText("Consultas");
+        btnSalir.setText("Salir");
+
+        btnConsultas1.setText("Consultas");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -51,7 +54,10 @@ public class mainUsuario extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(13, 13, 13)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnConsultas)
+                            .addComponent(btnConsultas1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(btnSalir))
                             .addComponent(btnEditarDatos))))
                 .addContainerGap(85, Short.MAX_VALUE))
         );
@@ -63,8 +69,10 @@ public class mainUsuario extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(btnEditarDatos)
                 .addGap(18, 18, 18)
-                .addComponent(btnConsultas)
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addComponent(btnConsultas1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnSalir)
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         pack();
@@ -113,8 +121,9 @@ public class mainUsuario extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnConsultas;
+    private javax.swing.JButton btnConsultas1;
     private javax.swing.JButton btnCrearExpediente;
     private javax.swing.JButton btnEditarDatos;
+    private javax.swing.JButton btnSalir;
     // End of variables declaration//GEN-END:variables
 }
