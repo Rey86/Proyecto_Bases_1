@@ -82,6 +82,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Consultas"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnConsultas1ActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
