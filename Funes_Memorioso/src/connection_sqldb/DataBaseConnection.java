@@ -1096,12 +1096,234 @@ public class DataBaseConnection {
     }
     
     // Reports
+    // Function to get the new transcripts in the base's transcripts
+    public static ResultSet getNewTranscripts() throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRAdminReports.getNewTranscripts(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    // Function to get the valid transcripts in the base's transcripts
+    public static ResultSet getValidTranscripts() throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRAdminReports.getValidTranscripts(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the top communities with the most transcripts time in the base's transcripts
+    public static ResultSet getTopTranscriptCommunity(Integer n) throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRUserReports.getTopTranscriptCommunity(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setInt(2, n);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the transcripts per transcript type in the base's transcripts
+    public static ResultSet getTranscriptPerType(Integer pnIdTranscriptType, Date pdDateCreation, Date pdDateLastModification, Integer pnIdCommunity) throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRUserReports.getTranscriptPerType(?, ?, ?, ?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setInt(2, pnIdTranscriptType);
+        stmt.setDate(3, pdDateCreation);
+        stmt.setDate(4, pdDateLastModification);
+        stmt.setInt(5, pnIdCommunity);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the due transcripts in the base's transcripts
+    public static ResultSet getDueTranscripts(Date pdDateCreation, Date pdDateLastModification) throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRUserReports.getTranscriptPerType(?, ?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setDate(2, pdDateCreation);
+        stmt.setDate(2, pdDateLastModification);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the accused users per comapny in the base's transcripts
+    public static ResultSet getAccusedPerCompany(Integer PnID_Company) throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRUserReports.getAccusedPerCompany(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setInt(2, PnID_Company);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the top crimes in the base's transcripts
+    public static ResultSet getTopCrimes(Integer n) throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRUserReports.getTopCrimes(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setInt(2, n);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
     // Function to get the top sentence time in the base's transcripts
     public static ResultSet getTopSentenceTime(Integer n) throws SQLException {
         Connection con = getConnectionDataBase();
         CallableStatement stmt = con.prepareCall("{?= call TR.TRUserReports.getTopSentenceTime(?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.setInt(2, n);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+   
+    // Function to get the list of users whose password was modified in the last 10 days in the base's users
+    public static ResultSet getUserPasswordMod(String pcUserName ,String pcFirstName,String pcLastName,Integer pnIdUser) throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call US.USAdminReports.getUserPasswordMod(?, ?, ?, ?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setString(2, pcUserName);
+        stmt.setString(3, pcFirstName);
+        stmt.setString(4, pcLastName);
+        stmt.setInt(5, pnIdUser);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the list of all users in the base's users
+    public static ResultSet getUserList() throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call US.USUserReports.getUserList(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the list of all banned users in the base's users
+    public static ResultSet getBannedUserList() throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call US.USUserReports.getBannedUserList(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the top reasons for banning in the base's users
+    public static ResultSet topBanReason(Integer n) throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call US.USUserReports.topBanReason(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setInt(2, n);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the percentage of all transcripts organized by type in the base's transcript
+    public static ResultSet getTranscriptPercentagePerType() throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getTranscriptPercentagePerType(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the percentage of trancripts organized by zone in the base's transcript
+    public static ResultSet getTrPercentagePerZone(Integer pnIdCountry,Integer pnIdProvince,Integer pnIdCanton,Integer pnIdDistrict) throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getTrPercentagePerZone(?, ?, ?, ?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setInt(2, pnIdCountry);
+        stmt.setInt(3, pnIdProvince);
+        stmt.setInt(4, pnIdCanton);
+        stmt.setInt(5, pnIdDistrict);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the percentage of accused users organized by an age range in the base's transcript
+    public static ResultSet getAgeRangePercentageAccused() throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getAgeRangePercentageAccused(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the percentage of accused users organized by zone in the base's transcript
+    public static ResultSet getAccuTrPercentPerZone(Integer pnIdCommunity, Integer pnIdCountry,Integer pnIdProvince,Integer pnIdCanton,Integer pnIdDistrict) throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getTrPercentagePerZone(?, ?, ?, ?, ?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setInt(2, pnIdCommunity);
+        stmt.setInt(3, pnIdCountry);
+        stmt.setInt(4, pnIdProvince);
+        stmt.setInt(5, pnIdCanton);
+        stmt.setInt(6, pnIdDistrict);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the average sentence time organized per type in the base's transcript
+    public static ResultSet getAverageSentenceTimePerType() throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getAverageSentenceTimePerType(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the list of due sentences in the base's transcript
+    public static ResultSet getDueSentenceTranscripts() throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getDueSentenceTranscripts(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the sentence time organized by type in the base's transcript
+    public static ResultSet getSentenceTimePerType() throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getSentenceTimePerType(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the sentence type organized by transcript type in the base's transcript
+    public static ResultSet getSentenceTypePerType() throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getSentenceTypePerType(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get the percentage of all users organized by an age range in the base's users
+    public static ResultSet getAgeRangePercentageUsers () throws SQLException {
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call US.USStatisticReports.getAgeRangePercentageUsers (?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
         return r;
