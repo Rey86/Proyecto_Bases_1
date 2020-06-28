@@ -1095,7 +1095,7 @@ public class DataBaseConnection {
         stmt.execute();
     }
     
-    //Reports
+    // Reports
     // Function to get the top sentence time in the base's transcripts
     public static ResultSet getTopSentenceTime(Integer n) throws SQLException {
         Connection con = getConnectionDataBase();
@@ -1107,3 +1107,4 @@ public class DataBaseConnection {
         return r;
     }
 }
+
