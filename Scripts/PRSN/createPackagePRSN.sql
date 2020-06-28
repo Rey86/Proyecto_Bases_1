@@ -27,7 +27,8 @@ CREATE OR REPLACE PACKAGE BODY PRSNTables AS
     person SYS_REFCURSOR;
     BEGIN 
     OPEN person FOR 
-        SELECT p.id_person id_person, p.first_name first_name, p.last_name last_name, p.second_last_name second_last_name, p.birthdate birthdate, g.gender_name gender_name, c.company_name company_name
+        SELECT p.id_person id_person, p.first_name||' '||p.last_name||' '||p.second_last_name name, 
+            p.birthdate birthdate, g.gender_name gender_name, c.company_name company_name
         FROM PERSON p
         INNER JOIN COMPANY c
         ON p.id_company = c.id_company
