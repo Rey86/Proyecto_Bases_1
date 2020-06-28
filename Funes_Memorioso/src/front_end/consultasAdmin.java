@@ -17,6 +17,7 @@ public class consultasAdmin extends javax.swing.JDialog {
     public consultasAdmin(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
