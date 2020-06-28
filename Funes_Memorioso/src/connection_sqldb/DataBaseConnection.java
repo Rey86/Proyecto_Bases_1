@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
 import java.sql.Types;
-import java.time.LocalDate;
 import oracle.jdbc.OracleTypes;
 
 public class DataBaseConnection {
@@ -724,7 +723,7 @@ public class DataBaseConnection {
     public static void setSentence(Integer pnIdSentence, Date pdStartDate, Date pdEndDate, 
             Integer pnIdSentenceType) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.setSentence(?,?)}");
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.setSentence(?,?,?,?)}");
         
         stmt.setInt(1, pnIdSentence);
         stmt.setDate(2, pdStartDate);
@@ -745,11 +744,354 @@ public class DataBaseConnection {
     // Procedure to insert a sentence in the system
     public static void insertSentence(Date pdStartDate, Date pdEndDate, Integer pnIdSentenceType) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertSentence(?)}");
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertSentence(?,?,?)}");
         
         stmt.setDate(1, pdStartDate);
         stmt.setDate(2, pdEndDate);
         stmt.setInt(3, pnIdSentenceType);
+        stmt.execute();
+    }
+    
+    // SentenceType
+    // Function to get all sentence types of the system
+    public static ResultSet getSentenceTypes() throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getSentenceType(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setNull(2, Types.INTEGER);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get a sentence type of the system
+    public static ResultSet getSentenceType(Integer pnIdSentenceType) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getSentenceType(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setInt(2, pnIdSentenceType);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to set a sentence type of the system
+    public static void setSentenceType(Integer pnIdSentenceType, String pcSentenceTypeName) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.setSentenceType(?,?)}");
+        
+        stmt.setInt(1, pnIdSentenceType);
+        stmt.setString(2, pcSentenceTypeName);
+        stmt.execute();
+    }
+    
+    // Function to delete a sentence type of the system
+    public static void deleteSentenceType(Integer pnIdSentenceType) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.deleteSentenceType(?)}");
+        
+        stmt.setInt(1, pnIdSentenceType);
+        stmt.execute();
+    }
+    
+    // Procedure to insert a sentence type in the system
+    public static void insertSentenceType(String pcSentenceTypeName) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertSentenceType(?)}");
+        
+        stmt.setString(1, pcSentenceTypeName);
+        stmt.execute();
+    }
+    
+    // Crime
+    // Function to get all crimes of the system
+    /*public static ResultSet getCrimes() throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getCrime(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setNull(2, Types.INTEGER);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get a crime of the system
+    public static ResultSet getCrime(Integer pnIdCrime) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getCrime(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setInt(2, pnIdCrime);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }*/
+    
+    // Function to set a crime of the system
+    public static void setCrime(Integer pnIdCrime, String pcCrimeDescription, Date pdCrimeDate) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.setCrime(?,?,?)}");
+        
+        stmt.setInt(1, pnIdCrime);
+        stmt.setString(2, pcCrimeDescription);
+        stmt.setDate(3, pdCrimeDate);
+        stmt.execute();
+    }
+    
+    // Function to delete a crime of the system
+    public static void deleteCrime(Integer pnIdCrime) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.deleteCrime(?)}");
+        
+        stmt.setInt(1, pnIdCrime);
+        stmt.execute();
+    }
+    
+    // Procedure to insert a crime in the system
+    public static void insertCrime(String pcCrimeDescription, Date pdCrimeDate) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertCrime(?,?)}");
+        
+        stmt.setString(1, pcCrimeDescription);
+        stmt.setDate(3, pdCrimeDate);
+        stmt.execute();
+    }
+    
+    // Photo
+    // Function to get all photos of the system
+    public static ResultSet getPhotos() throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getPhoto(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setNull(2, Types.INTEGER);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get a photo of the system
+    public static ResultSet getPhoto(Integer pnIdPhoto) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getPhoto(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setInt(2, pnIdPhoto);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to set a photo of the system
+    public static void setPhoto(Integer pnIdPhoto, String pcPhotoDescription, String pcDirection, 
+            String pcIdAccused) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.setPhoto(?,?,?,?)}");
+        
+        stmt.setInt(1, pnIdPhoto);
+        stmt.setString(2, pcPhotoDescription);
+        stmt.setString(3, pcDirection);
+        stmt.setString(4, pcIdAccused);
+        stmt.execute();
+    }
+    
+    // Function to delete a photo of the system
+    public static void deletePhoto(Integer pnIdPhoto) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.deletePhoto(?)}");
+        
+        stmt.setInt(1, pnIdPhoto);
+        stmt.execute();
+    }
+    
+    // Procedure to insert a photo in the system
+    public static void insertPhoto(String pcPhotoDescription, String pcDirection, String pcIdAccused) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertPhoto(?,?,?)}");
+        
+        stmt.setString(1, pcPhotoDescription);
+        stmt.setString(2, pcDirection);
+        stmt.setString(3, pcIdAccused);
+        stmt.execute();
+    }
+    
+    //UserApp
+    // Function to get all users app of the system
+    public static ResultSet getUsersApp() throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call PRSN.PRSNTables.getUserApp(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setNull(2, Types.VARCHAR);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get a user app of the system
+    public static ResultSet getUserApp(String pcUserName) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call PRSN.PRSNTables.getUserApp(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setString(2, pcUserName);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to set a user app of the system
+    public static void setUserApp(String pcUserName, Integer pnBanDays, Integer pnBanned, 
+            Integer pnIdUserType, String pcIdUser) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call PRSN.PRSNTables.setUserApp(?,?,?,?,?)}");
+        
+        stmt.setString(1, pcUserName);
+        stmt.setInt(2, pnBanDays);
+        stmt.setInt(3, pnBanned);
+        stmt.setInt(4, pnIdUserType);
+        stmt.setString(5, pcIdUser);
+        stmt.execute();
+    }
+    
+    // Function to delete a user app of the system
+    public static void deleteUserApp(String pcUserName) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call PRSN.PRSNTables.deleteUserApp(?)}");
+        
+        stmt.setString(1, pcUserName);
+        stmt.execute();
+    }
+    
+    // Procedure to insert a user app in the system
+    public static void insertUserApp(String pcUserName, Integer pnBanDays, Integer pnBanned, 
+            Integer pnIdUserType, String pcIdUser) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call PRSN.PRSNTables.insertUserApp(?,?,?,?,?)}");
+        
+        stmt.setString(1, pcUserName);
+        stmt.setInt(2, pnBanDays);
+        stmt.setInt(3, pnBanned);
+        stmt.setInt(4, pnIdUserType);
+        stmt.setString(5, pcIdUser);
+        stmt.execute();
+    }
+    
+    // UserType
+    // Function to get all user types of the system
+    public static ResultSet getUserTypes() throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getUserType(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setNull(2, Types.INTEGER);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get a user type of the system
+    public static ResultSet getUserType(Integer pnIdUserType) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getUserType(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setInt(2, pnIdUserType);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to set a user type of the system
+    public static void setUserType(Integer pnIdUserType, String pcUserTypeDescription) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.setUserType(?,?)}");
+        
+        stmt.setInt(1, pnIdUserType);
+        stmt.setString(2, pcUserTypeDescription);
+        stmt.execute();
+    }
+    
+    // Function to delete a user type of the system
+    public static void deleteUserType(Integer pnIdUserType) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.deleteUserType(?)}");
+        
+        stmt.setInt(1, pnIdUserType);
+        stmt.execute();
+    }
+    
+    // Procedure to insert a user type in the system
+    public static void insertUserType(String pcUserTypeDescription) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertUserType(?)}");
+        
+        stmt.setString(1, pcUserTypeDescription);
+        stmt.execute();
+    }
+    
+    // BanReason
+    // Function to get all ban reasons of the system
+    public static ResultSet getBanReasons() throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getBanReason(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setNull(2, Types.INTEGER);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to get a ban reason of the system
+    public static ResultSet getBanReason(Integer pnIdBanReason) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getBanReason(?)}");
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setInt(2, pnIdBanReason);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        return r;
+    }
+    
+    // Function to set a ban reason of the system
+    public static void setBanReason(Integer pnIdBanReason, String pcBanReasonDescription) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.setBanReason(?,?)}");
+        
+        stmt.setInt(1, pnIdBanReason);
+        stmt.setString(2, pcBanReasonDescription);
+        stmt.execute();
+    }
+    
+    // Function to delete a ban reason of the system
+    public static void deleteBanReason(Integer pnIdBanReason) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.deleteBanReason(?)}");
+        
+        stmt.setInt(1, pnIdBanReason);
+        stmt.execute();
+    }
+    
+    // Procedure to insert a ban reason in the system
+    public static void insertBanReason(String pcBanReasonDescription) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertBanReason(?)}");
+        
+        stmt.setString(1, pcBanReasonDescription);
+        stmt.execute();
+    }
+    
+    // BanReasonxUserApp  
+    // Function to delete a BanReasonxUserApp of the system
+    public static void deleteBanReasonxUserApp(Integer pnIdBanReason, String pcUserName) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.deleteBanReasonxUserApp(?,?)}");
+        
+        stmt.setInt(1, pnIdBanReason);
+        stmt.setString(2, pcUserName);
+        stmt.execute();
+    }
+    
+    // Procedure to insert a BanReasonxUserApp in the system
+    public static void insertBanReasonxUserApp(Integer pnIdBanReason, String pcUserName) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertBanReasonxUserApp(?,?)}");
+        
+        stmt.setInt(1, pnIdBanReason);
+        stmt.setString(2, pcUserName);
         stmt.execute();
     }
     
