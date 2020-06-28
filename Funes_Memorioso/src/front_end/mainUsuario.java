@@ -17,6 +17,7 @@ public class mainUsuario extends javax.swing.JDialog {
     public mainUsuario(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
