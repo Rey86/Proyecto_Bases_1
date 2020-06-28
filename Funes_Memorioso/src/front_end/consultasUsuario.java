@@ -17,6 +17,7 @@ public class consultasUsuario extends javax.swing.JDialog {
     public consultasUsuario(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
