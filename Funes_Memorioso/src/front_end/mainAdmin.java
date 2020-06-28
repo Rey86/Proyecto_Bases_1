@@ -38,6 +38,11 @@ public class mainAdmin extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         btnCrearExpediente.setText("Crear expediente");
+        btnCrearExpediente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrearExpedienteActionPerformed(evt);
+            }
+        });
 
         btnEditarUsuarios.setText("Editar Usuarios");
 
@@ -90,6 +95,11 @@ public class mainAdmin extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCrearExpedienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearExpedienteActionPerformed
+        crearExpediente dialog = new crearExpediente(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnCrearExpedienteActionPerformed
 
     /**
      * @param args the command line arguments
