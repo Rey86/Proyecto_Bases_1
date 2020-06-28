@@ -47,6 +47,11 @@ public class mainAdmin extends javax.swing.JDialog {
         btnEditarUsuarios.setText("Editar Usuarios");
 
         btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
 
         btnConsultas1.setText("Consultas");
         btnConsultas1.addActionListener(new java.awt.event.ActionListener() {
@@ -110,6 +115,10 @@ public class mainAdmin extends javax.swing.JDialog {
         consultasAdmin dialog = new consultasAdmin(new javax.swing.JFrame(), true);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnConsultas1ActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
 
     /**
      * @param args the command line arguments
