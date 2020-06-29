@@ -509,9 +509,10 @@ public class DataBaseConnection {
     // Function to set a transcript of the system
     public static void setTranscript(String pcTranscriptNumber, Integer pnValid, String pcIdAccused, 
             Integer pnIdTranscriptType, Integer pnIdVerdict, Integer pnIdCommunity, 
-            Integer pnIdSentence, Integer pnIdCrime, Date pdDueDate) throws SQLException{
+            Date pnSentenceStartDate, Date pnSentenceEndDate, Integer pnIdSentenceType, String pcCrimeDescription, 
+            Date pdCrimeDate, Date pdDueDate) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.setTranscript(?,?,?,?,?,?,?,?,?)}");
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.setTranscript(?,?,?,?,?,?,?,?,?,?,?,?)}");
         
         stmt.setString(1, pcTranscriptNumber);
         stmt.setInt(2, pnValid);
@@ -519,9 +520,12 @@ public class DataBaseConnection {
         stmt.setInt(4, pnIdTranscriptType);
         stmt.setInt(5, pnIdVerdict);
         stmt.setInt(6, pnIdCommunity);
-        stmt.setInt(7, pnIdSentence);
-        stmt.setInt(8, pnIdCrime);
-        stmt.setDate(9, pdDueDate);
+        stmt.setDate(7, pnSentenceStartDate);
+        stmt.setDate(8, pnSentenceEndDate);
+        stmt.setInt(9, pnIdSentenceType);
+        stmt.setString(10, pcCrimeDescription);
+        stmt.setDate(11, pdCrimeDate);
+        stmt.setDate(12, pdDueDate);
         stmt.execute();
     }
     
@@ -535,21 +539,26 @@ public class DataBaseConnection {
     }
     
     // Procedure to insert a transcript in the system
-    public static void insertTranscript(String pcTranscriptNumber, Integer pnValid, String pcIdAccused, 
+    public static void insertTranscript(String pcTranscriptNumber, Integer pnValid, String pcUserName, String pcIdAccused, 
             Integer pnIdTranscriptType, Integer pnIdVerdict, Integer pnIdCommunity, 
-            Integer pnIdSentence, Integer pnIdCrime, Date pdDueDate) throws SQLException{
+            Date pnSentenceStartDate, Date pnSentenceEndDate, Integer pnIdSentenceType, String pcCrimeDescription, 
+            Date pdCrimeDate, Date pdDueDate) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertTranscript(?,?,?,?,?,?,?,?,?)}");
+        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertTranscript(?,?,?,?,?,?,?,?,?,?,?,?,?)}");
         
         stmt.setString(1, pcTranscriptNumber);
         stmt.setInt(2, pnValid);
-        stmt.setString(3, pcIdAccused);
-        stmt.setInt(4, pnIdTranscriptType);
-        stmt.setInt(5, pnIdVerdict);
-        stmt.setInt(6, pnIdCommunity);
-        stmt.setInt(7, pnIdSentence);
-        stmt.setInt(8, pnIdCrime);
-        stmt.setDate(9, pdDueDate);
+        stmt.setString(3, pcUserName);
+        stmt.setString(4, pcIdAccused);
+        stmt.setInt(5, pnIdTranscriptType);
+        stmt.setInt(6, pnIdVerdict);
+        stmt.setInt(7, pnIdCommunity);
+        stmt.setDate(8, pnSentenceStartDate);
+        stmt.setDate(9, pnSentenceEndDate);
+        stmt.setInt(10, pnIdSentenceType);
+        stmt.setString(11, pcCrimeDescription);
+        stmt.setDate(12, pdCrimeDate);
+        stmt.setDate(13, pdDueDate);
         stmt.execute();
     }
     
@@ -696,62 +705,6 @@ public class DataBaseConnection {
         stmt.execute();
     }
     
-    // Sentence
-    // Function to get all sentences of the system
-    /*public static ResultSet getVerdicts() throws SQLException{
-        Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getSentence(?)}");
-        stmt.registerOutParameter(1, OracleTypes.CURSOR);
-        stmt.setNull(2, Types.INTEGER);
-        stmt.executeQuery();
-        ResultSet r = (ResultSet) stmt.getObject(1);
-        return r;
-    }
-    
-    // Function to get a sentence of the system
-    public static ResultSet getSentence(Integer pnIdSentence) throws SQLException{
-        Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getSentence(?)}");
-        stmt.registerOutParameter(1, OracleTypes.CURSOR);
-        stmt.setInt(2, pnIdSentence);
-        stmt.executeQuery();
-        ResultSet r = (ResultSet) stmt.getObject(1);
-        return r;
-    }*/
-    
-    // Function to set a sentence of the system
-    public static void setSentence(Integer pnIdSentence, Date pdStartDate, Date pdEndDate, 
-            Integer pnIdSentenceType) throws SQLException{
-        Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.setSentence(?,?,?,?)}");
-        
-        stmt.setInt(1, pnIdSentence);
-        stmt.setDate(2, pdStartDate);
-        stmt.setDate(3, pdEndDate);
-        stmt.setInt(4, pnIdSentenceType);
-        stmt.execute();
-    }
-    
-    // Function to delete a sentence of the system
-    public static void deleteSentence(Integer pnIdSentence) throws SQLException{
-        Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.deleteSentence(?)}");
-        
-        stmt.setInt(1, pnIdSentence);
-        stmt.execute();
-    }
-    
-    // Procedure to insert a sentence in the system
-    public static void insertSentence(Date pdStartDate, Date pdEndDate, Integer pnIdSentenceType) throws SQLException{
-        Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertSentence(?,?,?)}");
-        
-        stmt.setDate(1, pdStartDate);
-        stmt.setDate(2, pdEndDate);
-        stmt.setInt(3, pnIdSentenceType);
-        stmt.execute();
-    }
-    
     // SentenceType
     // Function to get all sentence types of the system
     public static ResultSet getSentenceTypes() throws SQLException{
@@ -800,59 +753,6 @@ public class DataBaseConnection {
         CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertSentenceType(?)}");
         
         stmt.setString(1, pcSentenceTypeName);
-        stmt.execute();
-    }
-    
-    // Crime
-    // Function to get all crimes of the system
-    /*public static ResultSet getCrimes() throws SQLException{
-        Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getCrime(?)}");
-        stmt.registerOutParameter(1, OracleTypes.CURSOR);
-        stmt.setNull(2, Types.INTEGER);
-        stmt.executeQuery();
-        ResultSet r = (ResultSet) stmt.getObject(1);
-        return r;
-    }
-    
-    // Function to get a crime of the system
-    public static ResultSet getCrime(Integer pnIdCrime) throws SQLException{
-        Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getCrime(?)}");
-        stmt.registerOutParameter(1, OracleTypes.CURSOR);
-        stmt.setInt(2, pnIdCrime);
-        stmt.executeQuery();
-        ResultSet r = (ResultSet) stmt.getObject(1);
-        return r;
-    }*/
-    
-    // Function to set a crime of the system
-    public static void setCrime(Integer pnIdCrime, String pcCrimeDescription, Date pdCrimeDate) throws SQLException{
-        Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.setCrime(?,?,?)}");
-        
-        stmt.setInt(1, pnIdCrime);
-        stmt.setString(2, pcCrimeDescription);
-        stmt.setDate(3, pdCrimeDate);
-        stmt.execute();
-    }
-    
-    // Function to delete a crime of the system
-    public static void deleteCrime(Integer pnIdCrime) throws SQLException{
-        Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.deleteCrime(?)}");
-        
-        stmt.setInt(1, pnIdCrime);
-        stmt.execute();
-    }
-    
-    // Procedure to insert a crime in the system
-    public static void insertCrime(String pcCrimeDescription, Date pdCrimeDate) throws SQLException{
-        Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertCrime(?,?)}");
-        
-        stmt.setString(1, pcCrimeDescription);
-        stmt.setDate(3, pdCrimeDate);
         stmt.execute();
     }
     
