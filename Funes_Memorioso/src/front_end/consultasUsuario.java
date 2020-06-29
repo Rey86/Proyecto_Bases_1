@@ -66,6 +66,11 @@ public class consultasUsuario extends javax.swing.JDialog {
         });
 
         btnInformacionDenunciado.setText("Información Denunciado");
+        btnInformacionDenunciado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInformacionDenunciadoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -127,6 +132,11 @@ public class consultasUsuario extends javax.swing.JDialog {
         usuariosBaneados dialog = new usuariosBaneados(new javax.swing.JFrame(), true);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnListaUsuariosBaneadosActionPerformed
+
+    private void btnInformacionDenunciadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformacionDenunciadoActionPerformed
+        datosDenunciado dialog = new datosDenunciado(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnInformacionDenunciadoActionPerformed
 
     /**
      * @param args the command line arguments
