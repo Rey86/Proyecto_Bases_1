@@ -54,6 +54,11 @@ public class consultasAdmin extends javax.swing.JDialog {
         });
 
         btnListaUsuarios.setText("Lista de Usuarios");
+        btnListaUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListaUsuariosActionPerformed(evt);
+            }
+        });
 
         btnListaUsuariosBaneados.setText("Lista de Usuarios Baneados");
 
@@ -122,6 +127,11 @@ public class consultasAdmin extends javax.swing.JDialog {
         Expedientes dialog = new Expedientes(new javax.swing.JFrame(), true);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnListaExpedientesActionPerformed
+
+    private void btnListaUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaUsuariosActionPerformed
+        usuarios dialog = new usuarios(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnListaUsuariosActionPerformed
 
     /**
      * @param args the command line arguments
