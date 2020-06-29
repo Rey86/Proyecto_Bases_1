@@ -40,6 +40,11 @@ public class consultasAdmin extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         btnTopLugares.setText("Top de lugares");
+        btnTopLugares.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTopLugaresActionPerformed(evt);
+            }
+        });
 
         btnListaExpedientes.setText("Lista de Expedientes");
 
@@ -102,6 +107,11 @@ public class consultasAdmin extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnTopLugaresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTopLugaresActionPerformed
+        TopLugares dialog = new TopLugares(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnTopLugaresActionPerformed
 
     /**
      * @param args the command line arguments
