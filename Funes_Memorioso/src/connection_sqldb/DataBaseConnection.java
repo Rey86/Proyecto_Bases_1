@@ -816,7 +816,7 @@ public class DataBaseConnection {
     // Function to get all users app of the system
     public static ResultSet getUsersApp() throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call PRSN.PRSNTables.getUserApp(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call US.USTables.getUserApp(?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.setNull(2, Types.VARCHAR);
         stmt.executeQuery();
@@ -827,7 +827,7 @@ public class DataBaseConnection {
     // Function to get a user app of the system
     public static ResultSet getUserApp(String pcUserName) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call PRSN.PRSNTables.getUserApp(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call US.USTables.getUserApp(?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.setString(2, pcUserName);
         stmt.executeQuery();
@@ -835,11 +835,11 @@ public class DataBaseConnection {
         return r;
     }
     
-    // Function to set a user app of the system
+    // Procedure to set a user app of the system
     public static void setUserApp(String pcUserName, Integer pnBanDays, Integer pnBanned, 
             Integer pnIdUserType, String pcIdUser) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call PRSN.PRSNTables.setUserApp(?,?,?,?,?)}");
+        CallableStatement stmt = con.prepareCall("{ call US.USTables.setUserApp(?,?,?,?,?)}");
         
         stmt.setString(1, pcUserName);
         stmt.setInt(2, pnBanDays);
@@ -852,31 +852,68 @@ public class DataBaseConnection {
     // Function to delete a user app of the system
     public static void deleteUserApp(String pcUserName) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call PRSN.PRSNTables.deleteUserApp(?)}");
+        CallableStatement stmt = con.prepareCall("{ call US.USTables.deleteUserApp(?)}");
         
         stmt.setString(1, pcUserName);
         stmt.execute();
     }
     
     // Procedure to insert a user app in the system
-    public static void insertUserApp(String pcUserName, Integer pnBanDays, Integer pnBanned, 
+    public static void insertUserApp(String pcUserName, String pcUserPassword, Integer pnBanDays, Integer pnBanned, 
             Integer pnIdUserType, String pcIdUser) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call PRSN.PRSNTables.insertUserApp(?,?,?,?,?)}");
+        CallableStatement stmt = con.prepareCall("{ call US.USTables.insertUserApp(?,?,?,?,?,?)}");
         
         stmt.setString(1, pcUserName);
-        stmt.setInt(2, pnBanDays);
-        stmt.setInt(3, pnBanned);
-        stmt.setInt(4, pnIdUserType);
-        stmt.setString(5, pcIdUser);
+        stmt.setString(2, pcUserPassword);
+        stmt.setInt(3, pnBanDays);
+        stmt.setInt(4, pnBanned);
+        stmt.setInt(5, pnIdUserType);
+        stmt.setString(6, pcIdUser);
         stmt.execute();
+    }
+    
+    public static void isValidUser(String pcUserName, String pcUserPassword) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ ?= call US.USTables.isValidUser(?,?)}");
+        
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.setString(2, pcUserName);
+        stmt.setString(3, pcUserPassword);
+        stmt.executeQuery();
+    }
+    
+    public static Boolean isBannedUser(String pcUserName) throws SQLException{
+        Connection con = getConnectionDataBase();
+        Boolean banned = false;
+        CallableStatement stmt = con.prepareCall("{ ?= call US.USTables.isBannedUser(?)}");
+        
+        stmt.registerOutParameter(1, Types.INTEGER);
+        stmt.setString(2, pcUserName);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        if (r.getInt("BANNED") == 1){ banned = true; }
+        
+        return banned;
+    }
+    
+    public static String getCurrentUserType(String pcUserName) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ ?= call US.USTables.getCurrentUserType(?)}");
+        
+        stmt.registerOutParameter(1, Types.VARCHAR);
+        stmt.setString(2, pcUserName);
+        stmt.executeQuery();
+        ResultSet r = (ResultSet) stmt.getObject(1);
+        
+        return r.getString("USERTYPE_NAME");
     }
     
     // UserType
     // Function to get all user types of the system
     public static ResultSet getUserTypes() throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getUserType(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call US.USTables.getUserType(?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.setNull(2, Types.INTEGER);
         stmt.executeQuery();
@@ -887,7 +924,7 @@ public class DataBaseConnection {
     // Function to get a user type of the system
     public static ResultSet getUserType(Integer pnIdUserType) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getUserType(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call US.USTables.getUserType(?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.setInt(2, pnIdUserType);
         stmt.executeQuery();
@@ -898,7 +935,7 @@ public class DataBaseConnection {
     // Function to set a user type of the system
     public static void setUserType(Integer pnIdUserType, String pcUserTypeDescription) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.setUserType(?,?)}");
+        CallableStatement stmt = con.prepareCall("{ call US.USTables.setUserType(?,?)}");
         
         stmt.setInt(1, pnIdUserType);
         stmt.setString(2, pcUserTypeDescription);
@@ -908,7 +945,7 @@ public class DataBaseConnection {
     // Function to delete a user type of the system
     public static void deleteUserType(Integer pnIdUserType) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.deleteUserType(?)}");
+        CallableStatement stmt = con.prepareCall("{ call US.USTables.deleteUserType(?)}");
         
         stmt.setInt(1, pnIdUserType);
         stmt.execute();
@@ -917,7 +954,7 @@ public class DataBaseConnection {
     // Procedure to insert a user type in the system
     public static void insertUserType(String pcUserTypeDescription) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertUserType(?)}");
+        CallableStatement stmt = con.prepareCall("{ call US.USTables.insertUserType(?)}");
         
         stmt.setString(1, pcUserTypeDescription);
         stmt.execute();
@@ -927,7 +964,7 @@ public class DataBaseConnection {
     // Function to get all ban reasons of the system
     public static ResultSet getBanReasons() throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getBanReason(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call US.USTables.getBanReason(?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.setNull(2, Types.INTEGER);
         stmt.executeQuery();
@@ -938,7 +975,7 @@ public class DataBaseConnection {
     // Function to get a ban reason of the system
     public static ResultSet getBanReason(Integer pnIdBanReason) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getBanReason(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call US.USTables.getBanReason(?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.setInt(2, pnIdBanReason);
         stmt.executeQuery();
@@ -949,7 +986,7 @@ public class DataBaseConnection {
     // Function to set a ban reason of the system
     public static void setBanReason(Integer pnIdBanReason, String pcBanReasonDescription) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.setBanReason(?,?)}");
+        CallableStatement stmt = con.prepareCall("{ call US.USTables.setBanReason(?,?)}");
         
         stmt.setInt(1, pnIdBanReason);
         stmt.setString(2, pcBanReasonDescription);
@@ -959,7 +996,7 @@ public class DataBaseConnection {
     // Function to delete a ban reason of the system
     public static void deleteBanReason(Integer pnIdBanReason) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.deleteBanReason(?)}");
+        CallableStatement stmt = con.prepareCall("{ call US.USTables.deleteBanReason(?)}");
         
         stmt.setInt(1, pnIdBanReason);
         stmt.execute();
@@ -968,7 +1005,7 @@ public class DataBaseConnection {
     // Procedure to insert a ban reason in the system
     public static void insertBanReason(String pcBanReasonDescription) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertBanReason(?)}");
+        CallableStatement stmt = con.prepareCall("{ call US.USTables.insertBanReason(?)}");
         
         stmt.setString(1, pcBanReasonDescription);
         stmt.execute();
@@ -978,7 +1015,7 @@ public class DataBaseConnection {
     // Function to delete a BanReasonxUserApp of the system
     public static void deleteBanReasonxUserApp(Integer pnIdBanReason, String pcUserName) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.deleteBanReasonxUserApp(?,?)}");
+        CallableStatement stmt = con.prepareCall("{ call US.USTables.deleteBanReasonxUserApp(?,?)}");
         
         stmt.setInt(1, pnIdBanReason);
         stmt.setString(2, pcUserName);
@@ -988,7 +1025,7 @@ public class DataBaseConnection {
     // Procedure to insert a BanReasonxUserApp in the system
     public static void insertBanReasonxUserApp(Integer pnIdBanReason, String pcUserName) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertBanReasonxUserApp(?,?)}");
+        CallableStatement stmt = con.prepareCall("{ call US.USTables.insertBanReasonxUserApp(?,?)}");
         
         stmt.setInt(1, pnIdBanReason);
         stmt.setString(2, pcUserName);
