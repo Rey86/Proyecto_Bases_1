@@ -47,6 +47,11 @@ public class consultasAdmin extends javax.swing.JDialog {
         });
 
         btnListaExpedientes.setText("Lista de Expedientes");
+        btnListaExpedientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListaExpedientesActionPerformed(evt);
+            }
+        });
 
         btnListaUsuarios.setText("Lista de Usuarios");
 
@@ -112,6 +117,11 @@ public class consultasAdmin extends javax.swing.JDialog {
         TopLugares dialog = new TopLugares(new javax.swing.JFrame(), true);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnTopLugaresActionPerformed
+
+    private void btnListaExpedientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaExpedientesActionPerformed
+        Expedientes dialog = new Expedientes(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnListaExpedientesActionPerformed
 
     /**
      * @param args the command line arguments
