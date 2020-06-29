@@ -5,6 +5,10 @@ CREATE OR REPLACE PACKAGE USTables IS
     PROCEDURE deleteUserApp (pcUserName VARCHAR2);
     PROCEDURE insertUserApp (pcUserName VARCHAR2, pcUserPassword VARCHAR2, pnBanDays NUMBER, pnBanned NUMBER, pnIdUserType NUMBER, 
         pcIdUser VARCHAR2);
+    FUNCTION isValidUser (pcUserName VARCHAR2, pcUserPassword VARCHAR2) RETURN SYS_REFCURSOR;
+    FUNCTION isBannedUser (pcUserName VARCHAR2) RETURN NUMBER;
+    FUNCTION getCurrentUserType (pcUserName VARCHAR2) RETURN VARCHAR2;
+    
     -- UserType Table
     FUNCTION getUserType (pnIdUserType NUMBER) RETURN SYS_REFCURSOR;
     PROCEDURE setUserType (pnIdUserType NUMBER, pcUserTypeDescription VARCHAR2);
@@ -98,6 +102,56 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertUserApp;
 
+-- Function that returns the row of the user if it exists or throw an error else.
+    FUNCTION isValidUser (pcUserName VARCHAR2, pcUserPassword VARCHAR2) RETURN SYS_REFCURSOR IS
+    uservalid SYS_REFCURSOR;
+    vmenError VARCHAR2(100);
+    BEGIN
+        OPEN uservalid FOR
+            SELECT username, user_password
+            FROM USERAPP
+            WHERE username = pcUserName and user_password = pcUserPassword;
+        RETURN uservalid;
+    Exception      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pcUserName and pcUserPassword');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
+    END isValidUser;
+    
+-- Funtion that returns 0 if the the user is banned or 1 else.   
+    FUNCTION isBannedUser (pcUserName VARCHAR2) RETURN NUMBER IS
+    vnBanned NUMBER;
+    vmenError VARCHAR2(100);
+    BEGIN
+        SELECT banned
+        INTO vnBanned
+        FROM USERAPP
+        WHERE username = pcUserName;
+        RETURN (vnBanned);
+    Exception      
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
+    END isBannedUser;
+
+-- Function that returns the type of the current user.
+    FUNCTION getCurrentUserType (pcUserName VARCHAR2) RETURN VARCHAR2 IS
+    vmenError VARCHAR2(100);
+    vcUserTypeName VARCHAR2(30);
+    BEGIN
+        SELECT usertype_description
+        INTO vcUserTypeName
+        FROM USERAPP ua
+        INNER JOIN USERTYPE ut
+        ON ua.id_usertype = ut.id_usertype
+        WHERE ua.username = pcUserName;
+        RETURN (vcUserTypeName);
+    Exception      
+        when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pcUserName and pcUserPassword');
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
+    END getCurrentUserType;
+    
 -- Table UserType
 -- Function to get a user type with specific id to show it in the screen      
     FUNCTION getUserType (pnIdUserType IN NUMBER) RETURN SYS_REFCURSOR IS
