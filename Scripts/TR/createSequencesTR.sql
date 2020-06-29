@@ -15,27 +15,9 @@ CREATE SEQUENCE s_verdict
     MAXVALUE 10000000
     NOCACHE
     NOCYCLE;
-    
--- Sequence to fill id SENTENCE.
-CREATE SEQUENCE s_sentence
-    START WITH 0
-    INCREMENT BY 1
-    MINVALUE 0
-    MAXVALUE 10000000
-    NOCACHE
-    NOCYCLE;
-    
+
 -- Sequence to fill id SENTENCETYPE.
 CREATE SEQUENCE s_sentencetype
-    START WITH 0
-    INCREMENT BY 1
-    MINVALUE 0
-    MAXVALUE 10000000
-    NOCACHE
-    NOCYCLE;
-    
--- Sequence to fill id CRIME
-CREATE SEQUENCE s_crime
     START WITH 0
     INCREMENT BY 1
     MINVALUE 0

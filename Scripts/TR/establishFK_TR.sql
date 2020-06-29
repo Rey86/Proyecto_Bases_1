@@ -29,31 +29,18 @@ ALTER TABLE TRANSCRIPT
     (id_community) REFERENCES
     Place.COMMUNITY(id_community);
     
-    --Sentence
+    --SentenceType
 ALTER TABLE TRANSCRIPT
-    ADD CONSTRAINT fk_transcript_sentence FOREIGN KEY
-    (id_sentence) REFERENCES
-    SENTENCE(id_sentence);
-    
-    --Crime
-ALTER TABLE TRANSCRIPT
-    ADD CONSTRAINT fk_transcript_crime FOREIGN KEY
-    (id_crime) REFERENCES
-    CRIME(id_crime);
-    
+    ADD CONSTRAINT fk_transcript_sentencetype FOREIGN KEY
+    (id_sentencetype) REFERENCES
+    SENTENCETYPE(id_sentencetype);
+  
 --Accused's foreign keys
     --ID
 ALTER TABLE ACCUSED
     ADD CONSTRAINT fk_accused_id FOREIGN KEY
     (id_accused) REFERENCES
     PRSN.PERSON(id_person);
-    
---Sentence's foreign key
-    --Sentence Type
-ALTER TABLE SENTENCE
-    ADD CONSTRAINT fk_sentence_senType FOREIGN KEY
-    (id_sentencetype) REFERENCES
-    SENTENCETYPE(id_sentencetype);
     
 --Photo's foreign key
     --Accused ID

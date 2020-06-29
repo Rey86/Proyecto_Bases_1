@@ -3,10 +3,12 @@ CREATE OR REPLACE PACKAGE TRTables IS
     -- Transcript Table
     FUNCTION getTranscript (pcTranscriptNumber VARCHAR2) RETURN SYS_REFCURSOR;
     PROCEDURE setTranscript (pcTranscriptNumber VARCHAR2, pnValid NUMBER, pcIdAccused VARCHAR2, 
-        pnIdTranscriptType NUMBER, pnIdVerdict NUMBER, pnIdCommunity NUMBER, pnIdSentence NUMBER, pnIdCrime NUMBER, pdDueDate DATE);
+        pnIdTranscriptType NUMBER, pnIdVerdict NUMBER, pnIdCommunity NUMBER, pdSentenceStartDate DATE, pdSentenceEndDate DATE, 
+        pnIdSentenceType NUMBER, pcCrimeDescription VARCHAR2, pdCrimeDate DATE, pdDueDate DATE);
     PROCEDURE deleteTranscript (pcTranscriptNumber VARCHAR2);
     PROCEDURE insertTranscript (pcTranscriptNumber VARCHAR2, pnValid NUMBER, pcUserName VARCHAR2, pcIdAccused VARCHAR2, 
-        pnIdTranscriptType NUMBER, pnIdVerdict NUMBER, pnIdCommunity NUMBER, pnIdSentence NUMBER, pnIdCrime NUMBER, pdDueDate DATE);
+        pnIdTranscriptType NUMBER, pnIdVerdict NUMBER, pnIdCommunity NUMBER, pdSentenceStartDate DATE, pdSentenceEndDate DATE, 
+        pnIdSentenceType NUMBER, pcCrimeDescription VARCHAR2, pdCrimeDate DATE, pdDueDate DATE);
     -- TranscriptType Table
     FUNCTION getTranscriptType (pnIdTranscriptType NUMBER) RETURN SYS_REFCURSOR;
     PROCEDURE setTranscriptType (pnIdTranscriptType NUMBER, pcTranscriptTypeName VARCHAR2);
@@ -21,21 +23,11 @@ CREATE OR REPLACE PACKAGE TRTables IS
     PROCEDURE setVerdict (pnIdVerdict NUMBER, pcVerdictName VARCHAR2);
     PROCEDURE deleteVerdict (pnIdVerdict NUMBER);
     PROCEDURE insertVerdict (pcVerdictName VARCHAR2);
-    -- Sentence Table
-    FUNCTION getSentence (pnIdSentence NUMBER) RETURN SYS_REFCURSOR;
-    PROCEDURE setSentence (pnIdSentence NUMBER, pdStartDate DATE, pdEndDate DATE, pnIdSentenceType NUMBER);
-    PROCEDURE deleteSentence (pnIdSentence NUMBER);
-    PROCEDURE insertSentence (pdStartDate DATE, pdEndDate DATE, pnIdSentenceType NUMBER);
     -- SentenceType Table
     FUNCTION getSentenceType (pnIdSentenceType NUMBER) RETURN SYS_REFCURSOR;
     PROCEDURE setSentenceType (pnIdSentenceType NUMBER, pcSentenceTypeName VARCHAR2);
     PROCEDURE deleteSentenceType (pnIdSentenceType NUMBER);
     PROCEDURE insertSentenceType (pcSentenceTypeName VARCHAR2);
-    -- Crime Table
-    FUNCTION getCrime (pnIdCrime NUMBER) RETURN SYS_REFCURSOR;
-    PROCEDURE setCrime (pnIdCrime NUMBER, pcCrimeDescription VARCHAR2, pdCrimeDate DATE);
-    PROCEDURE deleteCrime (pnIdCrime NUMBER);
-    PROCEDURE insertCrime (pcCrimeDescription VARCHAR2, pdCrimeDate DATE);
     -- Photo Table
     FUNCTION getPhoto (pnIdPhoto NUMBER) RETURN SYS_REFCURSOR;
     PROCEDURE setPhoto (pnIdPhoto NUMBER, pcPhotoDescription VARCHAR2, pcDirection VARCHAR2, pcIdAccused VARCHAR2);
@@ -53,9 +45,9 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
     OPEN transcript FOR
         SELECT t.transcript_number transcript_number, t.valid valid, t.username username, 
             p.first_name||' '||p.last_name||' '||p.second_last_name accused_name, tt.transcripttype_name transcripttype_name, 
-            v.verdict_name verdict_name, c.community_name community_name, s.start_date sentence_start_date,
-            s.end_date sentence_end_date, s.start_date-s.end_date sentence_time, st.sentencetype_name sentencetype_name, 
-            cr.crime_description crime_description, cr.crime_date crime_date, t.due_date due_date
+            v.verdict_name verdict_name, c.community_name community_name, t.sentence_startdate sentence_startdate,
+            t.sentence_enddate sentence_enddate, t.sentence_startdate-t.sentence_enddate sentence_time, st.sentencetype_name sentencetype_name, 
+            t.crime_description crime_description, t.crime_date crime_date, t.due_date due_date
         FROM TRANSCRIPT t
         INNER JOIN ACCUSED a
         ON t.id_accused = a.id_accused 
@@ -67,12 +59,8 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         ON t.id_verdict = v.id_verdict
         INNER JOIN Place.COMMUNITY c
         ON t.id_community = c.id_community
-        INNER JOIN SENTENCE s
-        ON t.id_sentence = s.id_sentence
         INNER JOIN SENTENCETYPE st
-        ON s.id_sentencetype = st.id_sentencetype 
-        INNER JOIN CRIME cr
-        ON t.id_crime = cr.id_crime
+        ON t.id_sentencetype = st.id_sentencetype 
         WHERE t.transcript_number = NVL(pcTranscriptNumber , t.transcript_number);
     RETURN transcript;
     Exception
@@ -84,9 +72,9 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
     END getTranscript;
 
 -- Procedure to set a transcript with specific number and the new values wrote by the user  
-    PROCEDURE setTranscript (pcTranscriptNumber IN VARCHAR2, pnValid IN NUMBER, pcIdAccused IN VARCHAR2, 
-        pnIdTranscriptType IN NUMBER, pnIdVerdict IN NUMBER, pnIdCommunity IN NUMBER, pnIdSentence IN NUMBER, 
-        pnIdCrime IN NUMBER, pdDueDate IN DATE) IS
+    PROCEDURE setTranscript (pcTranscriptNumber VARCHAR2, pnValid NUMBER, pcIdAccused VARCHAR2, 
+        pnIdTranscriptType NUMBER, pnIdVerdict NUMBER, pnIdCommunity NUMBER, pdSentenceStartDate DATE, pdSentenceEndDate DATE, 
+        pnIdSentenceType NUMBER, pcCrimeDescription VARCHAR2, pdCrimeDate DATE, pdDueDate DATE) IS
     vmenError VARCHAR2(100);
     BEGIN
         UPDATE TRANSCRIPT
@@ -95,8 +83,11 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         id_transcripttype = pnIdtranscriptType,
         id_verdict = pnIdVerdict,
         id_community = pnIdCommunity,
-        id_sentence = pnIdSentence,
-        id_crime = pnIdCrime,
+        sentence_startdate = pdSentenceStartDate,
+        sentence_enddate = pdSentenceEndDate,
+        id_sentencetype = pnIdSentenceType,
+        crime_description = pcCrimeDescription,
+        crime_date = pdCrimeDate,
         due_date = pdDueDate;
         Commit;
     Exception
@@ -123,15 +114,15 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
     END deleteTranscript;
 
 -- Procedure to insert a new transcript
-    PROCEDURE insertTranscript (pcTranscriptNumber IN VARCHAR2, pnValid IN NUMBER, pcUserName IN VARCHAR2, pcIdAccused IN VARCHAR2, 
-        pnIdTranscriptType IN NUMBER, pnIdVerdict IN NUMBER, pnIdCommunity IN NUMBER, pnIdSentence IN NUMBER, 
-        pnIdCrime IN NUMBER, pdDueDate IN DATE) IS
+    PROCEDURE insertTranscript (pcTranscriptNumber VARCHAR2, pnValid NUMBER, pcUserName VARCHAR2, pcIdAccused VARCHAR2, 
+        pnIdTranscriptType NUMBER, pnIdVerdict NUMBER, pnIdCommunity NUMBER, pdSentenceStartDate DATE, pdSentenceEndDate DATE, 
+        pnIdSentenceType NUMBER, pcCrimeDescription VARCHAR2, pdCrimeDate DATE, pdDueDate DATE) IS
     vmenError VARCHAR2(100);
     BEGIN 
-        INSERT INTO TRANSCRIPT (transcript_number, valid, username, id_accused, id_transcripttype, id_verdict, id_community, id_sentence, 
-        id_crime, due_date)
-        VALUES (pcTranscriptNumber, pnValid, pcUserName, pcIdAccused, pnIdTranscriptType, pnIdVerdict, pnIdCommunity, pnIdSentence, 
-        pnIdCrime, pdDueDate);
+        INSERT INTO TRANSCRIPT (transcript_number, valid, username, id_accused, id_transcripttype, id_verdict, id_community, sentence_startdate, 
+        sentence_enddate, id_sentencetype, crime_description, crime_date, due_date)
+        VALUES (pcTranscriptNumber, pnValid, pcUserName, pcIdAccused, pnIdTranscriptType, pnIdVerdict, pnIdCommunity, pdSentenceStartDate, 
+        pdSentenceEndDate, pnIdSentenceType, pcCrimeDescription, pdCrimeDate, pdDueDate);
         Commit;
     Exception
         WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
@@ -317,70 +308,6 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertVerdict;
 
--- Table Sentence 
--- Function to get a sentence with specific id to show it in the screen      
-    FUNCTION getSentence (pnIdSentence IN NUMBER) RETURN SYS_REFCURSOR IS
-    vmenError VARCHAR2(100);
-    sentence SYS_REFCURSOR;
-    BEGIN
-    OPEN sentence FOR
-        SELECT s.id_sentence id_sentence, s.start_date start_date, s.end_date end_date, s.start_date-s.end_date sentence_time,
-            st.sentencetype_name sentencetype_name
-        FROM SENTENCE s
-        INNER JOIN SENTENCETYPE st
-        ON s.id_sentencetype = st.id_sentencetype
-        WHERE s.id_sentence = NVL(pnIdSentence, s.id_sentence);
-    RETURN sentence;
-    Exception
-        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
-        when no_data_found then vmenError:= ('Couldn?t find register with the Index ||pnIdSentence');
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END getSentence;
-    -- Procedure to set a sentence with specific id and the new values wrote by the user  
-    PROCEDURE setSentence (pnIdSentence IN NUMBER, pdStartDate IN DATE, pdEndDate IN DATE, pnIdSentenceType IN NUMBER) IS
-    vmenError VARCHAR2(100);
-    BEGIN
-        UPDATE SENTENCE
-        SET start_date = pdStartDate,
-        end_date = pdEndDate,
-        id_sentencetype = pnIdSentenceType
-        WHERE id_sentence = pnIdSentence;
-        Commit;
-    Exception
-        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
-        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn?t find register with the index ||pnIdSentence');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END setSentence;
-    -- Procedure to delete a specific sentence  
-    PROCEDURE deleteSentence (pnIdSentence IN NUMBER) IS
-    vmenError VARCHAR2(100);
-    BEGIN 
-        DELETE FROM SENTENCE
-        WHERE id_sentence = pnIdSentence;
-        Commit;
-    Exception
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn?t find register with the index ||pnIdSentence');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END deleteSentence;
-    -- Procedure to insert a new sentence
-    PROCEDURE insertSentence (pdStartDate IN DATE, pdEndDate IN DATE, pnIdSentenceType IN NUMBER) IS
-    vmenError VARCHAR2(100);
-    BEGIN 
-        INSERT INTO SENTENCE (id_sentence, start_date, end_date, id_sentencetype)
-        VALUES (s_sentence.nextval, pdStartDate, pdEndDate, pnIdSentenceType);
-        Commit;
-    Exception
-        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END insertSentence;
 -- Table SentenceType
 -- Function to get a sentence type with specific id to show it in the screen      
     FUNCTION getSentenceType (pnIdSentenceType IN NUMBER) RETURN SYS_REFCURSOR IS
@@ -440,67 +367,6 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertSentenceType;
-
---  Table Crime
--- Function to get a crime with specific id to show it in the screen      
-    FUNCTION getCrime (pnIdCrime IN NUMBER) RETURN SYS_REFCURSOR IS
-    vmenError VARCHAR2(100);
-    crime SYS_REFCURSOR;
-    BEGIN 
-    OPEN crime FOR
-        SELECT id_crime, crime_description, crime_date
-        FROM CRIME
-        WHERE id_crime = NVL(pnIdCrime, id_crime);
-    RETURN crime;
-    Exception
-        WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.');      
-        when no_data_found then vmenError:= ('Couldn?t find register with the Index ||pnIdCrime');
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END getCrime;
-    -- Procedure to set a crime with specific id and the new values wrote by the user  
-    PROCEDURE setCrime (pnIdCrime IN NUMBER, pcCrimeDescription IN VARCHAR2, pdCrimeDate IN DATE) IS
-    vmenError VARCHAR2(100);
-     BEGIN
-        UPDATE CRIME
-        SET crime_description = pcCrimeDescription,
-        crime_date = pdCrimeDate
-        WHERE id_crime = pnIdCrime;
-        Commit;
-    Exception
-        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
-        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn?t find register with the index ||pnIdCrime');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END setCrime;
-    -- Procedure to delete a specific crime  
-    PROCEDURE deleteCrime (pnIdCrime IN NUMBER) IS
-    vmenError VARCHAR2(100);
-    BEGIN 
-        DELETE FROM CRIME
-        WHERE id_crime = pnIdCrime;
-        Commit;
-    Exception
-        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        when no_data_found then vmenError:= ('Couldn?t find register with the index ||pnIdCrime');
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END deleteCrime;
-    -- Procedure to insert a new crime
-    PROCEDURE insertCrime (pcCrimeDescription IN VARCHAR2, pdCrimeDate IN DATE) IS
-    vmenError VARCHAR2(100);
-    BEGIN 
-        INSERT INTO CRIME (id_crime, crime_description, crime_date)
-        VALUES (s_crime.nextval, pcCrimeDescription, pdCrimeDate);
-        Commit;
-    Exception
-        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');  
-        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
-        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END insertCrime;
 
 -- Table Photo
 -- Function to get a photo with specific id to show it in the screen      

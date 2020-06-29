@@ -117,10 +117,9 @@ CREATE OR REPLACE PACKAGE BODY TRStatisticReports AS
     AverageSentenceTimePerType SYS_REFCURSOR;
     BEGIN
     OPEN AverageSentenceTimePerType FOR 
-        SELECT t.id_transcripttype id_transcripttype, avg(s.start_date-s.end_date) Average
+        SELECT t.id_transcripttype id_transcripttype, avg(sentence_startdate-sentence_enddate) Average
         FROM transcript t
         INNER JOIN transcripttype tt on tt.id_transcripttype = t.id_transcripttype
-        INNER JOIN sentence s on s.id_sentence = t.id_sentence
         GROUP BY t.id_transcripttype;
     RETURN AverageSentenceTimePerType;
     EXCEPTION 
@@ -152,9 +151,8 @@ CREATE OR REPLACE PACKAGE BODY TRStatisticReports AS
     SentenceTimePerType SYS_REFCURSOR;
     BEGIN
     OPEN sentencetimepertype FOR
-        SELECT s.start_date - s.end_date Sentence_Time
+        SELECT sentence_startdate - sentence_enddate Sentence_Time
         FROM transcript t
-        INNER JOIN sentence s on s.id_sentence = t.id_sentence
         INNER JOIN transcripttype tt on tt.id_transcripttype = t.id_transcripttype
         GROUP BY t.ID_TRANSCRIPTTYPE; 
     RETURN sentencetimepertype;
@@ -172,9 +170,8 @@ CREATE OR REPLACE PACKAGE BODY TRStatisticReports AS
     OPEN sentencetypepertype FOR
         SELECT t.transcript_number transcript_number
         FROM transcript t
-        INNER JOIN sentence s on s.id_sentence = t.id_sentence
-        INNER JOIN sentencetype st on st.id_sentencetype  = s.id_sentencetype
-        GROUP BY s.id_sentencetype;
+        INNER JOIN sentencetype st on st.id_sentencetype  = t.id_sentencetype
+        GROUP BY t.id_sentencetype;
     RETURN sentencetypepertype;
     EXCEPTION 
         WHEN no_data_found then vmenError:= ('No rows returned');

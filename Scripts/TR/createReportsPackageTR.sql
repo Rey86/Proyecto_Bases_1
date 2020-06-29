@@ -163,9 +163,8 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
     topSentenceTime SYS_REFCURSOR;
     BEGIN
     OPEN topsentencetime FOR
-        select s.start_date - s.end_date sentence_time
-        from transcript t
-        inner join sentence s on s.id_sentence = t.id_sentence
+        select sentence_startdate - sentence_enddate sentence_time
+        from transcript
         where rownum <= n order by sentence_time desc;
     RETURN topsentencetime;
     Exception

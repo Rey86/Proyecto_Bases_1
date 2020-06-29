@@ -7,8 +7,11 @@ CREATE TABLE TRANSCRIPT(
     id_transcripttype NUMBER(8) CONSTRAINT transcript_idtranscripttype_nn NOT NULL,
     id_verdict NUMBER(8) CONSTRAINT transcript_idverdict_nn NOT NULL,
     id_community NUMBER(8) CONSTRAINT transcript_idcommunity_nn NOT NULL,
-    id_sentence NUMBER(8) CONSTRAINT transcript_idsentence_nn NOT NULL,
-    id_crime NUMBER(8) CONSTRAINT transcript_idcrime_nn NOT NULL,
+    sentence_startdate DATE,
+    sentence_enddate DATE,
+    id_sentencetype NUMBER(8),
+    crime_description VARCHAR2(100) CONSTRAINT transcript_crimedescription_nn NOT NULL,
+    crime_date DATE CONSTRAINT transcript_crimedate_nn NOT NULL,
     due_date DATE CONSTRAINT transcript_duedate_nn NOT NULL,
     date_creation DATE CONSTRAINT transcript_datecreation_nn NOT NULL,
     user_creation VARCHAR2(15) CONSTRAINT transcript_usercreation_nn NOT NULL,
@@ -40,11 +43,20 @@ COMMENT ON COLUMN
     TRANSCRIPT.id_community IS
     'Identification number of the community of the transcript';
 COMMENT ON COLUMN
-    TRANSCRIPT.id_sentence IS
-    'Identification number of the sentence of the transcript';
+    TRANSCRIPT.sentence_startdate IS
+    'Date when sentence begins';
 COMMENT ON COLUMN
-    TRANSCRIPT.id_crime IS
-    'Identification number of the crime of the transcript';
+    TRANSCRIPT.sentence_enddate IS
+    'Date when sentence ends';
+COMMENT ON COLUMN
+    TRANSCRIPT.id_sentencetype IS
+    'Identification number of sentence type of the sentence';
+COMMENT ON COLUMN
+    TRANSCRIPT.crime_description IS
+    'Description of the crime';
+COMMENT ON COLUMN
+    TRANSCRIPT.crime_date IS
+    'Date of the crime';
 COMMENT ON COLUMN
     TRANSCRIPT.due_date IS
     'Date of due of the transcript';
@@ -149,45 +161,6 @@ COMMENT ON COLUMN
 COMMENT ON COLUMN
     VERDICT.user_last_modification IS
     'Last user who modified it';
-
---Table Sentence
-CREATE TABLE SENTENCE(
-    id_sentence NUMBER(8) CONSTRAINT sentence_id_nn NOT NULL,
-    start_date DATE,
-    end_date DATE,
-    id_sentencetype NUMBER(8) CONSTRAINT sentence_typeid_nn NOT NULL,
-    date_creation DATE CONSTRAINT sentence_datecreation_nn NOT NULL,
-    user_creation VARCHAR2(15) CONSTRAINT sentence_usercreation_nn NOT NULL,
-    date_last_modification DATE,
-    user_last_modification VARCHAR2(15)
-    );
---Comments
-COMMENT ON TABLE SENTENCE
-    IS 'Table that stores data of sentences';
-COMMENT ON COLUMN
-    SENTENCE.id_sentence IS
-    'Identification number of the sentence';
-COMMENT ON COLUMN
-    SENTENCE.start_date IS
-    'Date when sentence begins';
-COMMENT ON COLUMN
-    SENTENCE.end_date IS
-    'Date when sentence ends';
-COMMENT ON COLUMN
-    SENTENCE.id_sentencetype IS
-    'Identification number of sentence type of the sentence';
-COMMENT ON COLUMN
-    SENTENCE.date_creation IS
-    'Date of creation';
-COMMENT ON COLUMN
-    SENTENCE.user_creation IS
-    'User who created it';
-COMMENT ON COLUMN
-    SENTENCE.date_last_modification IS
-    'Date of the last modification';
-COMMENT ON COLUMN
-    SENTENCE.user_last_modification IS
-    'Last user who modified it';  
     
 --Table SentenceType
 CREATE TABLE SENTENCETYPE(
@@ -218,41 +191,6 @@ COMMENT ON COLUMN
     'Date of the last modification';
 COMMENT ON COLUMN
     SENTENCETYPE.user_last_modification IS
-    'Last user who modified it';
-    
---Table Crime
-CREATE TABLE CRIME(
-    id_crime NUMBER(8) CONSTRAINT crime_id_nn NOT NULL,
-    crime_description VARCHAR2(100) CONSTRAINT crime_description_nn NOT NULL,
-    crime_date DATE CONSTRAINT crime_date_nn NOT NULL, 
-    date_creation DATE CONSTRAINT crime_datecreation_nn NOT NULL,
-    user_creation VARCHAR2(15) CONSTRAINT crime_usercreation_nn NOT NULL,
-    date_last_modification DATE,
-    user_last_modification VARCHAR2(15)
-    );
---Comments
-COMMENT ON TABLE CRIME
-    IS 'Table that stores data of crimes';
-COMMENT ON COLUMN
-    CRIME.id_crime IS
-    'Identification number of the crime';
-COMMENT ON COLUMN
-    CRIME.crime_description IS
-    'Description of the crime';
-COMMENT ON COLUMN
-    CRIME.crime_date IS
-    'Date of the crime';
-COMMENT ON COLUMN
-    CRIME.date_creation IS
-    'Date of creation';
-COMMENT ON COLUMN
-    CRIME.user_creation IS
-    'User who created it';
-COMMENT ON COLUMN
-    CRIME.date_last_modification IS
-    'Date of the last modification';
-COMMENT ON COLUMN
-    CRIME.user_last_modification IS
     'Last user who modified it';
     
 --Table Photo
