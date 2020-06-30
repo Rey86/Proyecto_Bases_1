@@ -35,7 +35,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     vmenError VARCHAR2(100);
     BEGIN
         OPEN community FOR 
-            SELECT c.id_community id_community, c.community_name community_name, d.district_name district_name
+            SELECT c.id_community id_community, c.community_name community_name, c.id_district id_district, d.district_name district_name
             FROM COMMUNITY c
             INNER JOIN DISTRICT d
             ON c.id_district = d.id_district
@@ -101,7 +101,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     vmenError VARCHAR2(100);
     BEGIN
         OPEN district FOR 
-            SELECT d.id_district id_district, d.district_name district_name, c.canton_name canton_name
+            SELECT d.id_district id_district, d.district_name district_name, d.id_canton id_canton, c.canton_name canton_name
             FROM DISTRICT d
             INNER JOIN CANTON c
             ON d.id_canton = c.id_canton
@@ -167,7 +167,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     vmenError VARCHAR2(100);
     BEGIN
         OPEN canton FOR 
-            SELECT c.id_canton id_canton, c.canton_name canton_name, p.province_name province_name
+            SELECT c.id_canton id_canton, c.canton_name canton_name, c.id_province id_province, p.province_name province_name
             FROM CANTON c
             INNER JOIN PROVINCE p
             ON c.id_province = p.id_province
@@ -233,7 +233,7 @@ CREATE OR REPLACE PACKAGE BODY PlaceTables AS
     vmenError VARCHAR2(100);
     BEGIN
         OPEN province FOR 
-            SELECT p.id_province id_province, p.province_name province_name, c.country_name country_name
+            SELECT p.id_province id_province, p.province_name province_name, p.id_country id_country, c.country_name country_name
             FROM PROVINCE p
             INNER JOIN COUNTRY c
             ON p.id_country = c.id_country
