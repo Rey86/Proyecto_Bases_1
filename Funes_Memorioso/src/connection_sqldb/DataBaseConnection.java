@@ -213,6 +213,25 @@ public class DataBaseConnection {
         stmt.execute();
     }
     
+    // Function to delete a district of the system
+    public static void deleteCanton(Integer pnIdCanton) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call Place.PlaceTables.deleteCanton(?)}");
+        
+        stmt.setInt(1, pnIdCanton);
+        stmt.execute();
+    }
+    
+    // Procedure to insert a district in the system
+    public static void insertCanton(String pcCantonName, Integer pnIdDistrict) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call Place.PlaceTables.insertCanton(?,?)}");
+        
+        stmt.setString(1, pcCantonName);
+        stmt.setInt(2, pnIdDistrict);
+        stmt.execute();
+    }
+    
     // Province
     // Function to get all provinces of the system
     public static ResultSet getProvinces() throws SQLException{
