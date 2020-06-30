@@ -4,30 +4,30 @@ import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 
-public class ListTranscriptType extends javax.swing.JDialog {
+public class ListSentenceType extends javax.swing.JDialog {
     
-    public ListTranscriptType(java.awt.Frame parent, boolean modal) {
+    public ListSentenceType(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
         try{
-            TranscriptTypeList();
+            SentenceTypeList();
         }
         catch (SQLException e){
             JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public void TranscriptTypeList() throws SQLException{
-        ResultSet r = connection_sqldb.DataBaseConnection.getTranscriptTypes();
-        DefaultTableModel dtb = (DefaultTableModel) jTableTranscriptTypes.getModel();
+    public void SentenceTypeList() throws SQLException{
+        ResultSet r = connection_sqldb.DataBaseConnection.getCountries();
+        DefaultTableModel dtb = (DefaultTableModel) jTableSentenceTypes.getModel();
         while(r.next()){
-            dtb.addRow(new Object[]{r.getInt("ID_TRANSCRIPTTYPE"), r.getString("TRANSCRIPTTYPE_NAME")});
+            dtb.addRow(new Object[]{r.getInt("ID_SENTENCETYPE"), r.getString("SENTENCETYPE_NAME")});
         }
     }
     
-    public void TranscriptTypeCleanList(){
-        DefaultTableModel dtb = (DefaultTableModel) jTableTranscriptTypes.getModel();
+    public void SentenceTypeCleanList(){
+        DefaultTableModel dtb = (DefaultTableModel) jTableSentenceTypes.getModel();
         for (int i = dtb.getRowCount()-1;i>=0;i--) dtb.removeRow(i);
     }
     
@@ -38,7 +38,7 @@ public class ListTranscriptType extends javax.swing.JDialog {
         jButtonClose = new javax.swing.JButton();
         jButtonEdit = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTableTranscriptTypes = new javax.swing.JTable();
+        jTableSentenceTypes = new javax.swing.JTable();
         jButtonInsert = new javax.swing.JButton();
         jButtonDelete = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -59,7 +59,7 @@ public class ListTranscriptType extends javax.swing.JDialog {
             }
         });
 
-        jTableTranscriptTypes.setModel(new javax.swing.table.DefaultTableModel(
+        jTableSentenceTypes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -75,8 +75,8 @@ public class ListTranscriptType extends javax.swing.JDialog {
                 return types [columnIndex];
             }
         });
-        jTableTranscriptTypes.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jScrollPane2.setViewportView(jTableTranscriptTypes);
+        jTableSentenceTypes.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jScrollPane2.setViewportView(jTableSentenceTypes);
 
         jButtonInsert.setText("Insertar");
         jButtonInsert.addActionListener(new java.awt.event.ActionListener() {
@@ -139,13 +139,13 @@ public class ListTranscriptType extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonCloseActionPerformed
 
     private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
-        Integer current_row = jTableTranscriptTypes.getSelectedRow();
+        Integer current_row = jTableSentenceTypes.getSelectedRow();
         if(current_row != -1){
-            InsertTranscriptType dialog = new InsertTranscriptType(new javax.swing.JFrame(), true,  Integer.parseInt(String.valueOf(jTableTranscriptTypes.getValueAt(current_row, 0))));
+            InsertSentenceType dialog = new InsertSentenceType(new javax.swing.JFrame(), true,  Integer.parseInt(String.valueOf(jTableSentenceTypes.getValueAt(current_row, 0))));
             dialog.setVisible(true);
             try{
-                TranscriptTypeCleanList();
-                TranscriptTypeList();
+                SentenceTypeCleanList();
+                SentenceTypeList();
             }
             catch (SQLException e){
                 JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
@@ -156,11 +156,11 @@ public class ListTranscriptType extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonEditActionPerformed
 
     private void jButtonInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInsertActionPerformed
-        InsertTranscriptType dialog = new InsertTranscriptType(new javax.swing.JFrame(), true, 0);
+        InsertSentenceType dialog = new InsertSentenceType(new javax.swing.JFrame(), true, 0);
         dialog.setVisible(true);
         try{
-            TranscriptTypeCleanList();
-            TranscriptTypeList();
+            SentenceTypeCleanList();
+            SentenceTypeList();
         }
         catch (SQLException e){
             JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
@@ -168,12 +168,12 @@ public class ListTranscriptType extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonInsertActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
-        Integer current_row = jTableTranscriptTypes.getSelectedRow();
+        Integer current_row = jTableSentenceTypes.getSelectedRow();
         if(current_row != -1){
             try{
-                connection_sqldb.DataBaseConnection.deleteTranscriptType((Integer) jTableTranscriptTypes.getValueAt(current_row, 0));
-                TranscriptTypeCleanList();
-                TranscriptTypeList();
+                connection_sqldb.DataBaseConnection.deleteSentenceType((Integer) jTableSentenceTypes.getValueAt(current_row, 0));
+                SentenceTypeCleanList();
+                SentenceTypeList();
             }
             catch (SQLException e){
                 JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
@@ -190,6 +190,6 @@ public class ListTranscriptType extends javax.swing.JDialog {
     private javax.swing.JButton jButtonInsert;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTableTranscriptTypes;
+    private javax.swing.JTable jTableSentenceTypes;
     // End of variables declaration//GEN-END:variables
 }

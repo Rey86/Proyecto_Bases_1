@@ -4,30 +4,30 @@ import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 
-public class ListTranscriptType extends javax.swing.JDialog {
-    
-    public ListTranscriptType(java.awt.Frame parent, boolean modal) {
+public class ListVerdict extends javax.swing.JDialog {
+
+    public ListVerdict(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
         try{
-            TranscriptTypeList();
+            VerdictList();
         }
         catch (SQLException e){
             JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public void TranscriptTypeList() throws SQLException{
-        ResultSet r = connection_sqldb.DataBaseConnection.getTranscriptTypes();
-        DefaultTableModel dtb = (DefaultTableModel) jTableTranscriptTypes.getModel();
+    public void VerdictList() throws SQLException{
+        ResultSet r = connection_sqldb.DataBaseConnection.getCountries();
+        DefaultTableModel dtb = (DefaultTableModel) jTableVerdicts.getModel();
         while(r.next()){
-            dtb.addRow(new Object[]{r.getInt("ID_TRANSCRIPTTYPE"), r.getString("TRANSCRIPTTYPE_NAME")});
+            dtb.addRow(new Object[]{r.getInt("ID_COUNTRY"), r.getString("COUNTRY_NAME")});
         }
     }
     
-    public void TranscriptTypeCleanList(){
-        DefaultTableModel dtb = (DefaultTableModel) jTableTranscriptTypes.getModel();
+    public void VerdictCleanList(){
+        DefaultTableModel dtb = (DefaultTableModel) jTableVerdicts.getModel();
         for (int i = dtb.getRowCount()-1;i>=0;i--) dtb.removeRow(i);
     }
     
@@ -38,7 +38,7 @@ public class ListTranscriptType extends javax.swing.JDialog {
         jButtonClose = new javax.swing.JButton();
         jButtonEdit = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTableTranscriptTypes = new javax.swing.JTable();
+        jTableVerdicts = new javax.swing.JTable();
         jButtonInsert = new javax.swing.JButton();
         jButtonDelete = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -59,7 +59,7 @@ public class ListTranscriptType extends javax.swing.JDialog {
             }
         });
 
-        jTableTranscriptTypes.setModel(new javax.swing.table.DefaultTableModel(
+        jTableVerdicts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -75,8 +75,8 @@ public class ListTranscriptType extends javax.swing.JDialog {
                 return types [columnIndex];
             }
         });
-        jTableTranscriptTypes.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jScrollPane2.setViewportView(jTableTranscriptTypes);
+        jTableVerdicts.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jScrollPane2.setViewportView(jTableVerdicts);
 
         jButtonInsert.setText("Insertar");
         jButtonInsert.addActionListener(new java.awt.event.ActionListener() {
@@ -92,7 +92,7 @@ public class ListTranscriptType extends javax.swing.JDialog {
             }
         });
 
-        jLabel1.setText("Tipos de Sentencia");
+        jLabel1.setText("Resoluciones");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -139,13 +139,13 @@ public class ListTranscriptType extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonCloseActionPerformed
 
     private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
-        Integer current_row = jTableTranscriptTypes.getSelectedRow();
+        Integer current_row = jTableVerdicts.getSelectedRow();
         if(current_row != -1){
-            InsertTranscriptType dialog = new InsertTranscriptType(new javax.swing.JFrame(), true,  Integer.parseInt(String.valueOf(jTableTranscriptTypes.getValueAt(current_row, 0))));
+            InsertVerdict dialog = new InsertVerdict(new javax.swing.JFrame(), true,  Integer.parseInt(String.valueOf(jTableVerdicts.getValueAt(current_row, 0))));
             dialog.setVisible(true);
             try{
-                TranscriptTypeCleanList();
-                TranscriptTypeList();
+                VerdictCleanList();
+                VerdictList();
             }
             catch (SQLException e){
                 JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
@@ -156,11 +156,11 @@ public class ListTranscriptType extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonEditActionPerformed
 
     private void jButtonInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInsertActionPerformed
-        InsertTranscriptType dialog = new InsertTranscriptType(new javax.swing.JFrame(), true, 0);
+        InsertVerdict dialog = new InsertVerdict(new javax.swing.JFrame(), true, 0);
         dialog.setVisible(true);
         try{
-            TranscriptTypeCleanList();
-            TranscriptTypeList();
+            VerdictCleanList();
+            VerdictList();
         }
         catch (SQLException e){
             JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
@@ -168,12 +168,12 @@ public class ListTranscriptType extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonInsertActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
-        Integer current_row = jTableTranscriptTypes.getSelectedRow();
+        Integer current_row = jTableVerdicts.getSelectedRow();
         if(current_row != -1){
             try{
-                connection_sqldb.DataBaseConnection.deleteTranscriptType((Integer) jTableTranscriptTypes.getValueAt(current_row, 0));
-                TranscriptTypeCleanList();
-                TranscriptTypeList();
+                connection_sqldb.DataBaseConnection.deleteCountry((Integer) jTableVerdicts.getValueAt(current_row, 0));
+                VerdictCleanList();
+                VerdictList();
             }
             catch (SQLException e){
                 JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
@@ -190,6 +190,6 @@ public class ListTranscriptType extends javax.swing.JDialog {
     private javax.swing.JButton jButtonInsert;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTableTranscriptTypes;
+    private javax.swing.JTable jTableVerdicts;
     // End of variables declaration//GEN-END:variables
 }
