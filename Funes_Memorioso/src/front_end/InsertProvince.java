@@ -2,6 +2,7 @@ package front_end;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class InsertProvince extends javax.swing.JDialog {
     private Integer id_province;
@@ -16,19 +17,32 @@ public class InsertProvince extends javax.swing.JDialog {
 
     public void initial(){
         try{
-                if(id_province > 0){
-                    ResultSet r = connection_sqldb.DataBaseConnection.getProvince(id_province);
-                    if(r.next()) {
-                        jLabelID.setText(String.valueOf(r.getInt("ID_PROVINCE")));
-                        jTextFieldName.setText(r.getString("PROVINCE_NAME")); 
-                        jTextFieldForeignId.setText(String.valueOf(r.getInt("ID_COUNTRY"))); 
-                    }
+            if(id_province > 0){
+                ResultSet r = connection_sqldb.DataBaseConnection.getProvince(id_province);
+                if(r.next()) {
+                    jLabelID.setText(String.valueOf(r.getInt("ID_PROVINCE")));
+                    jTextFieldName.setText(r.getString("PROVINCE_NAME")); 
+                    jTextFieldForeignId.setText(String.valueOf(r.getInt("ID_COUNTRY"))); 
                 }
+            }
         }
         catch (SQLException e){
             JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    public ArrayList<Integer> allcountries(){
+        ArrayList<Integer> countries = new ArrayList<>();
+        try{
+            ResultSet r = connection_sqldb.DataBaseConnection.getCountries();
+            while(r.next()) countries.add(r.getInt("ID_COUNTRY"));
+        }
+        catch (SQLException e){
+            JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
+        }
+        return countries;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -126,20 +140,30 @@ public class InsertProvince extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
+        ArrayList<Integer> countries = allcountries();
         if (!jTextFieldName.getText().equals("")){
             if (!jTextFieldForeignId.getText().equals("")){
                 try{
                     if(id_province > 0){
-                        connection_sqldb.DataBaseConnection.setProvince(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                        if (countries.contains(Integer.parseInt(jTextFieldForeignId.getText()))){
+                            connection_sqldb.DataBaseConnection.setProvince(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                            dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(this, "El país no existe en el sistema", "Cuidado", JOptionPane.WARNING_MESSAGE);
+                        }    
                     }
                     else{
-                        connection_sqldb.DataBaseConnection.insertProvince(jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                        if (countries.contains(Integer.parseInt(jTextFieldForeignId.getText()))){
+                            connection_sqldb.DataBaseConnection.insertProvince(jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                            dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(this, "El país no existe en el sistema", "Cuidado", JOptionPane.WARNING_MESSAGE);
+                        }     
                     }
                 }
                 catch (SQLException e){
                     JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
                 }
-                dispose();
             }
             else {
             JOptionPane.showMessageDialog(this, "La casilla de llave foránea se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);

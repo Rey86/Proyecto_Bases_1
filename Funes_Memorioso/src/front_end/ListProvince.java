@@ -22,7 +22,7 @@ public class ListProvince extends javax.swing.JDialog {
         ResultSet r = connection_sqldb.DataBaseConnection.getProvinces();
         DefaultTableModel dtb = (DefaultTableModel) jTableProvinces.getModel();
         while(r.next()){
-            dtb.addRow(new Object[]{r.getInt("ID_PROVINCE"), r.getString("PROVINCE_NAME"),r.getInt("ID_COUNTRY") });
+            dtb.addRow(new Object[]{r.getInt("ID_PROVINCE"), r.getString("PROVINCE_NAME"), r.getInt("ID_COUNTRY"), r.getString("COUNTRY_NAME")});
         }
     }
     
@@ -63,11 +63,11 @@ public class ListProvince extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Nombre", "ID País"
+                "ID", "Nombre", "ID País", "Nombre País"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -167,10 +167,10 @@ public class ListProvince extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonInsertActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
-        Integer current_row = jTableProvinces.getSelectedRow();
+        Integer current_row = jTableProvinces.getSelectedRow(); 
         if(current_row != -1){
             try{
-                connection_sqldb.DataBaseConnection.deleteCountry((Integer) jTableProvinces.getValueAt(current_row, 0));
+                connection_sqldb.DataBaseConnection.deleteProvince((Integer) jTableProvinces.getValueAt(current_row, 0));
                 ProvinceCleanList();
                 ProvinceList();
             }
