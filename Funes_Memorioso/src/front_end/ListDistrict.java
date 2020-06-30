@@ -19,10 +19,10 @@ public class ListDistrict extends javax.swing.JDialog {
     }
 
     public void DistrictList() throws SQLException{
-        ResultSet r = connection_sqldb.DataBaseConnection.getCantons();
+        ResultSet r = connection_sqldb.DataBaseConnection.getDistricts();
         DefaultTableModel dtb = (DefaultTableModel) jTableDistricts.getModel();
         while(r.next()){
-            dtb.addRow(new Object[]{r.getInt("ID_CANTON"), r.getString("CANTON_NAME"),r.getInt("ID_PROVINCE"), r.getString("PROVINCE_NAME") });
+            dtb.addRow(new Object[]{r.getInt("ID_DISTRICT"), r.getString("DISTRICT_NAME"),r.getInt("ID_CANTON"), r.getString("CANTON_NAME") });
         }
     }
     
@@ -112,7 +112,7 @@ public class ListDistrict extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonClose, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)))
+                        .addComponent(jButtonClose, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(

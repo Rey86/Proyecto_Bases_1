@@ -206,7 +206,7 @@ public class editarCatalogos extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonProvinceActionPerformed
 
     private void jButtonBanReasonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBanReasonActionPerformed
-        ListProvince dialog = new ListProvince(new javax.swing.JFrame(), true);
+        ListBanReason dialog = new ListBanReason(new javax.swing.JFrame(), true);
         dialog.setVisible(true);
     }//GEN-LAST:event_jButtonBanReasonActionPerformed
 

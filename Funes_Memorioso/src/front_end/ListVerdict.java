@@ -19,10 +19,10 @@ public class ListVerdict extends javax.swing.JDialog {
     }
 
     public void VerdictList() throws SQLException{
-        ResultSet r = connection_sqldb.DataBaseConnection.getCountries();
+        ResultSet r = connection_sqldb.DataBaseConnection.getVerdicts();
         DefaultTableModel dtb = (DefaultTableModel) jTableVerdicts.getModel();
         while(r.next()){
-            dtb.addRow(new Object[]{r.getInt("ID_COUNTRY"), r.getString("COUNTRY_NAME")});
+            dtb.addRow(new Object[]{r.getInt("ID_VERDICT"), r.getString("VERDICT_NAME")});
         }
     }
     
@@ -171,7 +171,7 @@ public class ListVerdict extends javax.swing.JDialog {
         Integer current_row = jTableVerdicts.getSelectedRow();
         if(current_row != -1){
             try{
-                connection_sqldb.DataBaseConnection.deleteCountry((Integer) jTableVerdicts.getValueAt(current_row, 0));
+                connection_sqldb.DataBaseConnection.deleteVerdict((Integer) jTableVerdicts.getValueAt(current_row, 0));
                 VerdictCleanList();
                 VerdictList();
             }

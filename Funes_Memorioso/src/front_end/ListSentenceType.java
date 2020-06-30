@@ -19,7 +19,7 @@ public class ListSentenceType extends javax.swing.JDialog {
     }
 
     public void SentenceTypeList() throws SQLException{
-        ResultSet r = connection_sqldb.DataBaseConnection.getCountries();
+        ResultSet r = connection_sqldb.DataBaseConnection.getSentenceTypes();
         DefaultTableModel dtb = (DefaultTableModel) jTableSentenceTypes.getModel();
         while(r.next()){
             dtb.addRow(new Object[]{r.getInt("ID_SENTENCETYPE"), r.getString("SENTENCETYPE_NAME")});

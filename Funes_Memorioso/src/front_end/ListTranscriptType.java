@@ -92,7 +92,7 @@ public class ListTranscriptType extends javax.swing.JDialog {
             }
         });
 
-        jLabel1.setText("Tipos de Sentencia");
+        jLabel1.setText("Tipos de Expediente");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

@@ -171,7 +171,7 @@ public class ListCompany extends javax.swing.JDialog {
         Integer current_row = jTableCompanies.getSelectedRow();
         if(current_row != -1){
             try{
-                connection_sqldb.DataBaseConnection.deleteCountry((Integer) jTableCompanies.getValueAt(current_row, 0));
+                connection_sqldb.DataBaseConnection.deleteCompany((Integer) jTableCompanies.getValueAt(current_row, 0));
                 CompanyCleanList();
                 CompanyList();
             }

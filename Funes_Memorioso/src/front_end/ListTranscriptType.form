@@ -125,7 +125,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Tipos de Sentencia"/>
+        <Property name="text" type="java.lang.String" value="Tipos de Expediente"/>
       </Properties>
     </Component>
   </SubComponents>

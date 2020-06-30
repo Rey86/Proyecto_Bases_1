@@ -157,6 +157,9 @@ public class InsertCommunity extends javax.swing.JDialog {
                 catch (SQLException e){
                     JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
                 }
+                catch (NumberFormatException nfe){
+                    JOptionPane.showMessageDialog(this, "La casilla ID País debe ser un número", "Cuidado", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else {
             JOptionPane.showMessageDialog(this, "La casilla de llave foránea se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);

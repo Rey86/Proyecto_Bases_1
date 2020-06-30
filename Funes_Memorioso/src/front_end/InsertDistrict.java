@@ -35,7 +35,7 @@ public class InsertDistrict extends javax.swing.JDialog {
         ArrayList<Integer> cantons = new ArrayList<>();
         try{
             ResultSet r = connection_sqldb.DataBaseConnection.getCantons();
-            while(r.next()) cantons.add(r.getInt("ID_COUNTRY"));
+            while(r.next()) cantons.add(r.getInt("ID_CANTON"));
         }
         catch (SQLException e){
             JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
@@ -163,6 +163,9 @@ public class InsertDistrict extends javax.swing.JDialog {
                 }
                 catch (SQLException e){
                     JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
+                }
+                catch (NumberFormatException nfe){
+                    JOptionPane.showMessageDialog(this, "La casilla ID País debe ser un número", "Cuidado", JOptionPane.ERROR_MESSAGE);
                 }
             }
             else {
