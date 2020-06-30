@@ -128,18 +128,23 @@ public class InsertCanton extends javax.swing.JDialog {
 
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
         if (!jTextFieldName.getText().equals("")){
-            try{
-                if(id_canton > 0){
-                    connection_sqldb.DataBaseConnection.setCanton(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+            if (!jTextFieldForeignId.getText().equals("")){
+                try{
+                    if(id_canton > 0){
+                        connection_sqldb.DataBaseConnection.setCanton(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                    }
+                    else{
+                        connection_sqldb.DataBaseConnection.insertCanton(jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                    }
                 }
-                else{
-                    connection_sqldb.DataBaseConnection.insertCanton(jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                catch (SQLException e){
+                    JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
                 }
+                dispose();
             }
-            catch (SQLException e){
-                JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
+            else{
+                JOptionPane.showMessageDialog(this, "La casilla de la llave foránea se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);
             }
-            dispose();
         }
         else {
             JOptionPane.showMessageDialog(this, "La casilla de nombre se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);

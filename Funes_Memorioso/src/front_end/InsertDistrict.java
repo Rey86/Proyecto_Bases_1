@@ -49,7 +49,7 @@ public class InsertDistrict extends javax.swing.JDialog {
 
         jLabel3.setText("Distrito");
 
-        jLabel4.setText("ID Province");
+        jLabel4.setText("ID Cantón");
 
         jButtonAccept.setText("Aceptar");
         jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
@@ -127,18 +127,23 @@ public class InsertDistrict extends javax.swing.JDialog {
 
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
         if (!jTextFieldName.getText().equals("")){
-            try{
-                if(id_district > 0){
-                    connection_sqldb.DataBaseConnection.setDistrict(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+            if (!jTextFieldForeignId.getText().equals("")){
+                try{
+                    if(id_district > 0){
+                        connection_sqldb.DataBaseConnection.setDistrict(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                    }
+                    else{
+                        connection_sqldb.DataBaseConnection.insertDistrict(jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                    }
                 }
-                else{
-                    connection_sqldb.DataBaseConnection.insertDistrict(jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                catch (SQLException e){
+                    JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
                 }
+                dispose();
             }
-            catch (SQLException e){
-                JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
+            else {
+            JOptionPane.showMessageDialog(this, "La casilla de llave foránea se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);
             }
-            dispose();
         }
         else {
             JOptionPane.showMessageDialog(this, "La casilla de nombre se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);

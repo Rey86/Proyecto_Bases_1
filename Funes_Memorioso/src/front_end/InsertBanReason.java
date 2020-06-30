@@ -3,12 +3,12 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 
-public class InsertCommunity extends javax.swing.JDialog {
-    private Integer id_community;
+public class InsertBanReason extends javax.swing.JDialog {
+    private Integer id_banreason;
     
-    public InsertCommunity(java.awt.Frame parent, boolean modal, Integer id_community) {
+    public InsertBanReason(java.awt.Frame parent, boolean modal, Integer id_banreason) {
         super(parent, modal);
-        this.id_community = id_community;
+        this.id_banreason = id_banreason;
         initComponents();
         initial();
         setLocationRelativeTo(null);
@@ -16,12 +16,11 @@ public class InsertCommunity extends javax.swing.JDialog {
     
     public void initial(){
         try{
-            if(id_community > 0){
-                ResultSet r = connection_sqldb.DataBaseConnection.getCommunity(id_community);
+            if(id_banreason > 0){
+                ResultSet r = connection_sqldb.DataBaseConnection.getBanReason(id_banreason);
                 if(r.next()) {
-                    jLabelID.setText(String.valueOf(r.getInt("ID_COMMUNITY")));
-                    jTextFieldName.setText(r.getString("COMMUNITY_NAME")); 
-                    jTextFieldForeignId.setText(String.valueOf(r.getInt("ID_DISTRICT"))); 
+                    jLabelID.setText(String.valueOf(r.getInt("ID_BANREASON")));
+                    jTextFieldName.setText(r.getString("BANREASON_DESCRIPTION")); 
                 }
             }
         }
@@ -30,28 +29,20 @@ public class InsertCommunity extends javax.swing.JDialog {
         }
     }
     
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollBar1 = new javax.swing.JScrollBar();
+        jButtonAccept = new javax.swing.JButton();
+        jButtonCancel = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTextFieldName = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jButtonAccept = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        jTextFieldForeignId = new javax.swing.JTextField();
         jLabelID = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        jLabel1.setText("ID: ");
-
-        jLabel2.setText("Nombre: ");
-
-        jLabel3.setText("Comunidad");
 
         jButtonAccept.setText("Aceptar");
         jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
@@ -60,9 +51,18 @@ public class InsertCommunity extends javax.swing.JDialog {
             }
         });
 
-        jButton2.setText("Cancelar");
+        jButtonCancel.setText("Cancelar");
+        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelActionPerformed(evt);
+            }
+        });
 
-        jLabel4.setText("ID Distrito:");
+        jLabel1.setText("ID: ");
+
+        jLabel2.setText("Nombre: ");
+
+        jLabel3.setText("Motivo de Baneo");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -74,11 +74,9 @@ public class InsertCommunity extends javax.swing.JDialog {
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel4))
-                        .addGap(19, 19, 19)
+                            .addComponent(jLabel2))
+                        .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldForeignId)
                             .addComponent(jTextFieldName)
                             .addComponent(jLabelID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
@@ -87,7 +85,7 @@ public class InsertCommunity extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButtonAccept)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton2))
+                                .addComponent(jButtonCancel))
                             .addComponent(jLabel3))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -97,22 +95,18 @@ public class InsertCommunity extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3)
-                .addGap(16, 16, 16)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 19, Short.MAX_VALUE)
-                    .addComponent(jLabelID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabelID, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextFieldForeignId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAccept)
-                    .addComponent(jButton2))
+                    .addComponent(jButtonCancel))
                 .addContainerGap())
         );
 
@@ -121,39 +115,35 @@ public class InsertCommunity extends javax.swing.JDialog {
 
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
         if (!jTextFieldName.getText().equals("")){
-            if (!jTextFieldForeignId.getText().equals("")){
-                try{
-                    if(id_community > 0){
-                        connection_sqldb.DataBaseConnection.setCommunity(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
-                    }
-                    else{
-                        connection_sqldb.DataBaseConnection.insertCommunity(jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
-                    }
+            try{
+                if(id_banreason > 0){
+                    connection_sqldb.DataBaseConnection.setBanReason(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText());
                 }
-                catch (SQLException e){
-                    JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
+                else{
+                    connection_sqldb.DataBaseConnection.insertBanReason(jTextFieldName.getText());
                 }
-                dispose();  
             }
-            else {
-                JOptionPane.showMessageDialog(this, "La casilla de llave foránea se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);
+            catch (SQLException e){
+                JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
             }
+            dispose();
         }
         else {
             JOptionPane.showMessageDialog(this, "La casilla de nombre se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jButtonAcceptActionPerformed
 
+    private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
+        dispose();
+    }//GEN-LAST:event_jButtonCancelActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButtonAccept;
+    private javax.swing.JButton jButtonCancel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelID;
-    private javax.swing.JScrollBar jScrollBar1;
-    private javax.swing.JTextField jTextFieldForeignId;
     private javax.swing.JTextField jTextFieldName;
     // End of variables declaration//GEN-END:variables
 }

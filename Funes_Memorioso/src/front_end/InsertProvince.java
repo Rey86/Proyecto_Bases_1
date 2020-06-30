@@ -16,14 +16,14 @@ public class InsertProvince extends javax.swing.JDialog {
 
     public void initial(){
         try{
-            if(id_province > 0){
-                ResultSet r = connection_sqldb.DataBaseConnection.getProvince(id_province);
-                if(r.next()) {
-                    jLabelID.setText(String.valueOf(r.getInt("ID_PROVINCE")));
-                    jTextFieldName.setText(r.getString("PROVINCE_NAME")); 
-                    jTextFieldForeignId.setText(String.valueOf(r.getInt("ID_COUNTRY"))); 
+                if(id_province > 0){
+                    ResultSet r = connection_sqldb.DataBaseConnection.getProvince(id_province);
+                    if(r.next()) {
+                        jLabelID.setText(String.valueOf(r.getInt("ID_PROVINCE")));
+                        jTextFieldName.setText(r.getString("PROVINCE_NAME")); 
+                        jTextFieldForeignId.setText(String.valueOf(r.getInt("ID_COUNTRY"))); 
+                    }
                 }
-            }
         }
         catch (SQLException e){
             JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
@@ -65,7 +65,7 @@ public class InsertProvince extends javax.swing.JDialog {
 
         jLabel3.setText("Provincia");
 
-        jLabel4.setText("ID Province");
+        jLabel4.setText("ID País");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -127,18 +127,23 @@ public class InsertProvince extends javax.swing.JDialog {
 
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
         if (!jTextFieldName.getText().equals("")){
-            try{
-                if(id_province > 0){
-                    connection_sqldb.DataBaseConnection.setProvince(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+            if (!jTextFieldForeignId.getText().equals("")){
+                try{
+                    if(id_province > 0){
+                        connection_sqldb.DataBaseConnection.setProvince(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                    }
+                    else{
+                        connection_sqldb.DataBaseConnection.insertProvince(jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                    }
                 }
-                else{
-                    connection_sqldb.DataBaseConnection.insertProvince(jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                catch (SQLException e){
+                    JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
                 }
+                dispose();
             }
-            catch (SQLException e){
-                JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
+            else {
+            JOptionPane.showMessageDialog(this, "La casilla de llave foránea se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);
             }
-            dispose();
         }
         else {
             JOptionPane.showMessageDialog(this, "La casilla de nombre se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);

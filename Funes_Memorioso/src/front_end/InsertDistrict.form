@@ -107,7 +107,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
-        <Property name="text" type="java.lang.String" value="ID Province"/>
+        <Property name="text" type="java.lang.String" value="ID Cant&#xf3;n"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldForeignId">
