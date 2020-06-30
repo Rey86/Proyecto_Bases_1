@@ -38,10 +38,25 @@ public class editarCatalogos extends javax.swing.JDialog {
         });
 
         jButtonDistrict.setText("Distrito");
+        jButtonDistrict.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDistrictActionPerformed(evt);
+            }
+        });
 
         jButtonCanton.setText("Cantón");
+        jButtonCanton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCantonActionPerformed(evt);
+            }
+        });
 
         jButtonProvince.setText("Provincia");
+        jButtonProvince.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonProvinceActionPerformed(evt);
+            }
+        });
 
         jButtonCountry.setText("País");
         jButtonCountry.addActionListener(new java.awt.event.ActionListener() {
@@ -51,16 +66,46 @@ public class editarCatalogos extends javax.swing.JDialog {
         });
 
         jButtonGender.setText("Género");
+        jButtonGender.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonGenderActionPerformed(evt);
+            }
+        });
 
         jButtonCompany.setText("Compañía");
+        jButtonCompany.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCompanyActionPerformed(evt);
+            }
+        });
 
         jButtonTranscriptType.setText("Tipo Expediente");
+        jButtonTranscriptType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonTranscriptTypeActionPerformed(evt);
+            }
+        });
 
         jButtonSentenceType.setText("Tipo Sentencia");
+        jButtonSentenceType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSentenceTypeActionPerformed(evt);
+            }
+        });
 
         jButtonVerdict.setText("Resolución");
+        jButtonVerdict.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVerdictActionPerformed(evt);
+            }
+        });
 
         jButtonBanReason.setText("Motivo de Baneo");
+        jButtonBanReason.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBanReasonActionPerformed(evt);
+            }
+        });
 
         jButtonClose.setText("Salir");
         jButtonClose.addActionListener(new java.awt.event.ActionListener() {
@@ -141,8 +186,54 @@ public class editarCatalogos extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonCountryActionPerformed
 
     private void jButtonCommunityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCommunityActionPerformed
-        // TODO add your handling code here:
+        ListCommunity dialog = new ListCommunity(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
     }//GEN-LAST:event_jButtonCommunityActionPerformed
+
+    private void jButtonDistrictActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDistrictActionPerformed
+        ListDistrict dialog = new ListDistrict(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonDistrictActionPerformed
+
+    private void jButtonCantonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCantonActionPerformed
+        ListCanton dialog = new ListCanton(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonCantonActionPerformed
+
+    private void jButtonProvinceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProvinceActionPerformed
+        ListProvince dialog = new ListProvince(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonProvinceActionPerformed
+
+    private void jButtonBanReasonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBanReasonActionPerformed
+        ListProvince dialog = new ListProvince(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonBanReasonActionPerformed
+
+    private void jButtonGenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGenderActionPerformed
+        ListGender dialog = new ListGender(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonGenderActionPerformed
+
+    private void jButtonCompanyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCompanyActionPerformed
+        ListCompany dialog = new ListCompany(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonCompanyActionPerformed
+
+    private void jButtonTranscriptTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTranscriptTypeActionPerformed
+        ListTranscriptType dialog = new ListTranscriptType(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonTranscriptTypeActionPerformed
+
+    private void jButtonSentenceTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSentenceTypeActionPerformed
+        ListSentenceType dialog = new ListSentenceType(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonSentenceTypeActionPerformed
+
+    private void jButtonVerdictActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerdictActionPerformed
+        ListVerdict dialog = new ListVerdict(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonVerdictActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBanReason;
