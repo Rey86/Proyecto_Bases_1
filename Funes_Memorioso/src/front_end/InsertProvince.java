@@ -3,24 +3,25 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 
-public class InsertCountry extends javax.swing.JDialog {
-    private Integer id_country;
-
-    public InsertCountry(java.awt.Frame parent, boolean modal, Integer id_country) {
+public class InsertProvince extends javax.swing.JDialog {
+    private Integer id_province;
+    
+    public InsertProvince(java.awt.Frame parent, boolean modal, Integer id_province) {
         super(parent, modal);
-        this.id_country = id_country;
+        this.id_province = id_province;
         initComponents();
         initial();
         setLocationRelativeTo(null);
     }
-    
+
     public void initial(){
         try{
-            if(id_country > 0){
-                ResultSet r = connection_sqldb.DataBaseConnection.getCountry(id_country);
+            if(id_province > 0){
+                ResultSet r = connection_sqldb.DataBaseConnection.getProvince(id_province);
                 if(r.next()) {
-                    jLabelID.setText(String.valueOf(r.getInt("ID_COUNTRY")));
-                    jTextFieldName.setText(r.getString("COUNTRY_NAME")); 
+                    jLabelID.setText(String.valueOf(r.getInt("ID_PROVINCE")));
+                    jTextFieldName.setText(r.getString("PROVINCE_NAME")); 
+                    jTextFieldForeignId.setText(String.valueOf(r.getInt("ID_COUNTRY"))); 
                 }
             }
         }
@@ -28,7 +29,6 @@ public class InsertCountry extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -40,6 +40,8 @@ public class InsertCountry extends javax.swing.JDialog {
         jTextFieldName = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabelID = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jTextFieldForeignId = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -61,7 +63,9 @@ public class InsertCountry extends javax.swing.JDialog {
 
         jLabel2.setText("Nombre: ");
 
-        jLabel3.setText("País");
+        jLabel3.setText("Provincia");
+
+        jLabel4.setText("ID Province");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -79,16 +83,19 @@ public class InsertCountry extends javax.swing.JDialog {
                             .addComponent(jTextFieldName)
                             .addComponent(jLabelID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
                                 .addComponent(jButtonAccept)
                                 .addGap(18, 18, 18)
                                 .addComponent(jButtonCancel))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel3)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(jLabel3))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextFieldForeignId)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -104,7 +111,11 @@ public class InsertCountry extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jTextFieldForeignId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAccept)
                     .addComponent(jButtonCancel))
@@ -115,13 +126,13 @@ public class InsertCountry extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
-        if (!jTextFieldName.getText().equals("")){ 
+        if (!jTextFieldName.getText().equals("")){
             try{
-                if(id_country > 0){
-                    connection_sqldb.DataBaseConnection.setCountry(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText());
+                if(id_province > 0){
+                    connection_sqldb.DataBaseConnection.setProvince(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
                 }
                 else{
-                    connection_sqldb.DataBaseConnection.insertCountry(jTextFieldName.getText());
+                    connection_sqldb.DataBaseConnection.insertProvince(jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
                 }
             }
             catch (SQLException e){
@@ -144,7 +155,9 @@ public class InsertCountry extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelID;
+    private javax.swing.JTextField jTextFieldForeignId;
     private javax.swing.JTextField jTextFieldName;
     // End of variables declaration//GEN-END:variables
 }
