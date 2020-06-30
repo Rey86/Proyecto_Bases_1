@@ -885,16 +885,14 @@ public class DataBaseConnection {
     
     public static Boolean isBannedUser(String pcUserName) throws SQLException{
         Connection con = getConnectionDataBase();
-        Boolean banned = false;
         CallableStatement stmt = con.prepareCall("{ ?= call US.USTables.isBannedUser(?)}");
         
         stmt.registerOutParameter(1, Types.INTEGER);
         stmt.setString(2, pcUserName);
         stmt.executeQuery();
-        ResultSet r = (ResultSet) stmt.getObject(1);
-        if (r.getInt("BANNED") == 1){ banned = true; }
-        
-        return banned;
+        Integer banned = (Integer) stmt.getObject(1);
+        if (banned == 1) return true; 
+        else return false;
     }
     
     public static String getCurrentUserType(String pcUserName) throws SQLException{
@@ -904,9 +902,8 @@ public class DataBaseConnection {
         stmt.registerOutParameter(1, Types.VARCHAR);
         stmt.setString(2, pcUserName);
         stmt.executeQuery();
-        ResultSet r = (ResultSet) stmt.getObject(1);
-        
-        return r.getString("USERTYPE_NAME");
+        String usertype_name = (String) stmt.getObject(1);  
+        return usertype_name;
     }
     
     // UserType

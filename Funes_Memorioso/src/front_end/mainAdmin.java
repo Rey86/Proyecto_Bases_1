@@ -65,6 +65,11 @@ public class mainAdmin extends javax.swing.JDialog {
         btnEditarExpedientes.setText("Editar Expedientes");
 
         btnEditarCatalogos.setText("Editar Catálogos");
+        btnEditarCatalogos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarCatalogosActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Menu Administradores");
 
@@ -120,6 +125,11 @@ public class mainAdmin extends javax.swing.JDialog {
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnEditarCatalogosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarCatalogosActionPerformed
+        editarCatalogos dialog = new editarCatalogos(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnEditarCatalogosActionPerformed
 
     /**
      * @param args the command line arguments
