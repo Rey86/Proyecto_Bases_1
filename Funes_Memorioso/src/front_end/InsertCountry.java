@@ -9,8 +9,8 @@ public class InsertCountry extends javax.swing.JDialog {
     public InsertCountry(java.awt.Frame parent, boolean modal, Integer id_country) {
         super(parent, modal);
         this.id_country = id_country;
-        initial();
         initComponents();
+        initial();
         setLocationRelativeTo(null);
     }
     
@@ -18,9 +18,9 @@ public class InsertCountry extends javax.swing.JDialog {
         try{
             if(id_country > 0){
                 ResultSet r = connection_sqldb.DataBaseConnection.getCountry(id_country);
-                while(r.next()){
-                    jTextFieldName.setText(r.getString("COUNTRY_NAME")); 
+                if(r.next()) {
                     jLabelID.setText(String.valueOf(r.getInt("ID_COUNTRY")));
+                    jTextFieldName.setText(r.getString("COUNTRY_NAME")); 
                 }
             }
         }
@@ -115,22 +115,27 @@ public class InsertCountry extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
-        try{
-            if(id_country == null){
-                connection_sqldb.DataBaseConnection.insertCountry(jButtonAccept.getText());
-            } else {
-                if(id_country > 0){
-                    connection_sqldb.DataBaseConnection.setCountry(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText());
-                }
-                else{
-                    connection_sqldb.DataBaseConnection.insertCountry(jTextFieldName.getText());
+        if (!jTextFieldName.getText().equals("")){ 
+            try{
+                if(id_country == null){
+                    connection_sqldb.DataBaseConnection.insertCountry(jButtonAccept.getText());
+                } else {
+                    if(id_country > 0){
+                        connection_sqldb.DataBaseConnection.setCountry(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText());
+                    }
+                    else{
+                        connection_sqldb.DataBaseConnection.insertCountry(jTextFieldName.getText());
+                    }
                 }
             }
+            catch (SQLException e){
+                JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
+            }
+            dispose();
         }
-        catch (SQLException e){
-            JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
+        else {
+            JOptionPane.showMessageDialog(this, "La casilla de nombre se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);
         }
-        dispose();
     }//GEN-LAST:event_jButtonAcceptActionPerformed
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
