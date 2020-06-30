@@ -10,13 +10,19 @@ public class ListCommunity extends javax.swing.JDialog {
         super(parent, modal);
         initComponents(); 
         setLocationRelativeTo(null);
+        try{
+            CommunityList();
+        }
+        catch (SQLException e){
+            JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     public void CommunityList() throws SQLException{
         ResultSet r = connection_sqldb.DataBaseConnection.getCommunities();
         DefaultTableModel dtb = (DefaultTableModel) jTableCommunities.getModel();
         while(r.next()){
-            dtb.addRow(new Object[]{r.getInt("ID_COMMUNITY"), r.getString("COMMUNITY_NAME")});
+            dtb.addRow(new Object[]{r.getInt("ID_COMMUNITY"), r.getString("COMMUNITY_NAME"), r.getInt("ID_DISTRICTS"), r.getString("DISTRICTS_NAME")});
         }
     }
     
@@ -60,11 +66,11 @@ public class ListCommunity extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Nombre", "ID Distrito"
+                "ID", "Nombre", "ID Distrito", "Nombre Distrito"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {

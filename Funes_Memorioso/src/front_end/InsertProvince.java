@@ -31,7 +31,7 @@ public class InsertProvince extends javax.swing.JDialog {
         }
     }
     
-    public ArrayList<Integer> allcountries(){
+    public ArrayList<Integer> allforeigns(){
         ArrayList<Integer> countries = new ArrayList<>();
         try{
             ResultSet r = connection_sqldb.DataBaseConnection.getCountries();
@@ -140,7 +140,7 @@ public class InsertProvince extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
-        ArrayList<Integer> countries = allcountries();
+        ArrayList<Integer> countries = allforeigns();
         if (!jTextFieldName.getText().equals("")){
             if (!jTextFieldForeignId.getText().equals("")){
                 try{

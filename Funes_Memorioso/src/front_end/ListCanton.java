@@ -22,7 +22,7 @@ public class ListCanton extends javax.swing.JDialog {
         ResultSet r = connection_sqldb.DataBaseConnection.getCantons();
         DefaultTableModel dtb = (DefaultTableModel) jTableCantons.getModel();
         while(r.next()){
-            dtb.addRow(new Object[]{r.getInt("ID_CANTON"), r.getString("CANTON_NAME"),r.getInt("ID_PROVINCE") });
+            dtb.addRow(new Object[]{r.getInt("ID_CANTON"), r.getString("CANTON_NAME"),r.getInt("ID_PROVINCE"), r.getString("PROVINCE_NAME") });
         }
     }
     
@@ -50,11 +50,11 @@ public class ListCanton extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Nombre", "ID Provincia"
+                "ID", "Nombre", "ID Provincia", "Nombre Provincial"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {

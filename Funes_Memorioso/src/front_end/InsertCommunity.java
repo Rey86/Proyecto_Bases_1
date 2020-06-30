@@ -2,6 +2,7 @@ package front_end;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class InsertCommunity extends javax.swing.JDialog {
     private Integer id_community;
@@ -28,6 +29,18 @@ public class InsertCommunity extends javax.swing.JDialog {
         catch (SQLException e){
             JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    public ArrayList<Integer> allforeigns(){
+        ArrayList<Integer> districts = new ArrayList<>();
+        try{
+            ResultSet r = connection_sqldb.DataBaseConnection.getDistricts();
+            while(r.next()) districts.add(r.getInt("ID_DISTRICT"));
+        }
+        catch (SQLException e){
+            JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
+        }
+        return districts;
     }
     
     @SuppressWarnings("unchecked")
@@ -120,23 +133,33 @@ public class InsertCommunity extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
+        ArrayList<Integer> districts = allforeigns();
         if (!jTextFieldName.getText().equals("")){
             if (!jTextFieldForeignId.getText().equals("")){
                 try{
                     if(id_community > 0){
-                        connection_sqldb.DataBaseConnection.setCommunity(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                        if (districts.contains(Integer.parseInt(jTextFieldForeignId.getText()))){
+                            connection_sqldb.DataBaseConnection.setCommunity(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                            dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(this, "El distrito no existe en el sistema", "Cuidado", JOptionPane.WARNING_MESSAGE);
+                        }    
                     }
                     else{
-                        connection_sqldb.DataBaseConnection.insertCommunity(jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                        if (districts.contains(Integer.parseInt(jTextFieldForeignId.getText()))){
+                            connection_sqldb.DataBaseConnection.insertCommunity(jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                            dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(this, "El distrito no existe en el sistema", "Cuidado", JOptionPane.WARNING_MESSAGE);
+                        }     
                     }
                 }
                 catch (SQLException e){
                     JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
                 }
-                dispose();  
             }
             else {
-                JOptionPane.showMessageDialog(this, "La casilla de llave foránea se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "La casilla de llave foránea se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);
             }
         }
         else {

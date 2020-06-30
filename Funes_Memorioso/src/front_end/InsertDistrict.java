@@ -2,6 +2,7 @@ package front_end;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class InsertDistrict extends javax.swing.JDialog {
     private Integer id_district;
@@ -29,6 +30,19 @@ public class InsertDistrict extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    public ArrayList<Integer> allforeigns(){
+        ArrayList<Integer> cantons = new ArrayList<>();
+        try{
+            ResultSet r = connection_sqldb.DataBaseConnection.getCantons();
+            while(r.next()) cantons.add(r.getInt("ID_COUNTRY"));
+        }
+        catch (SQLException e){
+            JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
+        }
+        return cantons;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -126,20 +140,30 @@ public class InsertDistrict extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
+        ArrayList<Integer> cantons = allforeigns();
         if (!jTextFieldName.getText().equals("")){
             if (!jTextFieldForeignId.getText().equals("")){
                 try{
                     if(id_district > 0){
-                        connection_sqldb.DataBaseConnection.setDistrict(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                        if (cantons.contains(Integer.parseInt(jTextFieldForeignId.getText()))){
+                            connection_sqldb.DataBaseConnection.setDistrict(Integer.valueOf(jLabelID.getText()), jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                            dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(this, "El cantón no existe en el sistema", "Cuidado", JOptionPane.WARNING_MESSAGE);
+                        }    
                     }
                     else{
-                        connection_sqldb.DataBaseConnection.insertDistrict(jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                        if (cantons.contains(Integer.parseInt(jTextFieldForeignId.getText()))){
+                            connection_sqldb.DataBaseConnection.insertDistrict(jTextFieldName.getText(), Integer.valueOf(jTextFieldForeignId.getText()));
+                            dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(this, "El cantón no existe en el sistema", "Cuidado", JOptionPane.WARNING_MESSAGE);
+                        }     
                     }
                 }
                 catch (SQLException e){
                     JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
                 }
-                dispose();
             }
             else {
             JOptionPane.showMessageDialog(this, "La casilla de llave foránea se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);
