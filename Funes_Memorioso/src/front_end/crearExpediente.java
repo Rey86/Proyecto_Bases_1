@@ -55,6 +55,12 @@ public class crearExpediente extends javax.swing.JDialog {
                     String[] enddate = String.valueOf(t.getDate("SENTENCE_ENDDATE")).split("-");
                     String[] crimedate = String.valueOf(t.getDate("CRIME_DATE")).split("-");
                     jTextFieldTranscriptNumber.setText(t.getString("TRANSCRIPT_NUMBER"));
+                    String current_gender = t.getInt("ID_GENDER") + " " + t.getString("GENDER_NAME");
+                    String current_company = t.getInt("ID_COMPANY") + " " + t.getString("COMPANY_NAME");
+                    String current_community = t.getInt("ID_COMMUNITY") + " " + t.getString("COMMUNITY_NAME");
+                    String current_transcriptType = t.getInt("ID_TRANSCRIPTTYPE") + " " + t.getString("TRANSCRIPTTYPE_NAME");
+                    String current_sentenceType = t.getInt("ID_SENTENCETYPE") + " " + t.getString("SENTENCETYPE_NAME");
+                    String current_verdict = t.getInt("ID_VERDICT") + " " + t.getString("VERDICT_NAME");
                     jTextFieldAccusedId.setText(t.getString("ID_ACCUSED")); 
                     jTextFieldBirthDate.setText(birthdate[2] + "-" + birthdate[1] + "-" + birthdate[0]); 
                     jTextFieldUsername.setText(t.getString("USERNAME"));  
@@ -66,6 +72,12 @@ public class crearExpediente extends javax.swing.JDialog {
                     jTextFieldDateEnd.setText(enddate[2] + "-" + enddate[1] + "-" + enddate[0]);
                     jTextFieldCrimeDate.setText(crimedate[2] + "-" + crimedate[1] + "-" + crimedate[0]);
                     jTextAreaCrimeDescription.setText(t.getString("CRIME_DESCRIPTION"));
+                    jComboBoxGenders.setSelectedItem(current_gender);
+                    jComboBoxCompanies.setSelectedItem(current_company);
+                    jComboBoxGenders.setSelectedItem(current_community);
+                    jComboBoxCompanies.setSelectedItem(current_transcriptType);
+                    jComboBoxGenders.setSelectedItem(current_sentenceType);
+                    jComboBoxCompanies.setSelectedItem(current_verdict);
                 }
             }
             jTextFieldUsername.setEnabled(false);
@@ -356,7 +368,7 @@ public class crearExpediente extends javax.swing.JDialog {
                             .addComponent(jLabel18)
                             .addComponent(jTextFieldDateEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel19)
                             .addComponent(jComboBoxSentenceType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)

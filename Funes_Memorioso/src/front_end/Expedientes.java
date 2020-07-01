@@ -31,6 +31,11 @@ public class Expedientes extends javax.swing.JDialog {
         }
     }
     
+    public String getIdAccused() throws SQLException{
+        ResultSet r = connection_sqldb.DataBaseConnection.getTranscripts();
+        return r.getString("ID_ACCUSED");
+    }
+    
     public void TranscriptCleanList(){
         DefaultTableModel dtb = (DefaultTableModel) jTableTranscripts.getModel();
         for (int i = dtb.getRowCount()-1;i>=0;i--) dtb.removeRow(i);
@@ -177,10 +182,17 @@ public class Expedientes extends javax.swing.JDialog {
         Integer current_row = jTableTranscripts.getSelectedRow();
         if(current_row != -1){
             try{
-                connection_sqldb.DataBaseConnection.deleteTranscript((String) jTableTranscripts.getValueAt(current_row, 0));
-                TranscriptCleanList();
-                TranscriptList();
-            }
+                if(jTableTranscripts.getValueAt(current_row, 0).equals(username)){
+                    connection_sqldb.DataBaseConnection.deleteTranscript((String) jTableTranscripts.getValueAt(current_row, 0));
+                    String id_accused = getIdAccused();
+                    connection_sqldb.DataBaseConnection.deleteAccused(id_accused);
+                    connection_sqldb.DataBaseConnection.deletePerson(id_accused);
+                    TranscriptCleanList();
+                    TranscriptList();
+                } else {
+                    JOptionPane.showMessageDialog(this, "No puede eliminar expedientes de otros usuarios", "Cuidado", JOptionPane.ERROR_MESSAGE);
+                }
+            }    
             catch (SQLException e){
                 JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
             }

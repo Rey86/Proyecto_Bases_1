@@ -518,7 +518,7 @@ public class DataBaseConnection {
     public static ResultSet getTranscript(String pcTranscriptNumber) throws SQLException{
         Connection con = getConnectionDataBase();
         CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getTranscript(?)}");
-        stmt.registerOutParameter(1, OracleTypes.VARCHAR);
+        stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.setString(2, pcTranscriptNumber);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
