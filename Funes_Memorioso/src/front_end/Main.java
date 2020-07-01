@@ -83,7 +83,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        Registrar dialog = new Registrar(new javax.swing.JFrame(), true);
+        Registrar dialog = new Registrar(new javax.swing.JFrame(), true, "");
         dialog.setVisible(true);
     }//GEN-LAST:event_btnRegistrarActionPerformed
 

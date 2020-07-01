@@ -892,14 +892,15 @@ public class DataBaseConnection {
         stmt.execute();
     }
     
-    public static void isValidUser(String pcUserName, String pcUserPassword) throws SQLException{
+    public static String getUserPassword(String pcUserName) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ ?= call US.USTables.isValidUser(?,?)}");
+        CallableStatement stmt = con.prepareCall("{ ?= call US.USTables.getUserPassword(?)}");
         
-        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.registerOutParameter(1, OracleTypes.VARCHAR);
         stmt.setString(2, pcUserName);
-        stmt.setString(3, pcUserPassword);
         stmt.executeQuery();
+        String password = (String) stmt.getObject(1);
+        return password;
     }
     
     public static Boolean isBannedUser(String pcUserName) throws SQLException{
