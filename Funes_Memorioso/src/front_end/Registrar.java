@@ -3,6 +3,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.ComboBoxModel;
 
 public class Registrar extends javax.swing.JDialog {
@@ -42,6 +43,18 @@ public class Registrar extends javax.swing.JDialog {
         catch (SQLException e){
             JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    public ArrayList<Integer> allforeigns(){
+        ArrayList<Integer> idusers = new ArrayList<>();
+        try{
+            ResultSet r = connection_sqldb.DataBaseConnection.getPersons();
+            while(r.next()) idusers.add(r.getInt("ID_USERS"));
+        }
+        catch (SQLException e){
+            JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
+        }
+        return idusers;
     }
 
     @SuppressWarnings("unchecked")
@@ -215,7 +228,61 @@ public class Registrar extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        dispose();
+        ArrayList<Integer> idusers = allforeigns();
+        if(!txtUser.getText().equals("")){
+            if(!txtPassword.getText().equals("")){
+                if(!txtName.getText().equals("")){
+                    if(!txtFirstLastName.getText().equals("")){
+                        if(!txtSecondLastName.getText().equals("")){
+                            if(!txtFechaNac.getText().equals("")){
+                                if(!txtCedula.getText().equals("")){
+                                    try{
+                                        if(!username.equals("")){
+                                            if(idusers.contains(Integer.parseInt(txtCedula.getText()))){
+                                                connection_sqldb.DataBaseConnection.setUserApp(txtUser.getText(), 0, 0, 2, txtCedula.getText());
+                                                connection_sqldb.DataBaseConnection.setPerson(txtCedula.getText(),txtName.getText(),txtFirstLastName.getText(),txtSecondLastName.getText(), txtFechaNac.getText(), cmbGenero.getSelectedItem(), cmbCompania.getSelectedItem());
+                                                dispose();
+                                            } else {
+                                                JOptionPane.showMessageDialog(this, "La cédula no existe en el sistema", "Cuidado", JOptionPane.WARNING_MESSAGE);
+                                            }                                            
+                                        }
+                                        else{
+                                            connection_sqldb.DataBaseConnection.insertPerson(txtCedula.getText(),txtName.getText(),txtFirstLastName.getText(),txtSecondLastName.getText(),txtFechaNac.getText(), cmbGenero.getSelectedItem(), cmbCompania.getSelectedItem());
+                                            if(idusers.contains(Integer.parseInt(txtCedula.getText()))){
+                                                connection_sqldb.DataBaseConnection.insertUserApp(txtUser.getText(),txtPassword.getText(), 0, 0, 2, txtCedula.getText());                         
+                                                dispose();
+                                            } else {
+                                                JOptionPane.showMessageDialog(this, "La cédula user no existe en el sistema", "Cuidado", JOptionPane.WARNING_MESSAGE);
+                                            }  
+                                        }
+                                    }
+                                    catch (SQLException e){
+                                        JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                    catch (NumberFormatException nfe){
+                                        JOptionPane.showMessageDialog(this, "Alguno de los datos introducidos debe ser un número", "Cuidado", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                }else {
+                                    JOptionPane.showMessageDialog(this, "La casilla de cedula se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);
+                                }
+                            }else {
+                                JOptionPane.showMessageDialog(this, "La casilla de fecha de nacimiento se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);
+                            }
+                        }else {
+                            JOptionPane.showMessageDialog(this, "La casilla de segundo apellido se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);
+                        }
+                    }else {
+                        JOptionPane.showMessageDialog(this, "La casilla de primer apellido se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);
+                    }
+                }else {
+                    JOptionPane.showMessageDialog(this, "La casilla de nombre se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);
+                }
+            }else {
+                JOptionPane.showMessageDialog(this, "La casilla de contraseña se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);
+            }
+        }else {
+            JOptionPane.showMessageDialog(this, "La casilla de nombre de usuario se encuentra vacía", "Cuidado", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
