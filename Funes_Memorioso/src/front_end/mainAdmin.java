@@ -19,7 +19,6 @@ public class mainAdmin extends javax.swing.JDialog {
         btnEditarUsuarios = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         btnConsultas1 = new javax.swing.JButton();
-        btnEditarExpedientes = new javax.swing.JButton();
         btnEditarCatalogos = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
@@ -48,8 +47,6 @@ public class mainAdmin extends javax.swing.JDialog {
             }
         });
 
-        btnEditarExpedientes.setText("Editar Expedientes");
-
         btnEditarCatalogos.setText("Editar Catálogos");
         btnEditarCatalogos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -64,16 +61,15 @@ public class mainAdmin extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(42, Short.MAX_VALUE)
+                .addContainerGap(45, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(btnEditarUsuarios)
                     .addComponent(btnSalir)
                     .addComponent(btnConsultas1)
-                    .addComponent(btnEditarExpedientes)
                     .addComponent(btnEditarCatalogos)
                     .addComponent(btnCrearExpediente)
                     .addComponent(jLabel1))
-                .addGap(40, 40, 40))
+                .addGap(43, 43, 43))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -82,15 +78,13 @@ public class mainAdmin extends javax.swing.JDialog {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnCrearExpediente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEditarExpedientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnEditarUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnConsultas1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(7, 7, 7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnEditarCatalogos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSalir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -99,7 +93,7 @@ public class mainAdmin extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCrearExpedienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearExpedienteActionPerformed
-        Expedientes dialog = new Expedientes(new javax.swing.JFrame(), true);
+        Expedientes dialog = new Expedientes(new javax.swing.JFrame(), true, username);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnCrearExpedienteActionPerformed
 
@@ -121,7 +115,6 @@ public class mainAdmin extends javax.swing.JDialog {
     private javax.swing.JButton btnConsultas1;
     private javax.swing.JButton btnCrearExpediente;
     private javax.swing.JButton btnEditarCatalogos;
-    private javax.swing.JButton btnEditarExpedientes;
     private javax.swing.JButton btnEditarUsuarios;
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;

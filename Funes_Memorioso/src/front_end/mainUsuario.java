@@ -88,7 +88,7 @@ public class mainUsuario extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCrearExpedienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearExpedienteActionPerformed
-        Expedientes dialog = new Expedientes(new javax.swing.JFrame(), true);
+        Expedientes dialog = new Expedientes(new javax.swing.JFrame(), true, username);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnCrearExpedienteActionPerformed
 

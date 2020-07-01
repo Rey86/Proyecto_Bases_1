@@ -518,7 +518,7 @@ public class DataBaseConnection {
     public static ResultSet getTranscript(String pcTranscriptNumber) throws SQLException{
         Connection con = getConnectionDataBase();
         CallableStatement stmt = con.prepareCall("{?= call TR.TRTables.getTranscript(?)}");
-        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        stmt.registerOutParameter(1, OracleTypes.VARCHAR);
         stmt.setString(2, pcTranscriptNumber);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
@@ -528,8 +528,8 @@ public class DataBaseConnection {
     // Function to set a transcript of the system
     public static void setTranscript(String pcTranscriptNumber, Integer pnValid, String pcIdAccused, 
             Integer pnIdTranscriptType, Integer pnIdVerdict, Integer pnIdCommunity, 
-            Date pnSentenceStartDate, Date pnSentenceEndDate, Integer pnIdSentenceType, String pcCrimeDescription, 
-            Date pdCrimeDate, Date pdDueDate) throws SQLException{
+            String pnSentenceStartDate, String pnSentenceEndDate, Integer pnIdSentenceType, String pcCrimeDescription, 
+            String pdCrimeDate, String pdDueDate) throws SQLException{
         Connection con = getConnectionDataBase();
         CallableStatement stmt = con.prepareCall("{ call TR.TRTables.setTranscript(?,?,?,?,?,?,?,?,?,?,?,?)}");
         
@@ -539,12 +539,12 @@ public class DataBaseConnection {
         stmt.setInt(4, pnIdTranscriptType);
         stmt.setInt(5, pnIdVerdict);
         stmt.setInt(6, pnIdCommunity);
-        stmt.setDate(7, pnSentenceStartDate);
-        stmt.setDate(8, pnSentenceEndDate);
+        stmt.setString(7, pnSentenceStartDate);
+        stmt.setString(8, pnSentenceEndDate);
         stmt.setInt(9, pnIdSentenceType);
         stmt.setString(10, pcCrimeDescription);
-        stmt.setDate(11, pdCrimeDate);
-        stmt.setDate(12, pdDueDate);
+        stmt.setString(11, pdCrimeDate);
+        stmt.setString(12, pdDueDate);
         stmt.execute();
     }
     
@@ -560,8 +560,8 @@ public class DataBaseConnection {
     // Procedure to insert a transcript in the system
     public static void insertTranscript(String pcTranscriptNumber, Integer pnValid, String pcUserName, String pcIdAccused, 
             Integer pnIdTranscriptType, Integer pnIdVerdict, Integer pnIdCommunity, 
-            Date pnSentenceStartDate, Date pnSentenceEndDate, Integer pnIdSentenceType, String pcCrimeDescription, 
-            Date pdCrimeDate, Date pdDueDate) throws SQLException{
+            String pnSentenceStartDate, String pnSentenceEndDate, Integer pnIdSentenceType, String pcCrimeDescription, 
+            String pdCrimeDate, String pdDueDate) throws SQLException{
         Connection con = getConnectionDataBase();
         CallableStatement stmt = con.prepareCall("{ call TR.TRTables.insertTranscript(?,?,?,?,?,?,?,?,?,?,?,?,?)}");
         
@@ -572,12 +572,12 @@ public class DataBaseConnection {
         stmt.setInt(5, pnIdTranscriptType);
         stmt.setInt(6, pnIdVerdict);
         stmt.setInt(7, pnIdCommunity);
-        stmt.setDate(8, pnSentenceStartDate);
-        stmt.setDate(9, pnSentenceEndDate);
+        stmt.setString(8, pnSentenceStartDate);
+        stmt.setString(9, pnSentenceEndDate);
         stmt.setInt(10, pnIdSentenceType);
         stmt.setString(11, pcCrimeDescription);
-        stmt.setDate(12, pdCrimeDate);
-        stmt.setDate(13, pdDueDate);
+        stmt.setString(12, pdCrimeDate);
+        stmt.setString(13, pdDueDate);
         stmt.execute();
     }
     

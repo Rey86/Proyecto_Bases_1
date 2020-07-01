@@ -119,8 +119,7 @@ public class consultasUsuario extends javax.swing.JDialog {
     }//GEN-LAST:event_btnTopLugaresActionPerformed
 
     private void btnListaExpedientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaExpedientesActionPerformed
-        Expedientes dialog = new Expedientes(new javax.swing.JFrame(), true);
-        dialog.setVisible(true);
+
     }//GEN-LAST:event_btnListaExpedientesActionPerformed
 
     private void btnListaUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaUsuariosActionPerformed

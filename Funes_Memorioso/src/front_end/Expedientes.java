@@ -5,10 +5,12 @@ import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 
 public class Expedientes extends javax.swing.JDialog {
-
-    public Expedientes(java.awt.Frame parent, boolean modal) {
+    private String username;
+        
+    public Expedientes(java.awt.Frame parent, boolean modal, String username) {
         super(parent, modal);
         initComponents();
+        this.username = username;
         setLocationRelativeTo(null);
         try{
             TranscriptList();
@@ -142,11 +144,11 @@ public class Expedientes extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelar2ActionPerformed
 
     private void jButtonInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInsertActionPerformed
-        crearExpediente dialog = new crearExpediente(new javax.swing.JFrame(), true, "");
+        crearExpediente dialog = new crearExpediente(new javax.swing.JFrame(), true, "", username);
         dialog.setVisible(true);
         try{
-            TranscriptList();
             TranscriptCleanList();
+            TranscriptList(); 
         }
         catch (SQLException e){
             JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
@@ -156,11 +158,12 @@ public class Expedientes extends javax.swing.JDialog {
     private void jButtonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
         Integer current_row = jTableTranscripts.getSelectedRow();
         if(current_row != -1){
-            crearExpediente dialog = new crearExpediente(new javax.swing.JFrame(), true, String.valueOf(jTableTranscripts.getValueAt(current_row, 0)));
+            System.out.println(String.valueOf(jTableTranscripts.getValueAt(current_row, 0)));
+            crearExpediente dialog = new crearExpediente(new javax.swing.JFrame(), true, String.valueOf(jTableTranscripts.getValueAt(current_row, 0)), username);
             dialog.setVisible(true);
             try{
-                TranscriptList();
                 TranscriptCleanList();
+                TranscriptList();
             }
             catch (SQLException e){
                 JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
@@ -175,8 +178,8 @@ public class Expedientes extends javax.swing.JDialog {
         if(current_row != -1){
             try{
                 connection_sqldb.DataBaseConnection.deleteTranscript((String) jTableTranscripts.getValueAt(current_row, 0));
-                TranscriptList();
                 TranscriptCleanList();
+                TranscriptList();
             }
             catch (SQLException e){
                 JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
