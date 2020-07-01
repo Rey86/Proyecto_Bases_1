@@ -43,22 +43,30 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
     transcript SYS_REFCURSOR;
     BEGIN 
     OPEN transcript FOR
-        SELECT t.transcript_number transcript_number, t.valid valid, t.username username, 
-            p.first_name||' '||p.last_name||' '||p.second_last_name accused_name, tt.transcripttype_name transcripttype_name, 
-            v.verdict_name verdict_name, c.community_name community_name, t.sentence_startdate sentence_startdate,
-            t.sentence_enddate sentence_enddate, t.sentence_startdate-t.sentence_enddate sentence_time, st.sentencetype_name sentencetype_name, 
+        SELECT t.transcript_number transcript_number, t.valid valid, t.username username, p.first_name first_name, t.id_accused id_accused,
+            p.last_name last_name, p.second_last_name second_last_name, p.birthdate birthdate, p.id_company id_company,
+            c.company_name company_name, p.id_gender id_gender, g.gender_name gender_name,
+            p.first_name||' '||p.last_name||' '||p.second_last_name accused_name, t.id_transcripttype id_transcripttype, 
+            tt.transcripttype_name transcripttype_name, t.id_verdict id_verdict, v.verdict_name verdict_name, 
+            t.id_community id_community, com.community_name community_name, t.sentence_startdate sentence_startdate,
+            t.sentence_enddate sentence_enddate, t.sentence_startdate-t.sentence_enddate sentence_time, 
+            t.id_sentencetype id_sentencetype, st.sentencetype_name sentencetype_name, 
             t.crime_description crime_description, t.crime_date crime_date, t.due_date due_date
         FROM TRANSCRIPT t
         INNER JOIN ACCUSED a
         ON t.id_accused = a.id_accused 
         INNER JOIN PRSN.PERSON p
         ON a.id_accused = p.id_person
+        INNER JOIN PRSN.GENDER g
+        ON p.id_gender = g.id_gender
+        INNER JOIN PRSN.COMPANY c
+        ON p.id_company = c.id_company
         INNER JOIN TRANSCRIPTTYPE tt
         ON t.id_transcripttype = tt.id_transcripttype
         INNER JOIN VERDICT v
         ON t.id_verdict = v.id_verdict
-        INNER JOIN Place.COMMUNITY c
-        ON t.id_community = c.id_community
+        INNER JOIN Place.COMMUNITY com
+        ON t.id_community = com.id_community
         INNER JOIN SENTENCETYPE st
         ON t.id_sentencetype = st.id_sentencetype 
         WHERE t.transcript_number = NVL(pcTranscriptNumber , t.transcript_number);

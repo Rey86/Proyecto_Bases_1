@@ -34,7 +34,7 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
     OPEN userapp FOR
         SELECT ua.username user_name, ua.ban_days ban_days, ua.banned banned, ut.usertype_description usertype_description, ua.id_user id_user,
             ua.user_password user_password, p.first_name first_name, p.last_name last_name, p.second_last_name second_last_name, 
-            p.birthdate birthdate, g.gender_name gender_name, c.company_name company_name
+            p.birthdate birthdate, p.id_gender id_gender, g.gender_name gender_name, p.id_company id_company, c.company_name company_name
         FROM USERAPP ua
         INNER JOIN PRSN.PERSON p
         ON ua.id_user = p.id_person
