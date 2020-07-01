@@ -22,12 +22,12 @@ public class Registrar extends javax.swing.JDialog {
             ResultSet g = connection_sqldb.DataBaseConnection.getGenders();
             ResultSet c = connection_sqldb.DataBaseConnection.getCompanies();
             while(g.next()){
-                cmbGenero.addItem(g.getString("GENDER_NAME"));
+                cmbGenero.addItem(String.valueOf(g.getInt("ID_GENDER")) + " " + g.getString("GENDER_NAME"));
             }
             while(c.next()){
-                cmbCompania.addItem(g.getString("COMPANY_NAME"));
+                cmbCompania.addItem(String.valueOf(c.getInt("ID_COMPANY")) + " " + c.getString("COMPANY_NAME"));
             }
-            if(username.equals("")){
+            if(!username.equals("")){
                 ResultSet u = connection_sqldb.DataBaseConnection.getUserApp(username);
                 if(u.next()) {
                     txtUser.setText(u.getString("USER_NAME"));
@@ -45,16 +45,16 @@ public class Registrar extends javax.swing.JDialog {
         }
     }
     
-    public ArrayList<Integer> allforeigns(){
-        ArrayList<Integer> idusers = new ArrayList<>();
+    public ArrayList<String> allforeigns(){
+        ArrayList<String> persons = new ArrayList<>();
         try{
             ResultSet r = connection_sqldb.DataBaseConnection.getPersons();
-            while(r.next()) idusers.add(r.getInt("ID_USERS"));
+            while(r.next()) persons.add(r.getString("ID_PERSON"));
         }
         catch (SQLException e){
             JOptionPane.showMessageDialog(this, e.toString(), "Cuidado", JOptionPane.ERROR_MESSAGE);
         }
-        return idusers;
+        return persons;
     }
 
     @SuppressWarnings("unchecked")
@@ -74,14 +74,14 @@ public class Registrar extends javax.swing.JDialog {
         txtSecondLastName = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         txtPassword = new javax.swing.JPasswordField();
-        txtFechaNac = new javax.swing.JFormattedTextField();
         jLabel7 = new javax.swing.JLabel();
         cmbGenero = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         cmbCompania = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        txtCedula = new javax.swing.JFormattedTextField();
+        txtFechaNac = new javax.swing.JTextField();
+        txtCedula = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -111,8 +111,6 @@ public class Registrar extends javax.swing.JDialog {
 
         jLabel6.setText("Fecha de Nacimiento:");
 
-        txtFechaNac.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-
         jLabel7.setText("Género:");
 
         jLabel8.setText("Compañía:");
@@ -120,8 +118,6 @@ public class Registrar extends javax.swing.JDialog {
         jLabel9.setText("Registrar");
 
         jLabel10.setText("Cédula:");
-
-        txtCedula.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -163,8 +159,8 @@ public class Registrar extends javax.swing.JDialog {
                                     .addComponent(jLabel6))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtFechaNac)
-                                    .addComponent(txtSecondLastName, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)))
+                                    .addComponent(txtSecondLastName, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                                    .addComponent(txtFechaNac)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel8)
@@ -214,13 +210,16 @@ public class Registrar extends javax.swing.JDialog {
                     .addComponent(jLabel8)
                     .addComponent(cmbCompania, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAceptar)
-                    .addComponent(btnCancelar))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAceptar)
+                            .addComponent(btnCancelar)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -228,9 +227,12 @@ public class Registrar extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        ArrayList<Integer> idusers = allforeigns();
+        String current_gender = (String) cmbGenero.getSelectedItem();
+        String current_company = (String) cmbCompania.getSelectedItem();
+        Integer id_gender = Integer.valueOf(current_gender.split(" ")[0]);
+        Integer id_company = Integer.valueOf(current_company.split(" ")[0]);
         if(!txtUser.getText().equals("")){
-            if(!txtPassword.getText().equals("")){
+            if(!txtPassword.getPassword().equals("")){
                 if(!txtName.getText().equals("")){
                     if(!txtFirstLastName.getText().equals("")){
                         if(!txtSecondLastName.getText().equals("")){
@@ -238,18 +240,20 @@ public class Registrar extends javax.swing.JDialog {
                                 if(!txtCedula.getText().equals("")){
                                     try{
                                         if(!username.equals("")){
-                                            if(idusers.contains(Integer.parseInt(txtCedula.getText()))){
-                                                connection_sqldb.DataBaseConnection.setUserApp(txtUser.getText(), 0, 0, 2, txtCedula.getText());
-                                                connection_sqldb.DataBaseConnection.setPerson(txtCedula.getText(),txtName.getText(),txtFirstLastName.getText(),txtSecondLastName.getText(), txtFechaNac.getText(), cmbGenero.getSelectedItem(), cmbCompania.getSelectedItem());
+                                            ArrayList<String> persons = allforeigns();
+                                            if(persons.contains(txtCedula.getText())){
+                                                connection_sqldb.DataBaseConnection.setUserApp(txtUser.getText(), String.valueOf(txtPassword.getPassword()), 0, 0, 2, txtCedula.getText());
+                                                connection_sqldb.DataBaseConnection.setPerson(txtCedula.getText(),txtName.getText(),txtFirstLastName.getText(),txtSecondLastName.getText(), txtFechaNac.getText(), id_gender, id_company);
                                                 dispose();
                                             } else {
                                                 JOptionPane.showMessageDialog(this, "La cédula no existe en el sistema", "Cuidado", JOptionPane.WARNING_MESSAGE);
                                             }                                            
                                         }
                                         else{
-                                            connection_sqldb.DataBaseConnection.insertPerson(txtCedula.getText(),txtName.getText(),txtFirstLastName.getText(),txtSecondLastName.getText(),txtFechaNac.getText(), cmbGenero.getSelectedItem(), cmbCompania.getSelectedItem());
-                                            if(idusers.contains(Integer.parseInt(txtCedula.getText()))){
-                                                connection_sqldb.DataBaseConnection.insertUserApp(txtUser.getText(),txtPassword.getText(), 0, 0, 2, txtCedula.getText());                         
+                                            connection_sqldb.DataBaseConnection.insertPerson(txtCedula.getText(),txtName.getText(),txtFirstLastName.getText(),txtSecondLastName.getText(), txtFechaNac.getText(), id_gender , id_company);
+                                            ArrayList<String> persons = allforeigns();
+                                            if(persons.contains(txtCedula.getText())){
+                                                connection_sqldb.DataBaseConnection.insertUserApp(txtUser.getText(), String.valueOf(txtPassword.getPassword()), 0, 0, 2, txtCedula.getText());                         
                                                 dispose();
                                             } else {
                                                 JOptionPane.showMessageDialog(this, "La cédula user no existe en el sistema", "Cuidado", JOptionPane.WARNING_MESSAGE);
@@ -304,8 +308,8 @@ public class Registrar extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JFormattedTextField txtCedula;
-    private javax.swing.JFormattedTextField txtFechaNac;
+    private javax.swing.JTextField txtCedula;
+    private javax.swing.JTextField txtFechaNac;
     private javax.swing.JTextField txtFirstLastName;
     private javax.swing.JTextField txtName;
     private javax.swing.JPasswordField txtPassword;

@@ -361,7 +361,7 @@ public class DataBaseConnection {
     
     // Function to set a person of the system
     public static void setPerson(String pcIdPerson, String pcFirstName, String pcLastName, 
-            String pcSecondLastName, Date pdBirthdate, Integer pnIdGender, Integer pnIdCompany) throws SQLException{
+            String pcSecondLastName, String pdBirthdate, Integer pnIdGender, Integer pnIdCompany) throws SQLException{
         Connection con = getConnectionDataBase();
         CallableStatement stmt = con.prepareCall("{ call PRSN.PRSNTables.setPerson(?,?,?,?,?,?,?)}");
         
@@ -369,7 +369,7 @@ public class DataBaseConnection {
         stmt.setString(2, pcFirstName);
         stmt.setString(3, pcLastName);
         stmt.setString(4, pcSecondLastName);
-        stmt.setDate(5, pdBirthdate);
+        stmt.setString(5, pdBirthdate);
         stmt.setInt(6, pnIdGender);
         stmt.setInt(7, pnIdCompany);
         stmt.execute();
@@ -386,7 +386,7 @@ public class DataBaseConnection {
     
     // Procedure to insert a person in the system
     public static void insertPerson(String pcIdPerson, String pcFirstName, String pcLastName, 
-            String pcSecondLastName, Date pdBirthdate, Integer pnIdGender, Integer pnIdCompany) throws SQLException{
+            String pcSecondLastName, String pdBirthdate, Integer pnIdGender, Integer pnIdCompany) throws SQLException{
         Connection con = getConnectionDataBase();
         CallableStatement stmt = con.prepareCall("{ call PRSN.PRSNTables.insertPerson(?,?,?,?,?,?,?)}");
         
@@ -394,7 +394,7 @@ public class DataBaseConnection {
         stmt.setString(2, pcFirstName);
         stmt.setString(3, pcLastName);
         stmt.setString(4, pcSecondLastName);
-        stmt.setDate(5, pdBirthdate);
+        stmt.setString(5, pdBirthdate);
         stmt.setInt(6, pnIdGender);
         stmt.setInt(7, pnIdCompany);
         stmt.execute();
@@ -855,16 +855,17 @@ public class DataBaseConnection {
     }
     
     // Procedure to set a user app of the system
-    public static void setUserApp(String pcUserName, Integer pnBanDays, Integer pnBanned, 
+    public static void setUserApp(String pcUserName, String pcUserPassword, Integer pnBanDays, Integer pnBanned, 
             Integer pnIdUserType, String pcIdUser) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call US.USTables.setUserApp(?,?,?,?,?)}");
+        CallableStatement stmt = con.prepareCall("{ call US.USTables.setUserApp(?,?,?,?,?,?)}");
         
         stmt.setString(1, pcUserName);
-        stmt.setInt(2, pnBanDays);
-        stmt.setInt(3, pnBanned);
-        stmt.setInt(4, pnIdUserType);
-        stmt.setString(5, pcIdUser);
+        stmt.setString(2, pcUserPassword);
+        stmt.setInt(3, pnBanDays);
+        stmt.setInt(4, pnBanned);
+        stmt.setInt(5, pnIdUserType);
+        stmt.setString(6, pcIdUser);
         stmt.execute();
     }
     

@@ -67,8 +67,8 @@
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="txtFechaNac" max="32767" attributes="0"/>
                                   <Component id="txtSecondLastName" pref="100" max="32767" attributes="0"/>
+                                  <Component id="txtFechaNac" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
@@ -136,14 +136,19 @@
                   <Component id="cmbCompania" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtCedula" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace pref="13" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnAceptar" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="19" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="btnAceptar" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="txtCedula" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -207,13 +212,6 @@
     </Component>
     <Component class="javax.swing.JPasswordField" name="txtPassword">
     </Component>
-    <Component class="javax.swing.JFormattedTextField" name="txtFechaNac">
-      <Properties>
-        <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
-          <Format subtype="1" type="1"/>
-        </Property>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>
         <Property name="text" type="java.lang.String" value="G&#xe9;nero:"/>
@@ -254,12 +252,9 @@
         <Property name="text" type="java.lang.String" value="C&#xe9;dula:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JFormattedTextField" name="txtCedula">
-      <Properties>
-        <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
-          <Format subtype="1" type="0"/>
-        </Property>
-      </Properties>
+    <Component class="javax.swing.JTextField" name="txtFechaNac">
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtCedula">
     </Component>
   </SubComponents>
 </Form>
