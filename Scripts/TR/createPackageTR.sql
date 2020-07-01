@@ -48,7 +48,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
             c.company_name company_name, p.id_gender id_gender, g.gender_name gender_name,
             p.first_name||' '||p.last_name||' '||p.second_last_name accused_name, t.id_transcripttype id_transcripttype, 
             tt.transcripttype_name transcripttype_name, t.id_verdict id_verdict, v.verdict_name verdict_name, 
-            t.id_community id_community, com.community_name community_name, t.sentence_startdate sentence_startdate,
+            t.id_community id_community, co.community_name community_name, t.sentence_startdate sentence_startdate,
             t.sentence_enddate sentence_enddate, t.sentence_startdate-t.sentence_enddate sentence_time, 
             t.id_sentencetype id_sentencetype, st.sentencetype_name sentencetype_name, 
             t.crime_description crime_description, t.crime_date crime_date, t.due_date due_date
@@ -65,8 +65,8 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         ON t.id_transcripttype = tt.id_transcripttype
         INNER JOIN VERDICT v
         ON t.id_verdict = v.id_verdict
-        INNER JOIN Place.COMMUNITY com
-        ON t.id_community = com.id_community
+        INNER JOIN Place.COMMUNITY co
+        ON t.id_community = co.id_community
         INNER JOIN SENTENCETYPE st
         ON t.id_sentencetype = st.id_sentencetype 
         WHERE t.transcript_number = NVL(pcTranscriptNumber , t.transcript_number);
@@ -96,7 +96,8 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
         id_sentencetype = pnIdSentenceType,
         crime_description = pcCrimeDescription,
         crime_date = pdCrimeDate,
-        due_date = pdDueDate;
+        due_date = pdDueDate
+        WHERE transcript_number = pcTranscriptNumber;
         Commit;
     Exception
         WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
