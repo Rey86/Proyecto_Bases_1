@@ -1,11 +1,11 @@
 CREATE OR REPLACE PACKAGE USTables IS
     -- UserApp Table
     FUNCTION getUserApp (pcUserName VARCHAR2) RETURN SYS_REFCURSOR;
-    PROCEDURE setUserApp (pcUserName VARCHAR2, pnBanDays NUMBER, pnBanned NUMBER, pnIdUserType NUMBER, pcIdUser VARCHAR2);
+    PROCEDURE setUserApp (pcUserName VARCHAR2, pcUserPassword VARCHAR2, pnBanDays NUMBER, pnBanned NUMBER, pnIdUserType NUMBER, pcIdUser VARCHAR2);
     PROCEDURE deleteUserApp (pcUserName VARCHAR2);
     PROCEDURE insertUserApp (pcUserName VARCHAR2, pcUserPassword VARCHAR2, pnBanDays NUMBER, pnBanned NUMBER, pnIdUserType NUMBER, 
         pcIdUser VARCHAR2);
-    FUNCTION isValidUser (pcUserName VARCHAR2, pcUserPassword VARCHAR2) RETURN SYS_REFCURSOR;
+    FUNCTION getUserPassword (pcUserName VARCHAR2) RETURN VARCHAR2;
     FUNCTION isBannedUser (pcUserName VARCHAR2) RETURN NUMBER;
     FUNCTION getCurrentUserType (pcUserName VARCHAR2) RETURN VARCHAR2;
     
@@ -33,7 +33,7 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
     BEGIN 
     OPEN userapp FOR
         SELECT ua.username user_name, ua.ban_days ban_days, ua.banned banned, ut.usertype_description usertype_description, ua.id_user id_user,
-            p.first_name first_name, p.last_name last_name, p.second_last_name second_last_name, 
+            ua.user_password user_password, p.first_name first_name, p.last_name last_name, p.second_last_name second_last_name, 
             p.birthdate birthdate, g.gender_name gender_name, c.company_name company_name
         FROM USERAPP ua
         INNER JOIN PRSN.PERSON p
@@ -55,11 +55,12 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
     END getUserApp;
 
 -- Procedure to set a user app with specific name and the new values wrote by the user  
-    PROCEDURE setUserApp (pcUserName IN VARCHAR2, pnBanDays IN NUMBER, pnBanned IN NUMBER, pnIdUserType IN NUMBER, pcIdUser IN VARCHAR2) IS
+    PROCEDURE setUserApp (pcUserName IN VARCHAR2, pcUserPassword VARCHAR2, pnBanDays IN NUMBER, pnBanned IN NUMBER, pnIdUserType IN NUMBER, pcIdUser IN VARCHAR2) IS
         vmenError VARCHAR2(100);
     BEGIN
         UPDATE USERAPP
-        SET ban_days = pnBanDays,
+        SET user_password = pcUserPassword,
+        ban_days = pnBanDays,
         banned = pnBanned,
         id_usertype = pnIdUserType,
         id_user = pcIdUser
@@ -102,22 +103,22 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END insertUserApp;
 
--- Function that returns the row of the user if it exists or throw an error else.
-    FUNCTION isValidUser (pcUserName VARCHAR2, pcUserPassword VARCHAR2) RETURN SYS_REFCURSOR IS
-    uservalid SYS_REFCURSOR;
+-- Function that returns the password of the user if it exists or throw an error else.
+    FUNCTION getUserPassword (pcUserName VARCHAR2) RETURN VARCHAR2 IS
+    vcUserPassword VARCHAR2(20);
     vmenError VARCHAR2(100);
     BEGIN
-        OPEN uservalid FOR
-            SELECT username, user_password
-            FROM USERAPP
-            WHERE username = pcUserName and user_password = pcUserPassword;
-        RETURN uservalid;
+        SELECT user_password
+        INTO vcUserPassword
+        FROM USERAPP
+        WHERE username = pcUserName;
+        RETURN vcUserPassword;
     Exception      
         when no_data_found then vmenError:= ('Couldn´t find register with the Index ||pcUserName and pcUserPassword');
         WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
-    END isValidUser;
+    END getUserPassword;
     
 -- Funtion that returns 0 if the the user is banned or 1 else.   
     FUNCTION isBannedUser (pcUserName VARCHAR2) RETURN NUMBER IS
