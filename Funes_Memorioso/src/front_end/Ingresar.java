@@ -110,10 +110,10 @@ public class Ingresar extends javax.swing.JDialog {
                 if (!connection_sqldb.DataBaseConnection.isBannedUser(txtUser.getText())) {
                     usertype_description = connection_sqldb.DataBaseConnection.getCurrentUserType(txtUser.getText());
                     if(usertype_description.equals("Administrador")){
-                        mainAdmin dialog = new  mainAdmin(new javax.swing.JFrame(), true);
+                        mainAdmin dialog = new  mainAdmin(new javax.swing.JFrame(), true, txtUser.getText());
                         dialog.setVisible(true);
                     } else {
-                        mainUsuario dialog = new  mainUsuario(new javax.swing.JFrame(), true);
+                        mainUsuario dialog = new  mainUsuario(new javax.swing.JFrame(), true, txtUser.getText());
                         dialog.setVisible(true);
                     }
                 } else {

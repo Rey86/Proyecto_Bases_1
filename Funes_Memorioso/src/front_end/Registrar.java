@@ -30,13 +30,18 @@ public class Registrar extends javax.swing.JDialog {
             if(!username.equals("")){
                 ResultSet u = connection_sqldb.DataBaseConnection.getUserApp(username);
                 if(u.next()) {
+                    String current_gender = u.getInt("ID_GENDER") + " " + u.getString("GENDER_NAME");
+                    String current_company = u.getInt("ID_COMPANY") + " " + u.getString("COMPANY_NAME");
+                    String[] date = String.valueOf(u.getDate("BIRTHDATE")).split("-");
                     txtUser.setText(u.getString("USER_NAME"));
                     txtPassword.setText(u.getString("USER_PASSWORD")); 
                     txtName.setText(u.getString("FIRST_NAME"));  
                     txtFirstLastName.setText(u.getString("LAST_NAME")); 
                     txtSecondLastName.setText(u.getString("SECOND_LAST_NAME"));
-                    txtFechaNac.setText(String.valueOf(u.getDate("BIRTHDATE")));
+                    txtFechaNac.setText(date[2] + "-" + date[1] + "-" + date[0]);
                     txtCedula.setText(u.getString("ID_USER"));
+                    cmbGenero.setSelectedItem(current_gender);
+                    cmbCompania.setSelectedItem(current_company);
                 }
             }
         }
