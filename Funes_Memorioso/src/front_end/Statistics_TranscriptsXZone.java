@@ -23,6 +23,7 @@ public class Statistics_TranscriptsXZone extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         initial();
+        setLocationRelativeTo(null);
     }
 
     public void initial(){
