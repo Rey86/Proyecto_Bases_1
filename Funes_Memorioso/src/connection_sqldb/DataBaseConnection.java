@@ -1191,7 +1191,7 @@ public class DataBaseConnection {
     // Function to get the list of all banned users in the base's users
     public static ResultSet getBannedUserList() throws SQLException {
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call US.USUserReports.getBannedUserList(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call US.USUserReports.getBannedUserList()}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
@@ -1212,7 +1212,7 @@ public class DataBaseConnection {
     // Function to get the percentage of all transcripts organized by type in the base's transcript
     public static ResultSet getTranscriptPercentagePerType() throws SQLException {
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getTranscriptPercentagePerType(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getTranscriptPercentagePerType()}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
@@ -1236,7 +1236,7 @@ public class DataBaseConnection {
     // Function to get the percentage of accused users organized by an age range in the base's transcript
     public static ResultSet getAgeRangePercentageAccused() throws SQLException {
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getAgeRangePercentageAccused(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getAgeRangePercentageAccused()}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
@@ -1261,7 +1261,7 @@ public class DataBaseConnection {
     // Function to get the average sentence time organized per type in the base's transcript
     public static ResultSet getAverageSentenceTimePerType() throws SQLException {
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getAverageSentenceTimePerType(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getAverageSentenceTimePerType()}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
@@ -1271,7 +1271,7 @@ public class DataBaseConnection {
     // Function to get the list of due sentences in the base's transcript
     public static ResultSet getDueSentenceTranscripts() throws SQLException {
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getDueSentenceTranscripts(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getDueSentenceTranscripts()}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
@@ -1281,7 +1281,7 @@ public class DataBaseConnection {
     // Function to get the sentence time organized by type in the base's transcript
     public static ResultSet getSentenceTimePerType() throws SQLException {
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getSentenceTimePerType(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getSentenceTimePerType()}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
@@ -1291,7 +1291,7 @@ public class DataBaseConnection {
     // Function to get the sentence type organized by transcript type in the base's transcript
     public static ResultSet getSentenceTypePerType() throws SQLException {
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getSentenceTypePerType(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getSentenceTypePerType()}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
@@ -1301,7 +1301,7 @@ public class DataBaseConnection {
     // Function to get the percentage of all users organized by an age range in the base's users
     public static ResultSet getAgeRangePercentageUsers () throws SQLException {
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call US.USStatisticReports.getAgeRangePercentageUsers (?)}");
+        CallableStatement stmt = con.prepareCall("{?= call US.USStatisticReports.getAgeRangePercentageUsers ()}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
