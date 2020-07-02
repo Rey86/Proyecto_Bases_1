@@ -81,7 +81,7 @@ public class consultasAdmin extends javax.swing.JDialog {
             }
         });
 
-        btnListaUsuariosContrasena.setText("Lista de Usuarios que Mantienen su Contraseña");
+        btnListaUsuariosContrasena.setText("Lista de Usuarios que cambiaron su contraseña");
         btnListaUsuariosContrasena.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnListaUsuariosContrasenaActionPerformed(evt);
@@ -89,6 +89,11 @@ public class consultasAdmin extends javax.swing.JDialog {
         });
 
         btnListaExpedientesNuevos.setText("Lista de Expedientes Nuevos");
+        btnListaExpedientesNuevos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListaExpedientesNuevosActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Consultas Admin");
 
@@ -100,14 +105,39 @@ public class consultasAdmin extends javax.swing.JDialog {
         });
 
         jButtonAccusedPerCompany.setText("Acusados Por Compañía");
+        jButtonAccusedPerCompany.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAccusedPerCompanyActionPerformed(evt);
+            }
+        });
 
         jButtonTopCrimes.setText("Top Crimenes");
+        jButtonTopCrimes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonTopCrimesActionPerformed(evt);
+            }
+        });
 
         jButtonTopSentenceType.setText("Top Tiempo de Sentencia");
+        jButtonTopSentenceType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonTopSentenceTypeActionPerformed(evt);
+            }
+        });
 
         jButtonValidTranscript.setText("Expedientes Válidos");
+        jButtonValidTranscript.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonValidTranscriptActionPerformed(evt);
+            }
+        });
 
         jButtonBanReason.setText("Top Razones de Baneo");
+        jButtonBanReason.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBanReasonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -157,13 +187,13 @@ public class consultasAdmin extends javax.swing.JDialog {
                 .addComponent(jButtonTopCrimes)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonTopSentenceType)
-                .addGap(18, 18, 18)
-                .addComponent(jButtonValidTranscript)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonValidTranscript)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonBanReason)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonClose)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -202,6 +232,36 @@ public class consultasAdmin extends javax.swing.JDialog {
         UserPasswordMod dialog = new UserPasswordMod(new javax.swing.JFrame(), true);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnListaUsuariosContrasenaActionPerformed
+
+    private void btnListaExpedientesNuevosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaExpedientesNuevosActionPerformed
+        NewTranscripts dialog = new NewTranscripts(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnListaExpedientesNuevosActionPerformed
+
+    private void jButtonAccusedPerCompanyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAccusedPerCompanyActionPerformed
+        AccusedPerCompany dialog = new AccusedPerCompany(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonAccusedPerCompanyActionPerformed
+
+    private void jButtonTopCrimesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTopCrimesActionPerformed
+        TopCrimes dialog = new TopCrimes(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonTopCrimesActionPerformed
+
+    private void jButtonTopSentenceTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTopSentenceTypeActionPerformed
+        TopSentenceTime dialog = new TopSentenceTime(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonTopSentenceTypeActionPerformed
+
+    private void jButtonValidTranscriptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonValidTranscriptActionPerformed
+        ValidTranscripts dialog = new ValidTranscripts(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonValidTranscriptActionPerformed
+
+    private void jButtonBanReasonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBanReasonActionPerformed
+        TopBanReason dialog = new TopBanReason(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonBanReasonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInformacionPVencer;

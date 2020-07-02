@@ -1062,7 +1062,7 @@ public class DataBaseConnection {
     // Function to get the new transcripts in the base's transcripts
     public static ResultSet getNewTranscripts() throws SQLException {
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRAdminReports.getNewTranscripts(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRAdminReports.getNewTranscripts()}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
@@ -1071,7 +1071,7 @@ public class DataBaseConnection {
     // Function to get the valid transcripts in the base's transcripts
     public static ResultSet getValidTranscripts() throws SQLException {
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRAdminReports.getValidTranscripts(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRAdminReports.getValidTranscripts()}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
@@ -1138,11 +1138,10 @@ public class DataBaseConnection {
     }
     
     // Function to get the accused users per comapny in the base's transcripts
-    public static ResultSet getAccusedPerCompany(Integer PnID_Company) throws SQLException {
+    public static ResultSet getAccusedPerCompany() throws SQLException {
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRUserReports.getAccusedPerCompany(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRUserReports.getAccusedPerCompany()}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
-        stmt.setInt(2, PnID_Company);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
         return r;
