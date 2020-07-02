@@ -44,7 +44,7 @@ CREATE OR REPLACE PACKAGE TRUserReports IS
     FUNCTION getTopTranscriptCommunity(n number) RETURN SYS_REFCURSOR;
     FUNCTION getTranscriptPerType(pnIdTranscriptType NUMBER, pdDateStartDate DATE,
     pdDateEndDate DATE, pnIdCommunity NUMBER) RETURN SYS_REFCURSOR;
-    FUNCTION getDueTranscripts(pdDateCreation Date, pdDateLastModification DATE) RETURN SYS_REFCURSOR;
+    FUNCTION getDueTranscripts(pdStartDate Date, pdEndDate DATE) RETURN SYS_REFCURSOR;
     FUNCTION getAccusedPerCompany(PnID_Company NUMBER) RETURN SYS_REFCURSOR;
     FUNCTION getTopCrimes(n NUMBER) RETURN SYS_REFCURSOR;
     FUNCTION getTopSentenceTime(n NUMBER) RETURN SYS_REFCURSOR;
@@ -93,22 +93,22 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
         when no_data_found then vmenError:= ('Couldn´t find register with one of the sent parameters ');
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END gettranscriptPerType;
-    
-    FUNCTION getDueTranscripts(pdDateCreation Date, pdDateLastModification DATE) RETURN SYS_REFCURSOR IS
+    --Function that gets the list of Due Transcripts
+    FUNCTION getDueTranscripts(pdStartDate Date, pdEndDate DATE) RETURN SYS_REFCURSOR IS
     vmenError VARCHAR2(100);
     DueTranscripts SYS_REFCURSOR;
     BEGIN
     OPEN duetranscripts FOR
         select t.transcript_number transcript_number, t.username username, c.company_name company_name,
-        p.first_name||' '||p.last_name||' '||p.second_last_name accused_name, p.birthdate birthdate, g.gender_name gender 
+        p.first_name||' '||p.last_name||' '||p.second_last_name accused_name, p.birthdate birthdate, g.gender_name gender, tt.transcripttype_name transcripttype_name 
         from transcript t 
         inner join accused a on t.id_accused = a.id_accused
         inner join PRSN.person p on a.id_accused = p.id_person
         inner join PRSN.gender g on p.id_gender = g.id_gender
         inner join PRSN.company c on p.id_company = c.id_company
-        where t.due_date = sysdate
-        and t.date_creation = NVL(pdDateCreation, t.date_creation)
-        and t.date_last_modification = NVL(pdDateLastModification, t.date_last_modification);
+        inner join transcripttype tt on tt.id_transcripttype = t.id_transcripttype
+        where t.due_date between sysdate-1 and sysdate+2
+        and t.date_creation between NVL(pdStartDate, t.date_creation) and  NVL(pdEndDate, t.date_creation); 
     RETURN duetranscripts;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 

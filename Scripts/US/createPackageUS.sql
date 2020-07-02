@@ -32,7 +32,7 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
     userapp SYS_REFCURSOR;
     BEGIN 
     OPEN userapp FOR
-        SELECT ua.username user_name, ua.ban_days ban_days, ua.banned banned, ut.usertype_description usertype_description, ua.id_user id_user,
+        SELECT ua.username user_name, ua.ban_days ban_days, ua.banned banned, ua.id_usertype id_usertype,ut.usertype_description usertype_description, ua.id_user id_user,
             ua.user_password user_password, p.first_name first_name, p.last_name last_name, p.second_last_name second_last_name, 
             p.birthdate birthdate, p.id_gender id_gender, g.gender_name gender_name, p.id_company id_company, c.company_name company_name
         FROM USERAPP ua
