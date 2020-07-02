@@ -17,7 +17,6 @@ import org.jfree.data.general.DefaultPieDataset;
 
 public class Statistics_TranscriptsXZone extends javax.swing.JDialog {
     JFreeChart chart;
-    DefaultPieDataset dataset = new DefaultPieDataset();
 
     public Statistics_TranscriptsXZone(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -32,17 +31,21 @@ public class Statistics_TranscriptsXZone extends javax.swing.JDialog {
             ResultSet ca = connection_sqldb.DataBaseConnection.getCantons();
             ResultSet p = connection_sqldb.DataBaseConnection.getProvinces();
             ResultSet co = connection_sqldb.DataBaseConnection.getCountries();
+            cmbDistrict.addItem("0 Sin Filtro"); 
+            cmbCanton.addItem("0 Sin Filtro"); 
+            cmbProvince.addItem("0 Sin Filtro"); 
+            cmbCountry.addItem("0 Sin Filtro"); 
             while(d.next()){
                 cmbDistrict.addItem(String.valueOf(d.getInt("ID_DISTRICT")) + " " + d.getString("DISTRICT_NAME"));
             }
             while(ca.next()){
                 cmbCanton.addItem(String.valueOf(ca.getInt("ID_CANTON")) + " " + ca.getString("CANTON_NAME"));
             }
-            while(d.next()){
-                cmbProvince.addItem(String.valueOf(p.getInt("ID_DISTRICT")) + " " + p.getString("DISTRICT_NAME"));
+            while(p.next()){
+                cmbProvince.addItem(String.valueOf(p.getInt("ID_PROVINCE")) + " " + p.getString("PROVINCE_NAME"));
             }
-            while(ca.next()){
-                cmbCountry.addItem(String.valueOf(co.getInt("ID_CANTON")) + " " + co.getString("CANTON_NAME"));
+            while(co.next()){
+                cmbCountry.addItem(String.valueOf(co.getInt("ID_COUNTRY")) + " " + co.getString("COUNTRY_NAME"));
             }
         }
         catch (SQLException e){
@@ -160,10 +163,11 @@ public class Statistics_TranscriptsXZone extends javax.swing.JDialog {
         Integer id_province = Integer.valueOf(current_province.split(" ")[0]);
         Integer id_canton = Integer.valueOf(current_canton.split(" ")[0]);
         Integer id_district = Integer.valueOf(current_district.split(" ")[0]);
+        DefaultPieDataset dataset = new DefaultPieDataset();
         try {
             ResultSet r = connection_sqldb.DataBaseConnection.getTrPercentagePerZone(id_country,id_province,id_canton,id_district);
             while(r.next()){
-                dataset.setValue(r.getString("transcripttype_name"), r.getInt("percentage"));
+                dataset.setValue(r.getString("community_name"), r.getInt("percentage"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Statistics.class.getName()).log(Level.SEVERE, null, ex);

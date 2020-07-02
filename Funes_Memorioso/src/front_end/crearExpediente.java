@@ -74,10 +74,10 @@ public class crearExpediente extends javax.swing.JDialog {
                     jTextAreaCrimeDescription.setText(t.getString("CRIME_DESCRIPTION"));
                     jComboBoxGenders.setSelectedItem(current_gender);
                     jComboBoxCompanies.setSelectedItem(current_company);
-                    jComboBoxGenders.setSelectedItem(current_community);
-                    jComboBoxCompanies.setSelectedItem(current_transcriptType);
-                    jComboBoxGenders.setSelectedItem(current_sentenceType);
-                    jComboBoxCompanies.setSelectedItem(current_verdict);
+                    cmbComunidad.setSelectedItem(current_community);
+                    cmbTipoExpediente.setSelectedItem(current_transcriptType);
+                    jComboBoxSentenceType.setSelectedItem(current_sentenceType);
+                    jComboBoxVerdicts.setSelectedItem(current_verdict);
                 }
             }
             jTextFieldUsername.setEnabled(false);

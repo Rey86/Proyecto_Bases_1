@@ -18,8 +18,6 @@ import java.util.logging.Logger;
 
 public class Statistics extends javax.swing.JDialog {
     JFreeChart chart;
-    DefaultPieDataset dataset = new DefaultPieDataset();
-    DefaultCategoryDataset data = new DefaultCategoryDataset();
 
     public Statistics(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -41,6 +39,7 @@ public class Statistics extends javax.swing.JDialog {
         btnTranscriptsXEndDateSentence = new javax.swing.JButton();
         btnJailYearsXTranscriptType = new javax.swing.JButton();
         btnTranscriptsHouseArrstXTranscriptType = new javax.swing.JButton();
+        jButtonClose = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -102,10 +101,17 @@ public class Statistics extends javax.swing.JDialog {
             }
         });
 
-        btnTranscriptsHouseArrstXTranscriptType.setText("Expedientes con Casa por Cárcel por Tipo Expediente");
+        btnTranscriptsHouseArrstXTranscriptType.setText("Expedientes por Tipo Sentencia");
         btnTranscriptsHouseArrstXTranscriptType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTranscriptsHouseArrstXTranscriptTypeActionPerformed(evt);
+            }
+        });
+
+        jButtonClose.setText("Salir");
+        jButtonClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCloseActionPerformed(evt);
             }
         });
 
@@ -125,7 +131,8 @@ public class Statistics extends javax.swing.JDialog {
                     .addComponent(btnTranscriptsXType)
                     .addComponent(jLabel1)
                     .addComponent(btnTranscriptsXZone)
-                    .addComponent(btnAgeUsers))
+                    .addComponent(btnAgeUsers)
+                    .addComponent(jButtonClose))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -151,13 +158,16 @@ public class Statistics extends javax.swing.JDialog {
                 .addComponent(btnJailYearsXTranscriptType)
                 .addGap(18, 18, 18)
                 .addComponent(btnTranscriptsHouseArrstXTranscriptType)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonClose)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTranscriptsXTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTranscriptsXTypeActionPerformed
+        DefaultPieDataset dataset = new DefaultPieDataset();
         try {
             ResultSet r = connection_sqldb.DataBaseConnection.getTranscriptPercentagePerType();
             while(r.next()){
@@ -187,6 +197,7 @@ public class Statistics extends javax.swing.JDialog {
     }//GEN-LAST:event_btnTranscriptsXZoneActionPerformed
 
     private void btnAgeUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgeUsersActionPerformed
+        DefaultPieDataset dataset = new DefaultPieDataset();
         try {
             ResultSet r = connection_sqldb.DataBaseConnection.getAgeRangePercentageUsers();
             while(r.next()){
@@ -211,6 +222,7 @@ public class Statistics extends javax.swing.JDialog {
     }//GEN-LAST:event_btnAgeUsersActionPerformed
 
     private void btnAgeAccusedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgeAccusedActionPerformed
+        DefaultPieDataset dataset = new DefaultPieDataset();
         try {
             ResultSet r = connection_sqldb.DataBaseConnection.getAgeRangePercentageAccused();
             while(r.next()){
@@ -240,10 +252,11 @@ public class Statistics extends javax.swing.JDialog {
     }//GEN-LAST:event_btnTranscriptsXPlaceAccusedActionPerformed
 
     private void btnTimeSentenceXTranscriptTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimeSentenceXTranscriptTypeActionPerformed
+        DefaultCategoryDataset data = new DefaultCategoryDataset();
         try {
-            ResultSet r = connection_sqldb.DataBaseConnection.getAverageSentenceTimePerType();
+            ResultSet r = connection_sqldb.DataBaseConnection.getSentenceTimePerType();
             while(r.next()){
-                data.addValue(r.getInt("Average"), "Promedio", r.getString("transcripttype_name"));
+                data.addValue(r.getInt("sentence_time"), "Años", r.getString("transcripttype_name"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Statistics.class.getName()).log(Level.SEVERE, null, ex);
@@ -262,12 +275,11 @@ public class Statistics extends javax.swing.JDialog {
     }//GEN-LAST:event_btnTimeSentenceXTranscriptTypeActionPerformed
 
     private void btnTranscriptsXEndDateSentenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTranscriptsXEndDateSentenceActionPerformed
+        DefaultCategoryDataset data = new DefaultCategoryDataset();
         try {
             ResultSet r = connection_sqldb.DataBaseConnection.getDueSentenceTranscripts();
-            int i = 1;
             while(r.next()){
-                data.addValue(i, "Vencidas", r.getString("id_transcripttype"));
-                i++;
+                data.addValue(r.getInt("QUANTITY_TRANSCRIPTS"), "Vencidas", r.getString("transcripttype_name"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Statistics.class.getName()).log(Level.SEVERE, null, ex);
@@ -286,10 +298,11 @@ public class Statistics extends javax.swing.JDialog {
     }//GEN-LAST:event_btnTranscriptsXEndDateSentenceActionPerformed
 
     private void btnJailYearsXTranscriptTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJailYearsXTranscriptTypeActionPerformed
+        DefaultCategoryDataset data = new DefaultCategoryDataset();
         try {
-            ResultSet r = connection_sqldb.DataBaseConnection.getSentenceTimePerType();
+            ResultSet r = connection_sqldb.DataBaseConnection.getAverageSentenceTimePerType();
             while(r.next()){
-                data.addValue(r.getInt("Sentence_Time"), "Años de sencentia", r.getString("transcripttype_name"));
+                data.addValue(r.getInt("AVERAGE"), "Años de sencentia", r.getString("transcripttype_name"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Statistics.class.getName()).log(Level.SEVERE, null, ex);
@@ -308,18 +321,17 @@ public class Statistics extends javax.swing.JDialog {
     }//GEN-LAST:event_btnJailYearsXTranscriptTypeActionPerformed
 
     private void btnTranscriptsHouseArrstXTranscriptTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTranscriptsHouseArrstXTranscriptTypeActionPerformed
+        DefaultCategoryDataset data = new DefaultCategoryDataset();
         try {
-            ResultSet r = connection_sqldb.DataBaseConnection.getSentenceTimePerType();
-            int i = 1;
+            ResultSet r = connection_sqldb.DataBaseConnection.getSentenceTypePerType();
             while(r.next()){
-                data.addValue(i, "EXpedientes", r.getString("transcript_number"));
-                i++;
+                data.addValue(r.getInt("QUANTITY_TRANSCRIPTS"), "Expedientes", r.getString("sentencetype_name"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Statistics.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        chart = ChartFactory.createBarChart("Expedientes con Casa por Cárcel por Tipo Expediente",
+        chart = ChartFactory.createBarChart("Expedientes Tipo Sentencia",
                                                 "Tipos", "", data,
                                                 PlotOrientation.HORIZONTAL, 
                                                 true, true, false);
@@ -331,6 +343,10 @@ public class Statistics extends javax.swing.JDialog {
         dialog.setVisible(true);
     }//GEN-LAST:event_btnTranscriptsHouseArrstXTranscriptTypeActionPerformed
 
+    private void jButtonCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCloseActionPerformed
+        dispose();
+    }//GEN-LAST:event_jButtonCloseActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgeAccused;
     private javax.swing.JButton btnAgeUsers;
@@ -341,6 +357,7 @@ public class Statistics extends javax.swing.JDialog {
     private javax.swing.JButton btnTranscriptsXPlaceAccused;
     private javax.swing.JButton btnTranscriptsXType;
     private javax.swing.JButton btnTranscriptsXZone;
+    private javax.swing.JButton jButtonClose;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

@@ -32,8 +32,8 @@ public class ListaExpedientesPorTipo extends javax.swing.JDialog {
         try{
             ResultSet tt = connection_sqldb.DataBaseConnection.getTranscriptTypes();
             ResultSet c = connection_sqldb.DataBaseConnection.getCommunities();
-            jComboBoxTranscriptType.addItem("0 No aplica"); 
-            jComboBoxCommunities.addItem("0 No aplica"); 
+            jComboBoxTranscriptType.addItem("0 Sin Filtro"); 
+            jComboBoxCommunities.addItem("0 Sin Filtro"); 
             while(tt.next()){
                 jComboBoxTranscriptType.addItem(String.valueOf(tt.getInt("ID_TRANSCRIPTTYPE")) + " " + tt.getString("TRANSCRIPTTYPE_NAME"));
             }

@@ -1250,10 +1250,26 @@ public class DataBaseConnection {
         Connection con = getConnectionDataBase();
         CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getTrPercentagePerZone(?, ?, ?, ?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
-        stmt.setInt(2, pnIdCountry);
-        stmt.setInt(3, pnIdProvince);
-        stmt.setInt(4, pnIdCanton);
-        stmt.setInt(5, pnIdDistrict);
+        if(pnIdCountry == 0){
+            stmt.setNull(2, Types.INTEGER);
+        } else {
+            stmt.setInt(2, pnIdCountry);
+        }
+        if(pnIdProvince == 0){
+            stmt.setNull(3, Types.INTEGER);
+        } else {
+            stmt.setInt(3, pnIdProvince);
+        }
+        if(pnIdCanton == 0){
+            stmt.setNull(4, Types.INTEGER);
+        } else {
+            stmt.setInt(4, pnIdCanton);
+        }
+        if(pnIdDistrict == 0){
+            stmt.setNull(5, Types.INTEGER);
+        } else {
+            stmt.setInt(5, pnIdDistrict);
+        }
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
         return r;
@@ -1272,13 +1288,35 @@ public class DataBaseConnection {
     // Function to get the percentage of accused users organized by zone in the base's transcript
     public static ResultSet getAccuTrPercentPerZone(Integer pnIdCommunity, Integer pnIdCountry,Integer pnIdProvince,Integer pnIdCanton,Integer pnIdDistrict) throws SQLException {
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getTrPercentagePerZone(?, ?, ?, ?, ?)}");
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getAccuTrPercentPerZone(?, ?, ?, ?, ?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
-        stmt.setInt(2, pnIdCommunity);
-        stmt.setInt(3, pnIdCountry);
-        stmt.setInt(4, pnIdProvince);
-        stmt.setInt(5, pnIdCanton);
-        stmt.setInt(6, pnIdDistrict);
+        
+        if(pnIdCommunity == 0){
+            stmt.setNull(2, Types.INTEGER);
+        } else {
+            stmt.setInt(2, pnIdCommunity);
+        }
+        if(pnIdCountry == 0){
+            stmt.setNull(3, Types.INTEGER);
+        } else {
+            stmt.setInt(3, pnIdCountry);
+        }
+        if(pnIdProvince == 0){
+            stmt.setNull(4, Types.INTEGER);
+        } else {
+            stmt.setInt(4, pnIdProvince);
+        }
+        if(pnIdCanton == 0){
+            stmt.setNull(5, Types.INTEGER);
+        } else {
+            stmt.setInt(5, pnIdCanton);
+        }
+        if(pnIdDistrict == 0){
+            stmt.setNull(6, Types.INTEGER);
+        } else {
+            stmt.setInt(6, pnIdDistrict);
+        }
+        
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
         return r;
