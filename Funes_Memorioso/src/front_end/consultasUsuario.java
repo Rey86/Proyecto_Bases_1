@@ -30,10 +30,16 @@ public class consultasUsuario extends javax.swing.JDialog {
     private void initComponents() {
 
         btnTopLugares = new javax.swing.JButton();
+        jButtonTopSentenceType = new javax.swing.JButton();
+        jButtonBanReason = new javax.swing.JButton();
+        jButtonClose = new javax.swing.JButton();
+        jButtonAccusedPerCompany = new javax.swing.JButton();
+        jButtonTopCrimes = new javax.swing.JButton();
         btnListaExpedientes = new javax.swing.JButton();
         btnListaUsuarios = new javax.swing.JButton();
         btnListaUsuariosBaneados = new javax.swing.JButton();
-        btnInformacionDenunciado = new javax.swing.JButton();
+        btnInformacionPVencer = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -44,7 +50,17 @@ public class consultasUsuario extends javax.swing.JDialog {
             }
         });
 
-        btnListaExpedientes.setText("Lista de Expedientes");
+        jButtonTopSentenceType.setText("Top Tiempo de Sentencia");
+
+        jButtonBanReason.setText("Top Razones de Baneo");
+
+        jButtonClose.setText("Salir");
+
+        jButtonAccusedPerCompany.setText("Acusados Por Compañía");
+
+        jButtonTopCrimes.setText("Top Crimenes");
+
+        btnListaExpedientes.setText("Lista de Expedientes por tipo");
         btnListaExpedientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnListaExpedientesActionPerformed(evt);
@@ -65,49 +81,61 @@ public class consultasUsuario extends javax.swing.JDialog {
             }
         });
 
-        btnInformacionDenunciado.setText("Información Denunciado");
-        btnInformacionDenunciado.addActionListener(new java.awt.event.ActionListener() {
+        btnInformacionPVencer.setText("Información Expexientes Proximos a Vencer ");
+        btnInformacionPVencer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInformacionDenunciadoActionPerformed(evt);
+                btnInformacionPVencerActionPerformed(evt);
             }
         });
+
+        jLabel1.setText("Consultas Usuario");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnListaExpedientes)
-                        .addGap(23, 23, 23))
-                    .addComponent(btnInformacionDenunciado)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(btnListaUsuariosBaneados)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(18, 18, 18)
-                            .addComponent(btnListaUsuarios))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(btnTopLugares)
-                            .addGap(37, 37, 37))))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addGap(17, 17, 17)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(btnTopLugares)
+                    .addComponent(btnListaExpedientes)
+                    .addComponent(btnListaUsuarios)
+                    .addComponent(btnListaUsuariosBaneados)
+                    .addComponent(btnInformacionPVencer)
+                    .addComponent(jLabel1)
+                    .addComponent(jButtonClose)
+                    .addComponent(jButtonAccusedPerCompany)
+                    .addComponent(jButtonTopCrimes)
+                    .addComponent(jButtonTopSentenceType)
+                    .addComponent(jButtonBanReason))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnTopLugares)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnListaExpedientes)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnListaUsuarios)
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnListaUsuariosBaneados)
-                .addGap(18, 18, 18)
-                .addComponent(btnInformacionDenunciado)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnInformacionPVencer)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonAccusedPerCompany)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonTopCrimes)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonTopSentenceType)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonBanReason)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonClose)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -132,10 +160,9 @@ public class consultasUsuario extends javax.swing.JDialog {
         dialog.setVisible(true);
     }//GEN-LAST:event_btnListaUsuariosBaneadosActionPerformed
 
-    private void btnInformacionDenunciadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformacionDenunciadoActionPerformed
-        datosDenunciado dialog = new datosDenunciado(new javax.swing.JFrame(), true);
-        dialog.setVisible(true);
-    }//GEN-LAST:event_btnInformacionDenunciadoActionPerformed
+    private void btnInformacionPVencerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformacionPVencerActionPerformed
+        
+    }//GEN-LAST:event_btnInformacionPVencerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -180,10 +207,16 @@ public class consultasUsuario extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnInformacionDenunciado;
+    private javax.swing.JButton btnInformacionPVencer;
     private javax.swing.JButton btnListaExpedientes;
     private javax.swing.JButton btnListaUsuarios;
     private javax.swing.JButton btnListaUsuariosBaneados;
     private javax.swing.JButton btnTopLugares;
+    private javax.swing.JButton jButtonAccusedPerCompany;
+    private javax.swing.JButton jButtonBanReason;
+    private javax.swing.JButton jButtonClose;
+    private javax.swing.JButton jButtonTopCrimes;
+    private javax.swing.JButton jButtonTopSentenceType;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

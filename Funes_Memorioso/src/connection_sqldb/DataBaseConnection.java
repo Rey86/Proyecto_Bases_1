@@ -1082,14 +1082,38 @@ public class DataBaseConnection {
     }
     
     // Function to get the transcripts per transcript type in the base's transcripts
-    public static ResultSet getTranscriptPerType(Integer pnIdTranscriptType, Date pdDateCreation, Date pdDateLastModification, Integer pnIdCommunity) throws SQLException {
+    public static ResultSet getTranscriptPerType(Integer pnIdTranscriptType, String pdStartDate, String pdEndDate, Integer pnIdCommunity) throws SQLException {
         Connection con = getConnectionDataBase();
         CallableStatement stmt = con.prepareCall("{?= call TR.TRUserReports.getTranscriptPerType(?, ?, ?, ?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
-        stmt.setInt(2, pnIdTranscriptType);
-        stmt.setDate(3, pdDateCreation);
-        stmt.setDate(4, pdDateLastModification);
-        stmt.setInt(5, pnIdCommunity);
+        if (pnIdTranscriptType > 0){
+            stmt.setInt(2, pnIdTranscriptType);
+        } else {
+            stmt.setNull(2, Types.INTEGER);
+        }
+        
+        if (!pdStartDate.equals("")) {
+            String[] current_startdate = pdStartDate.split("-");
+            String[] year = current_startdate[2].split(""); 
+            stmt.setString(3, current_startdate[0] + "/" + current_startdate[1] + "/" + year[2] + year[3]);
+        } else {
+            stmt.setNull(3, Types.DATE);
+        }
+        
+        if (!pdEndDate.equals("")) {
+            String[] current_enddate = pdEndDate.split("-");
+            String[] year = current_enddate[2].split(""); 
+            stmt.setString(4, current_enddate[0] + "/" + current_enddate[1] + "/" + year[2] + year[3]);
+        } else {
+            stmt.setNull(4, Types.DATE);
+        }
+        
+        if (pnIdCommunity > 0){
+            stmt.setInt(5, pnIdCommunity);
+        } else {
+            stmt.setNull(5, Types.INTEGER);
+        }
+        
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
         return r;
@@ -1157,7 +1181,7 @@ public class DataBaseConnection {
     // Function to get the list of all users in the base's users
     public static ResultSet getUserList() throws SQLException {
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call US.USUserReports.getUserList(?)}");
+        CallableStatement stmt = con.prepareCall("{?= call US.USUserReports.getUserList()}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
