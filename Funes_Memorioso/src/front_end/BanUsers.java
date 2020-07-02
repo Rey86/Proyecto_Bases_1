@@ -162,7 +162,7 @@ public class BanUsers extends javax.swing.JDialog {
                     ResultSet u = connection_sqldb.DataBaseConnection.getUserApp((String)jTableUsers.getValueAt(current_row, 0));
                     while(u.next()){
                         connection_sqldb.DataBaseConnection.insertBanReasonxUserApp(id_banreason, u.getString("USER_NAME"));
-                        connection_sqldb.DataBaseConnection.setUserApp(u.getString("USER_NAME"), u.getString("USER_PASSWORD"), Integer.valueOf(jTextFieldBanTime.getText()), 1, u.getInt("ID_USERTYPE"), u.getString("ID_USER")); 
+                        connection_sqldb.DataBaseConnection.setUserApp(u.getString("USER_NAME"), Integer.valueOf(jTextFieldBanTime.getText()), 1, u.getInt("ID_USERTYPE"), u.getString("ID_USER")); 
                     }
                     UsersCleanList();
                     UsersList();

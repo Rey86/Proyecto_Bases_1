@@ -247,7 +247,13 @@ public class Registrar extends javax.swing.JDialog {
                                         if(!username.equals("")){
                                             ArrayList<String> persons = allforeigns();
                                             if(persons.contains(txtCedula.getText())){
-                                                connection_sqldb.DataBaseConnection.setUserApp(txtUser.getText(), String.valueOf(txtPassword.getPassword()), 0, 0, 2, txtCedula.getText());
+                                                ResultSet u = connection_sqldb.DataBaseConnection.getUserApp(txtUser.getText());
+                                                while(u.next()){
+                                                    if(!String.valueOf(txtPassword.getPassword()).equals(u.getString("USER_PASSWORD"))){
+                                                        connection_sqldb.DataBaseConnection.setPassword(username, String.valueOf(txtPassword.getPassword()));
+                                                    }
+                                                }
+                                                connection_sqldb.DataBaseConnection.setUserApp(txtUser.getText(), 0, 0, 2, txtCedula.getText());
                                                 connection_sqldb.DataBaseConnection.setPerson(txtCedula.getText(),txtName.getText(),txtFirstLastName.getText(),txtSecondLastName.getText(), txtFechaNac.getText(), id_gender, id_company);
                                                 dispose();
                                             } else {

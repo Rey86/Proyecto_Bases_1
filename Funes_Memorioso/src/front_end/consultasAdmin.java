@@ -199,7 +199,8 @@ public class consultasAdmin extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonCloseActionPerformed
 
     private void btnListaUsuariosContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaUsuariosContrasenaActionPerformed
-        // TODO add your handling code here:
+        UserPasswordMod dialog = new UserPasswordMod(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnListaUsuariosContrasenaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -855,17 +855,16 @@ public class DataBaseConnection {
     }
     
     // Procedure to set a user app of the system
-    public static void setUserApp(String pcUserName, String pcUserPassword, Integer pnBanDays, Integer pnBanned, 
+    public static void setUserApp(String pcUserName, Integer pnBanDays, Integer pnBanned, 
             Integer pnIdUserType, String pcIdUser) throws SQLException{
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{ call US.USTables.setUserApp(?,?,?,?,?,?)}");
+        CallableStatement stmt = con.prepareCall("{ call US.USTables.setUserApp(?,?,?,?,?)}");
         
         stmt.setString(1, pcUserName);
-        stmt.setString(2, pcUserPassword);
-        stmt.setInt(3, pnBanDays);
-        stmt.setInt(4, pnBanned);
-        stmt.setInt(5, pnIdUserType);
-        stmt.setString(6, pcIdUser);
+        stmt.setInt(2, pnBanDays);
+        stmt.setInt(3, pnBanned);
+        stmt.setInt(4, pnIdUserType);
+        stmt.setString(5, pcIdUser);
         stmt.execute();
     }
     
@@ -925,6 +924,15 @@ public class DataBaseConnection {
         stmt.executeQuery();
         String usertype_name = (String) stmt.getObject(1);  
         return usertype_name;
+    }
+    
+    public static void setPassword(String pcUserName, String pcUserPassword) throws SQLException{
+        Connection con = getConnectionDataBase();
+        CallableStatement stmt = con.prepareCall("{ call US.USTables.setPassword(?, ?)}");
+
+        stmt.setString(1, pcUserName);
+        stmt.setString(2, pcUserPassword);
+        stmt.execute();
     }
     
     // UserType
@@ -1163,14 +1171,35 @@ public class DataBaseConnection {
     }
    
     // Function to get the list of users whose password was modified in the last 10 days in the base's users
-    public static ResultSet getUserPasswordMod(String pcUserName ,String pcFirstName,String pcLastName,Integer pnIdUser) throws SQLException {
+    public static ResultSet getUserPasswordMod(String pcUserName ,String pcFirstName,String pcLastName, String pcSecondLastName,String pnIdUser) throws SQLException {
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call US.USAdminReports.getUserPasswordMod(?, ?, ?, ?)}");
+        CallableStatement stmt = con.prepareCall("{?= call US.USAdminReports.getUserPasswordMod(?, ?, ?, ?, ?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
-        stmt.setString(2, pcUserName);
-        stmt.setString(3, pcFirstName);
-        stmt.setString(4, pcLastName);
-        stmt.setInt(5, pnIdUser);
+        if (pcUserName.equals("")){
+            stmt.setNull(2, Types.VARCHAR);
+        }else{
+            stmt.setString(2, pcUserName);
+        }
+        if (pcFirstName.equals("")){
+            stmt.setNull(3, Types.VARCHAR);
+        }else{
+            stmt.setString(3, pcFirstName);
+        }
+        if (pcLastName.equals("")){
+            stmt.setNull(4, Types.VARCHAR);
+        }else{
+            stmt.setString(4, pcLastName);
+        }
+        if (pcSecondLastName.equals("")){
+            stmt.setNull(5, Types.VARCHAR);
+        }else{
+            stmt.setString(5, pcSecondLastName);
+        }
+        if (pnIdUser.equals("")){
+            stmt.setNull(6, Types.VARCHAR);
+        }else{
+            stmt.setString(6, pnIdUser);
+        }
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
         return r;
