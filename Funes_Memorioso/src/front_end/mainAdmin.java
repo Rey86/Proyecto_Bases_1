@@ -63,6 +63,11 @@ public class mainAdmin extends javax.swing.JDialog {
         jLabel1.setText("Menu Administradores");
 
         jButtonStatistics.setText("Estadísticas");
+        jButtonStatistics.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonStatisticsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -126,6 +131,11 @@ public class mainAdmin extends javax.swing.JDialog {
         BanUsers dialog = new BanUsers(new javax.swing.JFrame(), true);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnBanearUsuariosActionPerformed
+
+    private void jButtonStatisticsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStatisticsActionPerformed
+        Statistics dialog = new Statistics(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonStatisticsActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBanearUsuarios;
