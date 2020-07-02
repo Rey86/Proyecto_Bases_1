@@ -31,11 +31,6 @@ public class Expedientes extends javax.swing.JDialog {
         }
     }
     
-    public String getIdAccused() throws SQLException{
-        ResultSet r = connection_sqldb.DataBaseConnection.getTranscripts();
-        return r.getString("ID_ACCUSED");
-    }
-    
     public void TranscriptCleanList(){
         DefaultTableModel dtb = (DefaultTableModel) jTableTranscripts.getModel();
         for (int i = dtb.getRowCount()-1;i>=0;i--) dtb.removeRow(i);
@@ -180,13 +175,16 @@ public class Expedientes extends javax.swing.JDialog {
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
         Integer current_row = jTableTranscripts.getSelectedRow();
+        String current_transcript = (String) jTableTranscripts.getValueAt(current_row, 0);
         if(current_row != -1){
             try{
-                if(jTableTranscripts.getValueAt(current_row, 0).equals(username)){
+                if(jTableTranscripts.getValueAt(current_row, 1).equals(username)){
+                    ResultSet r = connection_sqldb.DataBaseConnection.getTranscript(current_transcript);
                     connection_sqldb.DataBaseConnection.deleteTranscript((String) jTableTranscripts.getValueAt(current_row, 0));
-                    String id_accused = getIdAccused();
-                    connection_sqldb.DataBaseConnection.deleteAccused(id_accused);
-                    connection_sqldb.DataBaseConnection.deletePerson(id_accused);
+                    while(r.next()){
+                        connection_sqldb.DataBaseConnection.deleteAccused(r.getString("ID_ACCUSED"));
+                        connection_sqldb.DataBaseConnection.deletePerson(r.getString("ID_ACCUSED"));
+                    }
                     TranscriptCleanList();
                     TranscriptList();
                 } else {
