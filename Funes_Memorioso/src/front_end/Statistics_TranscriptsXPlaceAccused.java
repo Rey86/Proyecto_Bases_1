@@ -24,6 +24,7 @@ public class Statistics_TranscriptsXPlaceAccused extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         initial();
+        setLocationRelativeTo(null);
     }
 
     public void initial(){
