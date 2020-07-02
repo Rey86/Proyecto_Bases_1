@@ -79,10 +79,11 @@ CREATE OR REPLACE PACKAGE BODY USUserReports AS
     topBanReason SYS_REFCURSOR;
     BEGIN
     OPEN topbanreason FOR
-        select b.banreason_description banreason_description from userapp u 
-        inner join banreasonxuserapp bu on u.username = bu.username
-        inner join banreason b On b.id_banreason = bu.id_banreason
-        where rownum <=n order by b.banreason_description desc;
+        select banreason_description, banreason_quantity from(select br.banreason_description, count(brua.username) banreason_quantity 
+        from  banreason br 
+        inner join banreasonxuserapp brua On br.id_banreason = brua.id_banreason group by br.banreason_description 
+        order by banreason_quantity desc)
+        where rownum <=n;
     RETURN topbanreason;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 

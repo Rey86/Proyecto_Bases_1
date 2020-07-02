@@ -10,7 +10,16 @@ CREATE OR REPLACE PACKAGE BODY TRAdminReports AS
     NewTranscripts SYS_REFCURSOR;
     BEGIN 
     OPEN NewTranscripts FOR
-        SELECT transcript_number FROM transcript where SYSDATE = date_creation;
+        select  tt.transcripttype_name transcripttype, t.transcript_number transcript_number, t.valid, t.id_community id_community, 
+        t.id_transcripttype id_transcripttype, t.username username, p.first_name||' '||p.last_name||' '||p.second_last_name accused_name , 
+        g.gender_name gender , c.community_name community_name, t.date_creation date_creation
+        from transcript t 
+        inner join accused a on a.id_accused = t.id_accused 
+        inner join PRSN.person p on a.id_accused = p.id_person
+        inner join transcripttype tt on tt.id_transcripttype = t.id_transcripttype
+        inner join Place.community c on c.id_community = t.id_community
+        inner join PRSN.gender g on g.id_gender = p.id_gender 
+        where t.date_creation between SYSDATE-1 and SYSDATE+1;
     RETURN NewTranscripts;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
@@ -24,7 +33,7 @@ CREATE OR REPLACE PACKAGE BODY TRAdminReports AS
     OPEN ValidTranscripts FOR
         select tt.transcripttype_name transcripttype, t.transcript_number transcript_number, t.valid,
         t.username username, p.first_name||' '||p.last_name||' '||p.second_last_name accused_name, 
-        p.id_gender gender , c.community_name community_name
+        c.community_name community_name
         from transcript t 
         inner join accused a on a.id_accused = t.id_accused 
         inner join PRSN.person p on a.id_accused = p.id_person
@@ -45,7 +54,7 @@ CREATE OR REPLACE PACKAGE TRUserReports IS
     FUNCTION getTranscriptPerType(pnIdTranscriptType NUMBER, pdDateStartDate DATE,
     pdDateEndDate DATE, pnIdCommunity NUMBER) RETURN SYS_REFCURSOR;
     FUNCTION getDueTranscripts(pdStartDate Date, pdEndDate DATE) RETURN SYS_REFCURSOR;
-    FUNCTION getAccusedPerCompany(PnID_Company NUMBER) RETURN SYS_REFCURSOR;
+    FUNCTION getAccusedPerCompany RETURN SYS_REFCURSOR;
     FUNCTION getTopCrimes(n NUMBER) RETURN SYS_REFCURSOR;
     FUNCTION getTopSentenceTime(n NUMBER) RETURN SYS_REFCURSOR;
 END TRUserReports;
@@ -119,16 +128,16 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getDueTranscripts;
     
-    FUNCTION getAccusedPerCompany(PnID_Company NUMBER) RETURN SYS_REFCURSOR IS
+    FUNCTION getAccusedPerCompany RETURN SYS_REFCURSOR IS
     vmenError VARCHAR2(100);
     AccusedPerCompany  SYS_REFCURSOR;
     BEGIN 
     OPEN accusedpercompany FOR
-        select a.id_accused id_accused,  p.first_name||' '||p.last_name||' '||p.second_last_name Name, p.birthdate birthdate, g.gender_name gender
+        select c.company_name company_name, count(p.id_company) Accused_quantity
         from accused a
         inner join PRSN.person p on a.id_accused = p.id_person
-        inner join PRSN.gender g on p.id_gender = g.id_gender
-        where p.id_company = PnID_Company; 
+        inner join PRSN.company c on p.id_company = c.id_company
+        group by c.company_name; 
     RETURN accusedpercompany;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
@@ -144,9 +153,11 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
     topCrimes SYS_REFCURSOR;
     BEGIN
     OPEN topcrimes FOR 
-        select tt.transcripttype_name transcripttype_name from transcript t 
+        select transcripttype_name, transcripttype_quantity from( select tt.transcripttype_name transcripttype_name, count(t.id_transcripttype) transcripttype_quantity
+        from transcript t
         inner join transcripttype tt on t.id_transcripttype = tt.id_transcripttype 
-        where rownum <=n order by t.id_transcripttype desc;
+        group by tt.transcripttype_name
+        order by transcripttype_quantity desc) where rownum <=n ;
     RETURN topcrimes;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
@@ -162,9 +173,11 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
     topSentenceTime SYS_REFCURSOR;
     BEGIN
     OPEN topsentencetime FOR
-        select sentence_startdate - sentence_enddate sentence_time
+        select transcript_number, sentence_time
+        from ( select transcript_number, (sentence_enddate -  sentence_startdate)/365 sentence_time 
         from transcript
-        where rownum <= n order by sentence_time desc;
+        order by sentence_time desc) 
+        where rownum <=n ;
     RETURN topsentencetime;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
