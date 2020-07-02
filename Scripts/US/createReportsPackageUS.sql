@@ -1,23 +1,25 @@
 CREATE OR REPLACE PACKAGE USAdminReports IS
-    FUNCTION getUserPasswordMod(pcUserName VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pnIdUser NUMBER) RETURN SYS_REFCURSOR;
+    FUNCTION getUserPasswordMod(pcUserName VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pcSecondLastName VARCHAR2, pnIdUser NUMBER) RETURN SYS_REFCURSOR;
 END USAdminReports;
 
 CREATE OR REPLACE PACKAGE BODY USAdminReports AS
     --Function that gets list of users whose passwords have been modified in the past 10 days
-    FUNCTION getUserPasswordMod(pcUserName VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pnIdUser NUMBER) RETURN SYS_REFCURSOR IS 
+    FUNCTION getUserPasswordMod(pcUserName VARCHAR2, pcFirstName VARCHAR2, pcLastName VARCHAR2, pcSecondLastName VARCHAR2, pnIdUser NUMBER) RETURN SYS_REFCURSOR IS 
     vmenError VARCHAR2(100);
     UserPasswordMod SYS_REFCURSOR;
     BEGIN
     OPEN userpasswordmod FOR
-        select ua.username username , p.first_name||' '|| p.last_name name , id_user identification from userapp ua
+        select ua.username username , p.first_name first_name, p.last_name last_name, p.second_last_name second_last_name, 
+        id_user identification from userapp ua
         inner join ADM.generallog gl
         on ua.username = gl.username
         inner join PRSN.PERSON p
         on ua.id_user = p.id_person
-        where sysdate - gl.modification_date < 10 
+        where sysdate - gl.modification_date <= 10 
         and ua.username = NVL(pcUserName, ua.username)
         and p.first_name = NVL(pcFirstName, p.first_name)
         and p.last_name = NVL(pcLastName, p.last_name)
+        and p.second_last_name = NVL(pcSecondLastName, p.second_last_name)
         and ua.id_user = NVL(pnIdUser, ua.id_user);
     RETURN userpasswordmod;
     Exception

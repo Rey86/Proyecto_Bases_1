@@ -1,13 +1,14 @@
 CREATE OR REPLACE PACKAGE USTables IS
     -- UserApp Table
     FUNCTION getUserApp (pcUserName VARCHAR2) RETURN SYS_REFCURSOR;
-    PROCEDURE setUserApp (pcUserName VARCHAR2, pcUserPassword VARCHAR2, pnBanDays NUMBER, pnBanned NUMBER, pnIdUserType NUMBER, pcIdUser VARCHAR2);
+    PROCEDURE setUserApp (pcUserName VARCHAR2, pnBanDays NUMBER, pnBanned NUMBER, pnIdUserType NUMBER, pcIdUser VARCHAR2);
     PROCEDURE deleteUserApp (pcUserName VARCHAR2);
     PROCEDURE insertUserApp (pcUserName VARCHAR2, pcUserPassword VARCHAR2, pnBanDays NUMBER, pnBanned NUMBER, pnIdUserType NUMBER, 
         pcIdUser VARCHAR2);
     FUNCTION getUserPassword (pcUserName VARCHAR2) RETURN VARCHAR2;
     FUNCTION isBannedUser (pcUserName VARCHAR2) RETURN NUMBER;
     FUNCTION getCurrentUserType (pcUserName VARCHAR2) RETURN VARCHAR2;
+    PROCEDURE setPassword (pcUserName VARCHAR2, pcUserPassword VARCHAR2);
     
     -- UserType Table
     FUNCTION getUserType (pnIdUserType NUMBER) RETURN SYS_REFCURSOR;
@@ -55,12 +56,11 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
     END getUserApp;
 
 -- Procedure to set a user app with specific name and the new values wrote by the user  
-    PROCEDURE setUserApp (pcUserName IN VARCHAR2, pcUserPassword VARCHAR2, pnBanDays IN NUMBER, pnBanned IN NUMBER, pnIdUserType IN NUMBER, pcIdUser IN VARCHAR2) IS
+    PROCEDURE setUserApp (pcUserName IN VARCHAR2, pnBanDays IN NUMBER, pnBanned IN NUMBER, pnIdUserType IN NUMBER, pcIdUser IN VARCHAR2) IS
         vmenError VARCHAR2(100);
     BEGIN
         UPDATE USERAPP
-        SET user_password = pcUserPassword,
-        ban_days = pnBanDays,
+        SET ban_days = pnBanDays,
         banned = pnBanned,
         id_usertype = pnIdUserType,
         id_user = pcIdUser
@@ -152,6 +152,22 @@ CREATE OR REPLACE PACKAGE BODY USTables AS
         WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getCurrentUserType;
+    
+    PROCEDURE setPassword (pcUserName VARCHAR2, pcUserPassword VARCHAR2) IS
+        vmenError VARCHAR2(100);
+    BEGIN
+        UPDATE USERAPP
+        SET user_password = pcUserPassword
+        WHERE username = pcUserName;
+        Commit;
+    Exception
+        WHEN ACCESS_INTO_NULL THEN vmenError:= ('Cannot assign value to unitialized object');  
+        WHEN ROWTYPE_MISMATCH THEN vmenError:= ('Incompatible value type cannot be assigned');   
+        WHEN SUBSCRIPT_BEYOND_COUNT THEN vmenError:= ('Index is larger than the number of elements in the collection');  
+        WHEN SUBSCRIPT_OUTSIDE_LIMIT THEN vmenError:= ('Index is outside the legal range');  
+        when no_data_found then vmenError:= ('Couldn´t find register with the index ||pcUsername');
+        WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
+    END setPassword;
     
 -- Table UserType
 -- Function to get a user type with specific id to show it in the screen      

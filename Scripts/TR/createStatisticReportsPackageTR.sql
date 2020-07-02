@@ -117,10 +117,10 @@ CREATE OR REPLACE PACKAGE BODY TRStatisticReports AS
     AverageSentenceTimePerType SYS_REFCURSOR;
     BEGIN
     OPEN AverageSentenceTimePerType FOR 
-        SELECT t.id_transcripttype id_transcripttype, avg(sentence_startdate-sentence_enddate) Average
+        SELECT t.transcripttype_name transcripttype_name, avg(sentence_startdate-sentence_enddate) Average
         FROM transcript t
         INNER JOIN transcripttype tt on tt.id_transcripttype = t.id_transcripttype
-        GROUP BY t.id_transcripttype;
+        GROUP BY t.transcripttype_name;
     RETURN AverageSentenceTimePerType;
     EXCEPTION 
         WHEN no_data_found then vmenError:= ('No rows returned');
