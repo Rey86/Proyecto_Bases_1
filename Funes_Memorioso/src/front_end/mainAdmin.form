@@ -26,7 +26,7 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="2" attributes="0">
-                  <Component id="btnEditarUsuarios" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnBanearUsuarios" alignment="2" min="-2" max="-2" attributes="0"/>
                   <Component id="btnSalir" alignment="2" min="-2" max="-2" attributes="0"/>
                   <Component id="btnConsultas1" alignment="2" min="-2" max="-2" attributes="0"/>
                   <Component id="btnEditarCatalogos" alignment="2" min="-2" max="-2" attributes="0"/>
@@ -46,7 +46,7 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="btnCrearExpediente" pref="25" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="btnEditarUsuarios" pref="25" max="32767" attributes="0"/>
+              <Component id="btnBanearUsuarios" pref="25" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btnConsultas1" pref="25" max="32767" attributes="0"/>
               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
@@ -69,10 +69,13 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCrearExpedienteActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnEditarUsuarios">
+    <Component class="javax.swing.JButton" name="btnBanearUsuarios">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Editar Usuarios"/>
+        <Property name="text" type="java.lang.String" value="Banear Usuarios"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBanearUsuariosActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnSalir">
       <Properties>

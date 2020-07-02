@@ -1120,12 +1120,10 @@ public class DataBaseConnection {
     }
     
     // Function to get the due transcripts in the base's transcripts
-    public static ResultSet getDueTranscripts(Date pdDateCreation, Date pdDateLastModification) throws SQLException {
+    public static ResultSet getDueSentenceTranscripts() throws SQLException {
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRUserReports.getTranscriptPerType(?, ?)}");
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getDueSentenceTranscripts()}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
-        stmt.setDate(2, pdDateCreation);
-        stmt.setDate(2, pdDateLastModification);
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
         return r;
@@ -1268,11 +1266,26 @@ public class DataBaseConnection {
         return r;
     }
     
-    // Function to get the list of due sentences in the base's transcript
-    public static ResultSet getDueSentenceTranscripts() throws SQLException {
+    // Function to get the list of due transcripts 
+    public static ResultSet getDueTranscripts(String pdStartDate, String pdEndDate) throws SQLException {
         Connection con = getConnectionDataBase();
-        CallableStatement stmt = con.prepareCall("{?= call TR.TRStatisticReports.getDueSentenceTranscripts()}");
+        CallableStatement stmt = con.prepareCall("{?= call TR.TRUserReports.getDueTranscripts(?,?)}");
         stmt.registerOutParameter(1, OracleTypes.CURSOR);
+        if (!pdStartDate.equals("")) {
+            String[] current_startdate = pdStartDate.split("-");
+            String[] year = current_startdate[2].split(""); 
+            stmt.setString(2, current_startdate[0] + "/" + current_startdate[1] + "/" + year[2] + year[3]);
+        } else {
+            stmt.setNull(2, Types.DATE);
+        }
+        
+        if (!pdEndDate.equals("")) {
+            String[] current_enddate = pdEndDate.split("-");
+            String[] year = current_enddate[2].split(""); 
+            stmt.setString(3, current_enddate[0] + "/" + current_enddate[1] + "/" + year[2] + year[3]);
+        } else {
+            stmt.setNull(3, Types.DATE);
+        }
         stmt.executeQuery();
         ResultSet r = (ResultSet) stmt.getObject(1);
         return r;

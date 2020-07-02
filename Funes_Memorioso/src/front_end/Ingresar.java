@@ -117,7 +117,7 @@ public class Ingresar extends javax.swing.JDialog {
                         dialog.setVisible(true);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Su usuario se enecuentra baneado", "Acceso denegado", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Su usuario se encuentra baneado", "Acceso denegado", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Su contraseña es incorrecta", "Acceso denegado", JOptionPane.ERROR_MESSAGE);

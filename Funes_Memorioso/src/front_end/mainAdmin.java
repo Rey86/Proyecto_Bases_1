@@ -16,7 +16,7 @@ public class mainAdmin extends javax.swing.JDialog {
     private void initComponents() {
 
         btnCrearExpediente = new javax.swing.JButton();
-        btnEditarUsuarios = new javax.swing.JButton();
+        btnBanearUsuarios = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         btnConsultas1 = new javax.swing.JButton();
         btnEditarCatalogos = new javax.swing.JButton();
@@ -32,7 +32,12 @@ public class mainAdmin extends javax.swing.JDialog {
             }
         });
 
-        btnEditarUsuarios.setText("Editar Usuarios");
+        btnBanearUsuarios.setText("Banear Usuarios");
+        btnBanearUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBanearUsuariosActionPerformed(evt);
+            }
+        });
 
         btnSalir.setText("Salir");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -66,7 +71,7 @@ public class mainAdmin extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(btnEditarUsuarios)
+                    .addComponent(btnBanearUsuarios)
                     .addComponent(btnSalir)
                     .addComponent(btnConsultas1)
                     .addComponent(btnEditarCatalogos)
@@ -83,7 +88,7 @@ public class mainAdmin extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnCrearExpediente, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEditarUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                .addComponent(btnBanearUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnConsultas1, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
                 .addGap(8, 8, 8)
@@ -117,11 +122,16 @@ public class mainAdmin extends javax.swing.JDialog {
         dialog.setVisible(true);
     }//GEN-LAST:event_btnEditarCatalogosActionPerformed
 
+    private void btnBanearUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBanearUsuariosActionPerformed
+        BanUsers dialog = new BanUsers(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnBanearUsuariosActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBanearUsuarios;
     private javax.swing.JButton btnConsultas1;
     private javax.swing.JButton btnCrearExpediente;
     private javax.swing.JButton btnEditarCatalogos;
-    private javax.swing.JButton btnEditarUsuarios;
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton jButtonStatistics;
     private javax.swing.JLabel jLabel1;

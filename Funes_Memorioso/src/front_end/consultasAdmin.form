@@ -126,6 +126,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Lista de Usuarios que Mantienen su Contrase&#xf1;a"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnListaUsuariosContrasenaActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnListaExpedientesNuevos">
       <Properties>

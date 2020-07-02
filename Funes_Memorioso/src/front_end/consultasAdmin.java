@@ -82,6 +82,11 @@ public class consultasAdmin extends javax.swing.JDialog {
         });
 
         btnListaUsuariosContrasena.setText("Lista de Usuarios que Mantienen su Contraseña");
+        btnListaUsuariosContrasena.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListaUsuariosContrasenaActionPerformed(evt);
+            }
+        });
 
         btnListaExpedientesNuevos.setText("Lista de Expedientes Nuevos");
 
@@ -185,12 +190,17 @@ public class consultasAdmin extends javax.swing.JDialog {
     }//GEN-LAST:event_btnListaUsuariosBaneadosActionPerformed
 
     private void btnInformacionPVencerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformacionPVencerActionPerformed
-
+        DueTranscripts dialog = new DueTranscripts(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnInformacionPVencerActionPerformed
 
     private void jButtonCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCloseActionPerformed
         dispose();
     }//GEN-LAST:event_jButtonCloseActionPerformed
+
+    private void btnListaUsuariosContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaUsuariosContrasenaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnListaUsuariosContrasenaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInformacionPVencer;
