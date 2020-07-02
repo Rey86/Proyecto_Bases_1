@@ -11,6 +11,10 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.chart.plot.PlotOrientation;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Statistics extends javax.swing.JDialog {
     JFreeChart chart;
@@ -20,6 +24,7 @@ public class Statistics extends javax.swing.JDialog {
     public Statistics(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     @SuppressWarnings("unchecked")
@@ -153,187 +158,177 @@ public class Statistics extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTranscriptsXTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTranscriptsXTypeActionPerformed
-        dataset.setValue("iPhone", 20);
-        dataset.setValue("Samsung", 20);
-        dataset.setValue("Motorola", 40);
-        dataset.setValue("Nokia", 10);
+        try {
+            ResultSet r = connection_sqldb.DataBaseConnection.getTranscriptPercentagePerType();
+            while(r.next()){
+                dataset.setValue(r.getString("transcripttype_name"), r.getInt("percentage"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Statistics.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        chart = ChartFactory.createPieChart("Mobile Sales", dataset, 
+        chart = ChartFactory.createPieChart("Expedientes por Clasificación", dataset, 
                 true, true, false);
         
         PieSectionLabelGenerator labelGenerator = new  StandardPieSectionLabelGenerator(
-            "Marks {0} : ({2})", new DecimalFormat("0"), new DecimalFormat("0%"));
+            "Tipo {0} : ({2})", new DecimalFormat("0"), new DecimalFormat("0%"));
         ((PiePlot) chart.getPlot()).setLabelGenerator(labelGenerator);
         
         ChartPanel Panel = new ChartPanel(chart);
-        JDialog Ventana = new JDialog(new javax.swing.JFrame(), true);
-        Ventana.getContentPane().add(Panel);
-        Ventana.pack();
-        Ventana.setVisible(true);
+        JDialog dialog = new JDialog(new javax.swing.JFrame(), true);
+        dialog.getContentPane().add(Panel);
+        dialog.pack();
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnTranscriptsXTypeActionPerformed
 
     private void btnTranscriptsXZoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTranscriptsXZoneActionPerformed
-        dataset.setValue("iPhone", 20);
-        dataset.setValue("Samsung", 20);
-        dataset.setValue("Motorola", 40);
-        dataset.setValue("Nokia", 10);
-        
-        chart = ChartFactory.createPieChart("Mobile Sales", dataset, 
-                true, true, false);
-        
-        PieSectionLabelGenerator labelGenerator = new  StandardPieSectionLabelGenerator(
-            "Marks {0} : ({2})", new DecimalFormat("0"), new DecimalFormat("0%"));
-        ((PiePlot) chart.getPlot()).setLabelGenerator(labelGenerator);
-        
-        ChartPanel Panel = new ChartPanel(chart);
-        JDialog Ventana = new JDialog(new javax.swing.JFrame(), true);
-        Ventana.getContentPane().add(Panel);
-        Ventana.pack();
-        Ventana.setVisible(true);
+        Statistics_TranscriptsXZone dialog = new Statistics_TranscriptsXZone(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnTranscriptsXZoneActionPerformed
 
     private void btnAgeUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgeUsersActionPerformed
-        dataset.setValue("iPhone", 20);
-        dataset.setValue("Samsung", 20);
-        dataset.setValue("Motorola", 40);
-        dataset.setValue("Nokia", 10);
+        try {
+            ResultSet r = connection_sqldb.DataBaseConnection.getAgeRangePercentageUsers();
+            while(r.next()){
+                dataset.setValue(r.getString("user_age_range"), r.getInt("percentage"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Statistics.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        chart = ChartFactory.createPieChart("Mobile Sales", dataset, 
+        chart = ChartFactory.createPieChart("Porcentaje de Edades de Usuarios en Rangos", dataset, 
                 true, true, false);
         
         PieSectionLabelGenerator labelGenerator = new  StandardPieSectionLabelGenerator(
-            "Marks {0} : ({2})", new DecimalFormat("0"), new DecimalFormat("0%"));
+            "{0} : ({2})", new DecimalFormat("0"), new DecimalFormat("0%"));
         ((PiePlot) chart.getPlot()).setLabelGenerator(labelGenerator);
         
         ChartPanel Panel = new ChartPanel(chart);
-        JDialog Ventana = new JDialog(new javax.swing.JFrame(), true);
-        Ventana.getContentPane().add(Panel);
-        Ventana.pack();
-        Ventana.setVisible(true);
+        JDialog dialog = new JDialog(new javax.swing.JFrame(), true);
+        dialog.getContentPane().add(Panel);
+        dialog.pack();
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnAgeUsersActionPerformed
 
     private void btnAgeAccusedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgeAccusedActionPerformed
-        dataset.setValue("iPhone", 20);
-        dataset.setValue("Samsung", 20);
-        dataset.setValue("Motorola", 40);
-        dataset.setValue("Nokia", 10);
+        try {
+            ResultSet r = connection_sqldb.DataBaseConnection.getAgeRangePercentageAccused();
+            while(r.next()){
+                dataset.setValue(r.getString("accused_age_range"), r.getInt("percentage"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Statistics.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        chart = ChartFactory.createPieChart("Mobile Sales", dataset, 
+        chart = ChartFactory.createPieChart("Porcentaje de Edades de Acusados en Rangos", dataset, 
                 true, true, false);
         
         PieSectionLabelGenerator labelGenerator = new  StandardPieSectionLabelGenerator(
-            "Marks {0} : ({2})", new DecimalFormat("0"), new DecimalFormat("0%"));
+            "Edad {0} : ({2})", new DecimalFormat("0"), new DecimalFormat("0%"));
         ((PiePlot) chart.getPlot()).setLabelGenerator(labelGenerator);
         
         ChartPanel Panel = new ChartPanel(chart);
-        JDialog Ventana = new JDialog(new javax.swing.JFrame(), true);
-        Ventana.getContentPane().add(Panel);
-        Ventana.pack();
-        Ventana.setVisible(true);
+        JDialog dialog = new JDialog(new javax.swing.JFrame(), true);
+        dialog.getContentPane().add(Panel);
+        dialog.pack();
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnAgeAccusedActionPerformed
 
     private void btnTranscriptsXPlaceAccusedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTranscriptsXPlaceAccusedActionPerformed
-        dataset.setValue("iPhone", 20);
-        dataset.setValue("Samsung", 20);
-        dataset.setValue("Motorola", 40);
-        dataset.setValue("Nokia", 10);
-        
-        chart = ChartFactory.createPieChart("Mobile Sales", dataset, 
-                true, true, false);
-        
-        PieSectionLabelGenerator labelGenerator = new  StandardPieSectionLabelGenerator(
-            "Marks {0} : ({2})", new DecimalFormat("0"), new DecimalFormat("0%"));
-        ((PiePlot) chart.getPlot()).setLabelGenerator(labelGenerator);
-        
-        ChartPanel Panel = new ChartPanel(chart);
-        JDialog Ventana = new JDialog(new javax.swing.JFrame(), true);
-        Ventana.getContentPane().add(Panel);
-        Ventana.pack();
-        Ventana.setVisible(true);
+        Statistics_TranscriptsXPlaceAccused dialog = new Statistics_TranscriptsXPlaceAccused(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnTranscriptsXPlaceAccusedActionPerformed
 
     private void btnTimeSentenceXTranscriptTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimeSentenceXTranscriptTypeActionPerformed
-        data.addValue(1, "Negocio 1", "Lunes");
-        data.addValue(2, "Negocio 1", "Martes");
-        data.addValue(3, "Negocio 1", "Miércoles");
-        data.addValue(4, "Negocio 1", "Jueves");
-        data.addValue(5, "Negocio 1", "Viernes");
-        data.addValue(6, "Negocio 1", "Sábado");
-        data.addValue(7, "Negocio 1", "Domingo");
+        try {
+            ResultSet r = connection_sqldb.DataBaseConnection.getAverageSentenceTimePerType();
+            while(r.next()){
+                data.addValue(r.getInt("Average"), "Promedio", r.getString("transcripttype_name"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Statistics.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        chart = ChartFactory.createBarChart("Visitas diarias",
-                                                "Días", "Visitas", data,
+        chart = ChartFactory.createBarChart("Tiempo de Sentencia por Tipo de Expediente",
+                                                "Tipo", "Promedio", data,
                                                 PlotOrientation.HORIZONTAL, 
                                                 true, true, false);
         
         ChartPanel Panel = new ChartPanel(chart);
-        JDialog Ventana = new JDialog(new javax.swing.JFrame(), true);
-        Ventana.getContentPane().add(Panel);
-        Ventana.pack();
-        Ventana.setVisible(true);
+        JDialog dialog = new JDialog(new javax.swing.JFrame(), true);
+        dialog.getContentPane().add(Panel);
+        dialog.pack();
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnTimeSentenceXTranscriptTypeActionPerformed
 
     private void btnTranscriptsXEndDateSentenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTranscriptsXEndDateSentenceActionPerformed
-        data.addValue(1, "Negocio 1", "Lunes");
-        data.addValue(2, "Negocio 1", "Martes");
-        data.addValue(3, "Negocio 1", "Miércoles");
-        data.addValue(4, "Negocio 1", "Jueves");
-        data.addValue(5, "Negocio 1", "Viernes");
-        data.addValue(6, "Negocio 1", "Sábado");
-        data.addValue(7, "Negocio 1", "Domingo");
+        try {
+            ResultSet r = connection_sqldb.DataBaseConnection.getDueSentenceTranscripts();
+            int i = 1;
+            while(r.next()){
+                data.addValue(i, "Vencidas", r.getString("id_transcripttype"));
+                i++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Statistics.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        chart = ChartFactory.createBarChart("Visitas diarias",
-                                                "Días", "Visitas", data,
+        chart = ChartFactory.createBarChart("Expedientes con Condenas Vencidas o Próximas a Vencer",
+                                                "Expedientes", "", data,
                                                 PlotOrientation.HORIZONTAL, 
                                                 true, true, false);
         
         ChartPanel Panel = new ChartPanel(chart);
-        JDialog Ventana = new JDialog(new javax.swing.JFrame(), true);
-        Ventana.getContentPane().add(Panel);
-        Ventana.pack();
-        Ventana.setVisible(true);
+        JDialog dialog = new JDialog(new javax.swing.JFrame(), true);
+        dialog.getContentPane().add(Panel);
+        dialog.pack();
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnTranscriptsXEndDateSentenceActionPerformed
 
     private void btnJailYearsXTranscriptTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJailYearsXTranscriptTypeActionPerformed
-        data.addValue(1, "Negocio 1", "Lunes");
-        data.addValue(2, "Negocio 1", "Martes");
-        data.addValue(3, "Negocio 1", "Miércoles");
-        data.addValue(4, "Negocio 1", "Jueves");
-        data.addValue(5, "Negocio 1", "Viernes");
-        data.addValue(6, "Negocio 1", "Sábado");
-        data.addValue(7, "Negocio 1", "Domingo");
+        try {
+            ResultSet r = connection_sqldb.DataBaseConnection.getSentenceTimePerType();
+            while(r.next()){
+                data.addValue(r.getInt("Sentence_Time"), "Años de sencentia", r.getString("transcripttype_name"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Statistics.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        chart = ChartFactory.createBarChart("Visitas diarias",
-                                                "Días", "Visitas", data,
+        chart = ChartFactory.createBarChart("Años de Cárcel por Tipo de Expediente",
+                                                "Tipo", "Años", data,
                                                 PlotOrientation.HORIZONTAL, 
                                                 true, true, false);
         
         ChartPanel Panel = new ChartPanel(chart);
-        JDialog Ventana = new JDialog(new javax.swing.JFrame(), true);
-        Ventana.getContentPane().add(Panel);
-        Ventana.pack();
-        Ventana.setVisible(true);
+        JDialog dialog = new JDialog(new javax.swing.JFrame(), true);
+        dialog.getContentPane().add(Panel);
+        dialog.pack();
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnJailYearsXTranscriptTypeActionPerformed
 
     private void btnTranscriptsHouseArrstXTranscriptTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTranscriptsHouseArrstXTranscriptTypeActionPerformed
-        data.addValue(1, "Negocio 1", "Lunes");
-        data.addValue(2, "Negocio 1", "Martes");
-        data.addValue(3, "Negocio 1", "Miércoles");
-        data.addValue(4, "Negocio 1", "Jueves");
-        data.addValue(5, "Negocio 1", "Viernes");
-        data.addValue(6, "Negocio 1", "Sábado");
-        data.addValue(7, "Negocio 1", "Domingo");
+        try {
+            ResultSet r = connection_sqldb.DataBaseConnection.getSentenceTimePerType();
+            int i = 1;
+            while(r.next()){
+                data.addValue(i, "EXpedientes", r.getString("transcript_number"));
+                i++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Statistics.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        chart = ChartFactory.createBarChart("Visitas diarias",
-                                                "Días", "Visitas", data,
+        chart = ChartFactory.createBarChart("Expedientes con Casa por Cárcel por Tipo Expediente",
+                                                "Tipos", "", data,
                                                 PlotOrientation.HORIZONTAL, 
                                                 true, true, false);
         
         ChartPanel Panel = new ChartPanel(chart);
-        JDialog Ventana = new JDialog(new javax.swing.JFrame(), true);
-        Ventana.getContentPane().add(Panel);
-        Ventana.pack();
-        Ventana.setVisible(true);
+        JDialog dialog = new JDialog(new javax.swing.JFrame(), true);
+        dialog.getContentPane().add(Panel);
+        dialog.pack();
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnTranscriptsHouseArrstXTranscriptTypeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
