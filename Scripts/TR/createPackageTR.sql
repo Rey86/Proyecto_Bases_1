@@ -49,7 +49,7 @@ CREATE OR REPLACE PACKAGE BODY TRTables AS
             p.first_name||' '||p.last_name||' '||p.second_last_name accused_name, t.id_transcripttype id_transcripttype, 
             tt.transcripttype_name transcripttype_name, t.id_verdict id_verdict, v.verdict_name verdict_name, 
             t.id_community id_community, co.community_name community_name, t.sentence_startdate sentence_startdate,
-            t.sentence_enddate sentence_enddate, t.sentence_startdate-t.sentence_enddate sentence_time, 
+            t.sentence_enddate sentence_enddate, t.sentence_enddate-t.sentence_startdate sentence_time, 
             t.id_sentencetype id_sentencetype, st.sentencetype_name sentencetype_name, 
             t.crime_description crime_description, t.crime_date crime_date, t.due_date due_date
         FROM TRANSCRIPT t

@@ -42,8 +42,8 @@ END TRAdminReports;
 
 CREATE OR REPLACE PACKAGE TRUserReports IS 
     FUNCTION getTopTranscriptCommunity(n number) RETURN SYS_REFCURSOR;
-    FUNCTION getTranscriptPerType(pnIdTranscriptType NUMBER, pdDateCreation DATE,
-    pdDateLastModification DATE, pnIdCommunity NUMBER) RETURN SYS_REFCURSOR;
+    FUNCTION getTranscriptPerType(pnIdTranscriptType NUMBER, pdDateStartDate DATE,
+    pdDateEndDate DATE, pnIdCommunity NUMBER) RETURN SYS_REFCURSOR;
     FUNCTION getDueTranscripts(pdDateCreation Date, pdDateLastModification DATE) RETURN SYS_REFCURSOR;
     FUNCTION getAccusedPerCompany(PnID_Company NUMBER) RETURN SYS_REFCURSOR;
     FUNCTION getTopCrimes(n NUMBER) RETURN SYS_REFCURSOR;
@@ -57,10 +57,10 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
     topTranscriptCommunity SYS_REFCURSOR;
     BEGIN
     OPEN topTranscriptCommunity FOR
-        select c.community_name community_name , count(t.id_community) transcript_quantity
+        select community_name, transcript_quantity from(Select c.community_name community_name , count(t.id_community) transcript_quantity
         from transcript t inner join Place.community c on t.id_community = c.id_community
-        where rownum <=n group by c.community_name 
-        order by t.id_community desc;
+        group by c.community_name
+        order by transcript_quantity desc)where rownum <= n;
     RETURN toptranscriptcommunity;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
@@ -68,14 +68,14 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
         WHEN OTHERS THEN vmenError:= ('An unexpected error has ocurred');
     END getTopTranscriptCommunity;
     --Function that gets the transcripts classified by type
-    FUNCTION getTranscriptPerType(pnIdTranscriptType NUMBER, pdDateCreation DATE, pdDateLastModification DATE, pnIdCommunity NUMBER)  RETURN SYS_REFCURSOR IS
+    FUNCTION getTranscriptPerType(pnIdTranscriptType NUMBER, pdDateStartDate DATE, pdDateEndDate DATE, pnIdCommunity NUMBER)  RETURN SYS_REFCURSOR IS
     vmenError VARCHAR2(100);
     TranscriptPerType SYS_REFCURSOR;
     BEGIN 
     OPEN TranscriptPerType FOR
-        select  tt.transcripttype_name transcripttype, t.transcript_number transcript_number, t.valid,
-        t.username username, p.first_name||' '||p.last_name||' '||p.second_last_name accused_name , 
-        g.gender_name gender , c.community_name community_name, t.date_creation date_creation, t.date_last_modification date_last_modification
+        select  tt.transcripttype_name transcripttype, t.transcript_number transcript_number, t.valid, t.id_community id_community, 
+        t.id_transcripttype id_transcripttype, t.username username, p.first_name||' '||p.last_name||' '||p.second_last_name accused_name , 
+        g.gender_name gender , c.community_name community_name, t.date_creation date_creation
         from transcript t 
         inner join accused a on a.id_accused = t.id_accused 
         inner join PRSN.person p on a.id_accused = p.id_person
@@ -83,8 +83,7 @@ CREATE OR REPLACE PACKAGE BODY TRUserReports AS
         inner join Place.community c on c.id_community = t.id_community
         inner join PRSN.gender g on g.id_gender = p.id_gender 
         where t.id_transcripttype = NVL(pnIdTranscriptType, t.id_transcripttype)
-        and t.date_creation = NVL(pdDateCreation, t.date_creation)
-        and t.date_last_modification =  NVL(pdDateLastModification, t.date_last_modification)
+        and t.date_creation between NVL(pdDateStartDate, t.date_creation) and NVL(pdDateEndDate, t.date_creation) 
         and t.id_community = NVL(pnIdCommunity, t.id_community)
         order by t.id_transcripttype;
     RETURN transcriptpertype;

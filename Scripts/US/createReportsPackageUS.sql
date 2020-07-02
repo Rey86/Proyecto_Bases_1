@@ -43,12 +43,14 @@ CREATE OR REPLACE PACKAGE BODY USUserReports AS
     UserList SYS_REFCURSOR;
     BEGIN
     OPEN userlist FOR
-        select u.username username, p.first_name||' '|| p.last_name||' '|| p.second_last_name Name, p.birthdate birthdate,
-        u.id_user id_user, g.gender_name gender from userapp u
+        select u.username username, p.first_name first_name, p.last_name last_name, p.second_last_name second_last_name, p.birthdate birthdate,
+        u.id_user id_user, g.gender_name gender, c.company_name company_name, (SYSDATE-p.birthdate)/365 age from userapp u
         inner join PRSN.PERSON p
         on u.id_user = p.id_person 
         inner join PRSN.gender g
-        on p.id_gender = g.id_gender;
+        on p.id_gender = g.id_gender
+        inner join PRSN.company c
+        on p.id_company = c.id_company;
     RETURN userlist;
     Exception
         WHEN TOO_MANY_ROWS THEN vmenError:= ('Your SELECT statement retrived multiple rows.'); 
