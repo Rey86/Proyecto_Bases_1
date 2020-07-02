@@ -26,7 +26,7 @@ public class Expedientes extends javax.swing.JDialog {
         while(r.next()){
             dtb.addRow(new Object[]{r.getString("TRANSCRIPT_NUMBER"), r.getString("USERNAME"),
                 r.getString("ACCUSED_NAME"), r.getString("TRANSCRIPTTYPE_NAME"), r.getString("VERDICT_NAME"), 
-                r.getString("COMMUNITY_NAME"), r.getString("SENTENCE_TIME"), r.getString("CRIME_DATE"), 
+                r.getString("COMMUNITY_NAME"), r.getInt("SENTENCE_TIME"), r.getString("CRIME_DATE"), 
                 r.getString("DUE_DATE")});
         }
     }

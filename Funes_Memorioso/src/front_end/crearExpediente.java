@@ -170,7 +170,7 @@ public class crearExpediente extends javax.swing.JDialog {
             }
         });
 
-        jLabel6.setText("Describa del crimen:");
+        jLabel6.setText("Descripción del crimen:");
 
         jTextAreaCrimeDescription.setColumns(20);
         jTextAreaCrimeDescription.setRows(5);

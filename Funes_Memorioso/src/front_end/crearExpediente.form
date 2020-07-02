@@ -301,7 +301,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel6">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Describa del crimen:"/>
+        <Property name="text" type="java.lang.String" value="Descripci&#xf3;n del crimen:"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
