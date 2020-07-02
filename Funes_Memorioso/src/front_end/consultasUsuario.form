@@ -85,11 +85,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Top Tiempo de Sentencia"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonTopSentenceTypeActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonBanReason">
       <Properties>
         <Property name="text" type="java.lang.String" value="Top Razones de Baneo"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonBanReasonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonClose">
       <Properties>
@@ -100,11 +106,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Acusados Por Compa&#xf1;&#xed;a"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonAccusedPerCompanyActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonTopCrimes">
       <Properties>
         <Property name="text" type="java.lang.String" value="Top Crimenes"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonTopCrimesActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnListaExpedientes">
       <Properties>

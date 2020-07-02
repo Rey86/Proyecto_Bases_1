@@ -34,14 +34,34 @@ public class consultasUsuario extends javax.swing.JDialog {
         });
 
         jButtonTopSentenceType.setText("Top Tiempo de Sentencia");
+        jButtonTopSentenceType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonTopSentenceTypeActionPerformed(evt);
+            }
+        });
 
         jButtonBanReason.setText("Top Razones de Baneo");
+        jButtonBanReason.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBanReasonActionPerformed(evt);
+            }
+        });
 
         jButtonClose.setText("Salir");
 
         jButtonAccusedPerCompany.setText("Acusados Por Compañía");
+        jButtonAccusedPerCompany.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAccusedPerCompanyActionPerformed(evt);
+            }
+        });
 
         jButtonTopCrimes.setText("Top Crimenes");
+        jButtonTopCrimes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonTopCrimesActionPerformed(evt);
+            }
+        });
 
         btnListaExpedientes.setText("Lista de Expedientes por tipo");
         btnListaExpedientes.addActionListener(new java.awt.event.ActionListener() {
@@ -130,7 +150,8 @@ public class consultasUsuario extends javax.swing.JDialog {
     }//GEN-LAST:event_btnTopLugaresActionPerformed
 
     private void btnListaExpedientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaExpedientesActionPerformed
-
+        ListaExpedientesPorTipo dialog = new ListaExpedientesPorTipo(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnListaExpedientesActionPerformed
 
     private void btnListaUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaUsuariosActionPerformed
@@ -144,8 +165,29 @@ public class consultasUsuario extends javax.swing.JDialog {
     }//GEN-LAST:event_btnListaUsuariosBaneadosActionPerformed
 
     private void btnInformacionPVencerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformacionPVencerActionPerformed
-        
+        DueTranscripts dialog = new DueTranscripts(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnInformacionPVencerActionPerformed
+
+    private void jButtonAccusedPerCompanyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAccusedPerCompanyActionPerformed
+        AccusedPerCompany dialog = new AccusedPerCompany(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonAccusedPerCompanyActionPerformed
+
+    private void jButtonTopCrimesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTopCrimesActionPerformed
+        TopCrimes dialog = new TopCrimes(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonTopCrimesActionPerformed
+
+    private void jButtonTopSentenceTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTopSentenceTypeActionPerformed
+        TopSentenceTime dialog = new TopSentenceTime(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonTopSentenceTypeActionPerformed
+
+    private void jButtonBanReasonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBanReasonActionPerformed
+        TopBanReason dialog = new TopBanReason(new javax.swing.JFrame(), true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButtonBanReasonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnInformacionPVencer;

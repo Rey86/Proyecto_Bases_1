@@ -79,9 +79,9 @@ public class mainUsuario extends javax.swing.JDialog {
                 .addComponent(btnEditarDatos)
                 .addGap(18, 18, 18)
                 .addComponent(btnConsultas1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addComponent(btnSalir)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
